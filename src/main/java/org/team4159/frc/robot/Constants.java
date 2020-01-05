@@ -18,7 +18,7 @@ public final class Constants {
 
     public static final boolean LEFT_ENCODER_REVERSED = false;
     public static final boolean RIGHT_ENCODER_REVERSED = false;
-    public static final double ENCODER_DIST_PER_PULSE = 1.0;
+    public static final double ENCODER_DIST_PER_PULSE = 1.0; // meters / ticks
 
     // TODO: MEASURE!
 

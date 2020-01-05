@@ -18,19 +18,17 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import static org.team4159.frc.robot.Constants.*;
 
 public class Drivetrain extends SubsystemBase {
+  private TalonSRX left_front_talon, left_rear_talon, right_front_talon, right_rear_talon;
+
   private SpeedControllerGroup left_talons;
   private SpeedControllerGroup right_talons;
 
   private DifferentialDrive differential_drive;
   private DifferentialDriveOdometry odometry;
 
-  private Encoder left_encoder, right_encoder;
-
   private PigeonIMU pigeon;
 
   public Drivetrain() {
-    TalonSRX left_front_talon, left_rear_talon, right_front_talon, right_rear_talon;
-
     left_front_talon = configureTalonSRX(new WPI_TalonSRX(CAN_IDS.LEFT_FRONT_TALON));
     left_rear_talon = configureTalonSRX(new WPI_TalonSRX(CAN_IDS.LEFT_REAR_TALON));
     right_front_talon = configureTalonSRX(new WPI_TalonSRX(CAN_IDS.RIGHT_FRONT_TALON));
@@ -47,16 +45,6 @@ public class Drivetrain extends SubsystemBase {
 
     odometry = new DifferentialDriveOdometry(Rotation2d.fromDegrees(getHeading()));
 
-    left_encoder = new Encoder(
-            DRIVE_CONSTANTS.LEFT_ENCODER_PORTS[0], DRIVE_CONSTANTS.LEFT_ENCODER_PORTS[1],
-            DRIVE_CONSTANTS.LEFT_ENCODER_REVERSED);
-    left_encoder.setDistancePerPulse(DRIVE_CONSTANTS.ENCODER_DIST_PER_PULSE);
-
-    right_encoder = new Encoder(
-            DRIVE_CONSTANTS.RIGHT_ENCODER_PORTS[0], DRIVE_CONSTANTS.RIGHT_ENCODER_PORTS[1],
-            DRIVE_CONSTANTS.RIGHT_ENCODER_REVERSED);
-    right_encoder.setDistancePerPulse(DRIVE_CONSTANTS.ENCODER_DIST_PER_PULSE);
-
     pigeon = new PigeonIMU(CAN_IDS.PIGEON_IMU);
   }
 
@@ -71,8 +59,8 @@ public class Drivetrain extends SubsystemBase {
   public void periodic() {
     odometry.update(
             Rotation2d.fromDegrees(getHeading()),
-            left_encoder.getDistance(),
-            right_encoder.getDistance());
+            getLeftDistance(),
+            getRightDistance());
   }
 
   public void arcadeDrive(double forward, double rotation) {
@@ -99,24 +87,32 @@ public class Drivetrain extends SubsystemBase {
   }
 
   public DifferentialDriveWheelSpeeds getWheelSpeeds() {
-    return new DifferentialDriveWheelSpeeds(left_encoder.getRate(), right_encoder.getRate());
+    return new DifferentialDriveWheelSpeeds(getLeftRate(), getRightRate());
   }
 
   public void resetEncoders() {
-    left_encoder.reset();
-    right_encoder.reset();
+    left_front_talon.setSelectedSensorPosition(0);
+    right_front_talon.setSelectedSensorPosition(0);
   }
 
   public double getAverageEncoderDistance() {
-    return (left_encoder.getDistance() + right_encoder.getDistance()) / 2.0;
+    return (getLeftDistance() + getRightDistance()) / 2.0;
   }
 
-  public Encoder getLeftEncoder() {
-    return left_encoder;
+  public double getLeftDistance() {
+    return left_front_talon.getSelectedSensorPosition() * DRIVE_CONSTANTS.ENCODER_DIST_PER_PULSE;
   }
 
-  public Encoder getRightEncoder() {
-    return right_encoder;
+  public double getLeftRate() {
+    return left_front_talon.getSelectedSensorVelocity() * DRIVE_CONSTANTS.ENCODER_DIST_PER_PULSE;
+  }
+
+  public double getRightDistance() {
+    return right_front_talon.getSelectedSensorPosition() * DRIVE_CONSTANTS.ENCODER_DIST_PER_PULSE;
+  }
+
+  public double getRightRate() {
+    return right_front_talon.getSelectedSensorVelocity() * DRIVE_CONSTANTS.ENCODER_DIST_PER_PULSE;
   }
 
   public void zeroHeading() {

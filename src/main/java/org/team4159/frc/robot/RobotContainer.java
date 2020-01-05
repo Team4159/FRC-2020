@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj.controller.RamseteController;
 import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.PIDCommand;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 
@@ -44,6 +45,6 @@ public class RobotContainer {
             drivetrain // require drivetrain subsystem
     );
 
-    return ramsete_command;
+    return ramsete_command.andThen(() -> drivetrain.rawDrive(0.0, 0.0));
   }
 }

@@ -10,8 +10,8 @@ import edu.wpi.first.wpilibj.util.Units;
 
 import java.util.ArrayList;
 
-public class TrajectoryFromTrenchRunToShootingPosition {
-  public static Trajectory generateTrajectory() {
+public class Trajectories {
+  public static Trajectory generateTrajectoryFromTrenchRunBalltoShootingPosition() {
 
     // start and end positions and headings of robot
     var trench_ball_pos = new Pose2d(Units.feetToMeters(4.0), Units.feetToMeters(0.0), Rotation2d.fromDegrees(0.0));

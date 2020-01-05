@@ -10,7 +10,7 @@ import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 
 import org.team4159.frc.robot.subsystems.Drivetrain;
-import org.team4159.frc.robot.traj.TrajectoryFromTrenchRunToShootingPosition;
+import org.team4159.frc.robot.traj.Trajectories;
 
 import static org.team4159.frc.robot.Constants.*;
 
@@ -30,16 +30,16 @@ public class RobotContainer {
 
   public Command getAutonomousCommand() {
     RamseteCommand ramsete_command = new RamseteCommand(
-            TrajectoryFromTrenchRunToShootingPosition.generateTrajectory(),
-            drivetrain::getPose,
-            new RamseteController(),
-            new SimpleMotorFeedforward(1, 0, 0),
-            new DifferentialDriveKinematics(1),
-            drivetrain::getWheelSpeeds,
-            new PIDController(1, 0, 0),
-            new PIDController(1, 0, 0),
-            drivetrain::voltsDrive,
-            drivetrain
+            Trajectories.generateTrajectoryFromTrenchRunBalltoShootingPosition(), // desired trajectory to follow
+            drivetrain::getPose, // method reference (lambda) to pose supplier
+            new RamseteController(), // Empty constructor means default gains
+            new SimpleMotorFeedforward(1, 0, 0), // Feedforward gains kS, kV, kA obtained from characterization
+            new DifferentialDriveKinematics(1), // track width
+            drivetrain::getWheelSpeeds, // lambda to wheel speed supplier
+            new PIDController(1, 0, 0), // left side PID using Proportional gain from characterization
+            new PIDController(1, 0, 0), // right side PID using Proportional gain from characterization
+            drivetrain::voltsDrive, // lambda to pass voltage outputs to motors
+            drivetrain // require drivetrain subsystem
     );
 
     return ramsete_command;

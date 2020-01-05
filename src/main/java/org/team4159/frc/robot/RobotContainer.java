@@ -31,7 +31,7 @@ public class RobotContainer {
 
   public Command getAutonomousCommand() {
     RamseteCommand ramsete_command = new RamseteCommand(
-            Trajectories.generateTrajectoryFromTrenchRunBalltoShootingPosition(), // desired trajectory to follow
+            Trajectories.testTrajectory(), // desired trajectory to follow
             drivetrain::getPose, // method reference (lambda) to pose supplier
             new RamseteController(), // Empty constructor means default gains
             new SimpleMotorFeedforward(DRIVE_CONSTANTS.kS,

@@ -38,12 +38,10 @@ public class Drivetrain extends SubsystemBase {
 
     left_talons = new SpeedControllerGroup(
             (WPI_TalonSRX) left_front_talon,
-            (WPI_TalonSRX) left_rear_talon
-    );
+            (WPI_TalonSRX) left_rear_talon);
     right_talons = new SpeedControllerGroup(
             (WPI_TalonSRX) right_front_talon,
-            (WPI_TalonSRX) right_rear_talon
-    );
+            (WPI_TalonSRX) right_rear_talon);
 
     differential_drive = new DifferentialDrive(left_talons, right_talons);
 
@@ -74,8 +72,7 @@ public class Drivetrain extends SubsystemBase {
     odometry.update(
             Rotation2d.fromDegrees(getHeading()),
             left_encoder.getDistance(),
-            right_encoder.getDistance()
-    );
+            right_encoder.getDistance());
   }
 
   public void arcadeDrive(double forward, double rotation) {

@@ -22,7 +22,7 @@ public class Trajectories {
     interior_waypoints.add(new Translation2d(Units.feetToMeters(2.0), Units.feetToMeters(2.0))); // to avoid hitting shield gen
 
     // maximum velocity and acceleration respectively
-    TrajectoryConfig config = new TrajectoryConfig(3.0, 3.0);
+    var config = new TrajectoryConfig(3.0, 3.0);
 
     return TrajectoryGenerator.generateTrajectory(
             trench_ball_pos,

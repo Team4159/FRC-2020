@@ -82,9 +82,14 @@ public class Drivetrain extends SubsystemBase {
     differential_drive.arcadeDrive(forward, rotation);
   }
 
-  public void setRawSpeeds(double left, double right) {
+  public void rawDrive(double left, double right) {
     left_talons.set(left);
     right_talons.set(right);
+  }
+
+  public void voltsDrive(double left_volts, double right_volts) {
+    left_talons.setVoltage(left_volts);
+    right_talons.setVoltage(right_volts);
   }
 
   public void setOdometry(Pose2d pose) {

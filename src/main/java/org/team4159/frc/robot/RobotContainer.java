@@ -4,7 +4,6 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import org.team4159.frc.robot.subsystems.Drivetrain;
 
-
 import static org.team4159.frc.robot.Constants.*;
 
 public class RobotContainer {

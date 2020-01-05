@@ -1,8 +1,6 @@
 package org.team4159.frc.robot.subsystems;
 
 import com.ctre.phoenix.sensors.PigeonIMU;
-import edu.wpi.first.wpilibj.CAN;
-import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.geometry.Pose2d;
@@ -100,19 +98,19 @@ public class Drivetrain extends SubsystemBase {
   }
 
   public double getLeftDistance() {
-    return left_front_talon.getSelectedSensorPosition() * DRIVE_CONSTANTS.ENCODER_DIST_PER_PULSE;
+    return left_front_talon.getSelectedSensorPosition() * DRIVE_CONSTANTS.METERS_PER_TICK;
   }
 
   public double getLeftRate() {
-    return left_front_talon.getSelectedSensorVelocity() * DRIVE_CONSTANTS.ENCODER_DIST_PER_PULSE;
+    return left_front_talon.getSelectedSensorVelocity() * DRIVE_CONSTANTS.METERS_PER_TICK;
   }
 
   public double getRightDistance() {
-    return right_front_talon.getSelectedSensorPosition() * DRIVE_CONSTANTS.ENCODER_DIST_PER_PULSE;
+    return right_front_talon.getSelectedSensorPosition() * DRIVE_CONSTANTS.METERS_PER_TICK;
   }
 
   public double getRightRate() {
-    return right_front_talon.getSelectedSensorVelocity() * DRIVE_CONSTANTS.ENCODER_DIST_PER_PULSE;
+    return right_front_talon.getSelectedSensorVelocity() * DRIVE_CONSTANTS.METERS_PER_TICK;
   }
 
   public void zeroHeading() {

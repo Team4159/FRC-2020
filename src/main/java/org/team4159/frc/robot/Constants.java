@@ -13,12 +13,8 @@ public final class Constants {
   }
 
   public static final class DRIVE_CONSTANTS {
-    public static final int[] LEFT_ENCODER_PORTS = new int[] {0, 1};
-    public static final int[] RIGHT_ENCODER_PORTS = new int[] {2, 3};
-
-    public static final boolean LEFT_ENCODER_REVERSED = false;
-    public static final boolean RIGHT_ENCODER_REVERSED = false;
-    public static final double ENCODER_DIST_PER_PULSE = 1.0; // meters / ticks
+    public static final double METERS_PER_TICK = 1.0; // meters / ticks
+    public static final double TRACK_WIDTH = 0.69;
 
     // TODO: MEASURE!
 
@@ -28,13 +24,7 @@ public final class Constants {
 
     public static final double kP = 8.5;
 
-    public static final DifferentialDriveKinematics kDriveKinematics = new DifferentialDriveKinematics(MATH.TRACK_WIDTH);
-  }
-
-  public static final class MATH {
-    // TODO: MEASURE!
-
-    public static final double TRACK_WIDTH = 0.69;
+    public static final DifferentialDriveKinematics kDriveKinematics = new DifferentialDriveKinematics(TRACK_WIDTH);
   }
 
   public final static class CONTROLS {

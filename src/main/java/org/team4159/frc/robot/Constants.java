@@ -1,5 +1,7 @@
 package org.team4159.frc.robot;
 
+import edu.wpi.first.wpilibj.kinematics.DifferentialDriveKinematics;
+
 public final class Constants {
   public final static class CAN_IDS {
     public static final int LEFT_FRONT_TALON = 0;
@@ -17,6 +19,22 @@ public final class Constants {
     public static final boolean LEFT_ENCODER_REVERSED = false;
     public static final boolean RIGHT_ENCODER_REVERSED = false;
     public static final double ENCODER_DIST_PER_PULSE = 1.0;
+
+    // TODO: MEASURE!
+
+    public static final double kS = 0.22; // volts
+    public static final double kV = 1.98; // volts * seconds / meters
+    public static final double kA = 0.2; // volts * (seconds ^ 2) / meters
+
+    public static final double kP = 8.5;
+
+    public static final DifferentialDriveKinematics kDriveKinematics = new DifferentialDriveKinematics(MATH.TRACK_WIDTH);
+  }
+
+  public static final class MATH {
+    // TODO: MEASURE!
+
+    public static final double TRACK_WIDTH = 0.69;
   }
 
   public final static class CONTROLS {

@@ -33,11 +33,13 @@ public class RobotContainer {
             Trajectories.generateTrajectoryFromTrenchRunBalltoShootingPosition(), // desired trajectory to follow
             drivetrain::getPose, // method reference (lambda) to pose supplier
             new RamseteController(), // Empty constructor means default gains
-            new SimpleMotorFeedforward(1, 0, 0), // Feedforward gains kS, kV, kA obtained from characterization
-            new DifferentialDriveKinematics(1), // track width
+            new SimpleMotorFeedforward(DRIVE_CONSTANTS.kS,
+                                       DRIVE_CONSTANTS.kV,
+                                       DRIVE_CONSTANTS.kA), // Feedforward gains kS, kV, kA obtained from characterization
+            DRIVE_CONSTANTS.kDriveKinematics, // track width
             drivetrain::getWheelSpeeds, // lambda to wheel speed supplier
-            new PIDController(1, 0, 0), // left side PID using Proportional gain from characterization
-            new PIDController(1, 0, 0), // right side PID using Proportional gain from characterization
+            new PIDController(DRIVE_CONSTANTS.kP, 0, 0), // left side PID using Proportional gain from characterization
+            new PIDController(DRIVE_CONSTANTS.kP, 0, 0), // right side PID using Proportional gain from characterization
             drivetrain::voltsDrive, // lambda to pass voltage outputs to motors
             drivetrain // require drivetrain subsystem
     );

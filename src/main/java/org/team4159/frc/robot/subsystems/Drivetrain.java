@@ -14,12 +14,21 @@ public class Drivetrain extends SubsystemBase {
   private SpeedControllerGroup right_talons;
 
   public Drivetrain() {
+    TalonSRX left_front_talon, left_rear_talon, right_front_talon, right_rear_talon;
+
+    left_front_talon = configureTalonSRX(new WPI_TalonSRX(CAN_IDS.LEFT_FRONT_TALON));
+    left_rear_talon = configureTalonSRX(new WPI_TalonSRX(CAN_IDS.LEFT_REAR_TALON));
+    right_front_talon = configureTalonSRX(new WPI_TalonSRX(CAN_IDS.RIGHT_FRONT_TALON));
+    right_rear_talon = configureTalonSRX(new WPI_TalonSRX(CAN_IDS.RIGHT_REAR_TALON));
+
     left_talons = new SpeedControllerGroup(
-            (WPI_TalonSRX) configureTalonSRX(new WPI_TalonSRX(CAN_IDS.LEFT_FRONT_TALON)),
-            (WPI_TalonSRX) configureTalonSRX(new WPI_TalonSRX(CAN_IDS.LEFT_REAR_TALON)));
+            (WPI_TalonSRX) left_front_talon,
+            (WPI_TalonSRX) left_rear_talon
+    );
     right_talons = new SpeedControllerGroup(
-            (WPI_TalonSRX) configureTalonSRX(new WPI_TalonSRX(CAN_IDS.RIGHT_FRONT_TALON)),
-            (WPI_TalonSRX) configureTalonSRX(new WPI_TalonSRX(CAN_IDS.RIGHT_REAR_TALON)));
+            (WPI_TalonSRX) right_front_talon,
+            (WPI_TalonSRX) right_rear_talon
+    );
   }
 
   private TalonSRX configureTalonSRX(TalonSRX talonSRX) {

@@ -1,5 +1,8 @@
 package org.team4159.frc.robot;
 
+import edu.wpi.first.wpilibj.controller.PIDController;
+import edu.wpi.first.wpilibj.controller.RamseteController;
+import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveKinematics;
 
 public final class Constants {
@@ -24,7 +27,17 @@ public final class Constants {
 
     public static final double kP = 8.5;
 
+    // ramsete constants (tested for most robots)
+    public static final double kB = 2.0;
+    public static final double kZeta = 0.7;
+
     public static final DifferentialDriveKinematics kDriveKinematics = new DifferentialDriveKinematics(TRACK_WIDTH);
+    public static final RamseteController kDriveRamseteController = new RamseteController(kB,
+                                                                                          kZeta);
+    public static final SimpleMotorFeedforward kDriveFeedforwardGains = new SimpleMotorFeedforward(DRIVE_CONSTANTS.kS,
+                                                                                                   DRIVE_CONSTANTS.kV,
+                                                                                                   DRIVE_CONSTANTS.kA);
+    public static final PIDController kDrivePController = new PIDController(DRIVE_CONSTANTS.kP, 0, 0);
   }
 
   public final static class CONTROLS {

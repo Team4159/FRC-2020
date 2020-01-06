@@ -59,7 +59,6 @@ public class Robot extends TimedRobot {
 
     // Retrieve the commanded speed from NetworkTables
     double autospeed = auto_speed_entry.getDouble(0);
-    prior_autospeed = autospeed;
 
     // command motors to do things
     drivetrain.rawDrive((rotate_entry.getBoolean(false) ? -1 : 1) * autospeed, autospeed);

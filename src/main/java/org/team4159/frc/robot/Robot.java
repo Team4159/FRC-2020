@@ -6,6 +6,7 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
 import org.team4159.frc.robot.subsystems.Drivetrain;
@@ -35,6 +36,11 @@ public class Robot extends TimedRobot {
   @Override
   public void robotPeriodic() {
     CommandScheduler.getInstance().run();
+
+    SmartDashboard.putNumber("l_encoder_pos", drivetrain.getLeftDistance());
+    SmartDashboard.putNumber("l_encoder_rate", drivetrain.getLeftRate());
+    SmartDashboard.putNumber("r_encoder_pos", drivetrain.getRightDistance());
+    SmartDashboard.putNumber("r_encoder_rate", drivetrain.getRightRate());
   }
 
   /** characterization routine **/

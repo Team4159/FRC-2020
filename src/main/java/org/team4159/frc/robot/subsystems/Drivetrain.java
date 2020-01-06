@@ -2,6 +2,7 @@ package org.team4159.frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.sensors.PigeonIMU;
+
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.geometry.Pose2d;
@@ -17,8 +18,6 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import static org.team4159.frc.robot.Constants.*;
 
 public class Drivetrain extends SubsystemBase {
-  private final boolean characterizing = true;
-
   private TalonSRX left_front_talon, left_rear_talon, right_front_talon, right_rear_talon;
 
   private SpeedControllerGroup left_talons;
@@ -35,6 +34,7 @@ public class Drivetrain extends SubsystemBase {
     right_front_talon = configureTalonSRX(new WPI_TalonSRX(CAN_IDS.RIGHT_FRONT_TALON));
     right_rear_talon = configureTalonSRX(new WPI_TalonSRX(CAN_IDS.RIGHT_REAR_TALON));
 
+    // timeoutMs from characterization routine example, don't know if it is optimal
     left_front_talon.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 10);
     right_front_talon.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 10);
 
@@ -49,7 +49,6 @@ public class Drivetrain extends SubsystemBase {
             (WPI_TalonSRX) right_rear_talon);
 
     differential_drive = new DifferentialDrive(left_talons, right_talons);
-
     odometry = new DifferentialDriveOdometry(Rotation2d.fromDegrees(getHeading()));
 
     pigeon = new PigeonIMU(CAN_IDS.PIGEON_IMU);
@@ -130,7 +129,7 @@ public class Drivetrain extends SubsystemBase {
     return right_front_talon.getSelectedSensorVelocity() * DRIVE_CONSTANTS.METERS_PER_TICK;
   }
 
-  public void zeroHeading() {
+  public void resetHeading() {
     pigeon.setYaw(0.0);
   }
 
@@ -138,12 +137,12 @@ public class Drivetrain extends SubsystemBase {
     var yaw_pitch_roll = new double[3];
     pigeon.getYawPitchRoll(yaw_pitch_roll);
 
-    double yaw = yaw_pitch_roll[2];
+    double yaw = yaw_pitch_roll[0];
 
     return Math.IEEEremainder(yaw, 360);
   }
 
-  public double getTurnRate() {
+  public double getAngularVelocity() {
     var xyz_degrees_per_second = new double[3];
     pigeon.getRawGyro(xyz_degrees_per_second);
 

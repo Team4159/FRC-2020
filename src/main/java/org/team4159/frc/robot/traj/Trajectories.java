@@ -1,6 +1,5 @@
 package org.team4159.frc.robot.traj;
 
-import edu.wpi.first.wpilibj.Ultrasonic;
 import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.geometry.Translation2d;
@@ -23,6 +22,7 @@ public class Trajectories {
     // maximum velocity and acceleration respectively
     var config = new TrajectoryConfig(3.0, 3.0);
 
+    // if IntelliJ doesn't recognize List.of(...), configure IntelliJ to use java 10+
     return TrajectoryGenerator.generateTrajectory(
             trench_ball_pos,
             List.of(

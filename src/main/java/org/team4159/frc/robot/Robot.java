@@ -19,17 +19,14 @@ public class Robot extends TimedRobot {
   private NetworkTableEntry telemetry_entry;
   private NetworkTableEntry rotate_entry;
 
-  private double prior_autospeed = 0;
-
   @Override
   public void robotInit() {
+    // set update rate to 10ms, needed for characterization routine
     NetworkTableInstance.getDefault().setUpdateRate(0.010);
 
     auto_speed_entry = NetworkTableInstance.getDefault().getEntry("/robot/autospeed");
     telemetry_entry = NetworkTableInstance.getDefault().getEntry("/robot/telemetry");
     rotate_entry = NetworkTableInstance.getDefault().getEntry("/robot/rotate");
-
-    prior_autospeed = 0;
 
     robot_container = new RobotContainer();
     drivetrain = robot_container.drivetrain;

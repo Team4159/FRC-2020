@@ -1,5 +1,6 @@
 package org.team4159.frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.sensors.PigeonIMU;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
@@ -16,6 +17,8 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import static org.team4159.frc.robot.Constants.*;
 
 public class Drivetrain extends SubsystemBase {
+  private final boolean characterizing = true;
+
   private TalonSRX left_front_talon, left_rear_talon, right_front_talon, right_rear_talon;
 
   private SpeedControllerGroup left_talons;
@@ -31,6 +34,12 @@ public class Drivetrain extends SubsystemBase {
     left_rear_talon = configureTalonSRX(new WPI_TalonSRX(CAN_IDS.LEFT_REAR_TALON));
     right_front_talon = configureTalonSRX(new WPI_TalonSRX(CAN_IDS.RIGHT_FRONT_TALON));
     right_rear_talon = configureTalonSRX(new WPI_TalonSRX(CAN_IDS.RIGHT_REAR_TALON));
+
+    left_front_talon.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 10);
+    right_front_talon.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 10);
+
+    left_front_talon.setSelectedSensorPosition(0);
+    right_front_talon.setSelectedSensorPosition(0);
 
     left_talons = new SpeedControllerGroup(
             (WPI_TalonSRX) left_front_talon,
@@ -73,6 +82,14 @@ public class Drivetrain extends SubsystemBase {
   public void voltsDrive(double left_volts, double right_volts) {
     left_talons.setVoltage(left_volts);
     right_talons.setVoltage(right_volts);
+  }
+
+  public double getLeftVoltage() {
+    return left_front_talon.getMotorOutputVoltage();
+  }
+
+  public double getRightVoltage() {
+    return right_front_talon.getMotorOutputVoltage();
   }
 
   public void setOdometry(Pose2d pose) {
@@ -121,7 +138,7 @@ public class Drivetrain extends SubsystemBase {
     var yaw_pitch_roll = new double[3];
     pigeon.getYawPitchRoll(yaw_pitch_roll);
 
-    double yaw = yaw_pitch_roll[0];
+    double yaw = yaw_pitch_roll[2];
 
     return Math.IEEEremainder(yaw, 360);
   }

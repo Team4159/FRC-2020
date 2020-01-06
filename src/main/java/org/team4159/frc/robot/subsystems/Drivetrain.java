@@ -34,12 +34,10 @@ public class Drivetrain extends SubsystemBase {
     right_front_talon = configureTalonSRX(new WPI_TalonSRX(CAN_IDS.RIGHT_FRONT_TALON));
     right_rear_talon = configureTalonSRX(new WPI_TalonSRX(CAN_IDS.RIGHT_REAR_TALON));
 
-    // timeoutMs from characterization routine example, don't know if it is optimal
-    left_front_talon.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 10);
-    right_front_talon.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 10);
+    left_front_talon.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative);
+    right_front_talon.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative);
 
-    left_front_talon.setSelectedSensorPosition(0);
-    right_front_talon.setSelectedSensorPosition(0);
+    resetEncoders();
 
     left_talons = new SpeedControllerGroup(
             (WPI_TalonSRX) left_front_talon,

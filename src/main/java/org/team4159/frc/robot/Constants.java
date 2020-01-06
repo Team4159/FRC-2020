@@ -12,7 +12,7 @@ public final class Constants {
     public static final int RIGHT_FRONT_TALON = 2;
     public static final int RIGHT_REAR_TALON = 3;
 
-    public static final int PIGEON_IMU = 4;
+    public static final int PIGEON_IMU = 0;
   }
 
   public static final class DRIVE_CONSTANTS {
@@ -32,12 +32,6 @@ public final class Constants {
     public static final double kZeta = 0.7;
 
     public static final DifferentialDriveKinematics kDriveKinematics = new DifferentialDriveKinematics(TRACK_WIDTH);
-    public static final RamseteController kDriveRamseteController = new RamseteController(kB,
-                                                                                          kZeta);
-    public static final SimpleMotorFeedforward kDriveFeedforwardGains = new SimpleMotorFeedforward(DRIVE_CONSTANTS.kS,
-                                                                                                   DRIVE_CONSTANTS.kV,
-                                                                                                   DRIVE_CONSTANTS.kA);
-    public static final PIDController kDrivePController = new PIDController(DRIVE_CONSTANTS.kP, 0, 0);
   }
 
   public final static class CONTROLS {

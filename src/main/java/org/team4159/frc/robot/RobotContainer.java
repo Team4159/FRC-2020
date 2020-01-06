@@ -1,6 +1,9 @@
 package org.team4159.frc.robot;
 
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.controller.PIDController;
+import edu.wpi.first.wpilibj.controller.RamseteController;
+import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
@@ -27,14 +30,17 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     RamseteCommand ramsete_command = new RamseteCommand(
             Trajectories.testTrajectory(), // desired trajectory to follow
-            drivetrain::getPose, // method reference (lambda) to pose supplier
-            DRIVE_CONSTANTS.kDriveRamseteController, // Empty constructor means default gains
-            DRIVE_CONSTANTS.kDriveFeedforwardGains, // Feedforward gains kS, kV, kA obtained from characterization
+            drivetrain::getPose, // method reference to pose supplier
+            new RamseteController(DRIVE_CONSTANTS.kB,
+                                  DRIVE_CONSTANTS.kZeta), // object that performs path-following computation
+            new SimpleMotorFeedforward(DRIVE_CONSTANTS.kS,
+                                       DRIVE_CONSTANTS.kV,
+                                       DRIVE_CONSTANTS.kA), // Feedforward gains kS, kV, kA obtained from characterization
             DRIVE_CONSTANTS.kDriveKinematics, // track width
-            drivetrain::getWheelSpeeds, // lambda to wheel speed supplier
-            DRIVE_CONSTANTS.kDrivePController, // left side PID using Proportional gain from characterization
-            DRIVE_CONSTANTS.kDrivePController, // right side PID using Proportional gain from characterization
-            drivetrain::voltsDrive, // lambda to pass voltage outputs to motors
+            drivetrain::getWheelSpeeds, // method reference to wheel speed supplier
+            new PIDController(DRIVE_CONSTANTS.kP, 0, 0), // left side PID using Proportional gain from characterization
+            new PIDController(DRIVE_CONSTANTS.kP, 0, 0), // right side PID using Proportional gain from characterization
+            drivetrain::voltsDrive, // method reference to pass voltage outputs to motors
             drivetrain // require drivetrain subsystem
     );
 

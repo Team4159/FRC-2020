@@ -15,20 +15,21 @@ public class Robot extends TimedRobot {
   private Drivetrain drivetrain;
 
   /** for characterization routine **/
-  private NetworkTableEntry auto_speed_entry =
-          NetworkTableInstance.getDefault().getEntry("/robot/autospeed");
-  private NetworkTableEntry telemetry_entry =
-          NetworkTableInstance.getDefault().getEntry("/robot/telemetry");
-  private NetworkTableEntry rotate_entry =
-          NetworkTableInstance.getDefault().getEntry("/robot/rotate");
+  private NetworkTableEntry auto_speed_entry;
+  private NetworkTableEntry telemetry_entry;
+  private NetworkTableEntry rotate_entry;
 
   private double prior_autospeed = 0;
-
-  private Number[] numberArray = new Number[10];
 
   @Override
   public void robotInit() {
     NetworkTableInstance.getDefault().setUpdateRate(0.010);
+
+    auto_speed_entry = NetworkTableInstance.getDefault().getEntry("/robot/autospeed");
+    telemetry_entry = NetworkTableInstance.getDefault().getEntry("/robot/telemetry");
+    rotate_entry = NetworkTableInstance.getDefault().getEntry("/robot/rotate");
+
+    prior_autospeed = 0;
 
     robot_container = new RobotContainer();
     drivetrain = robot_container.drivetrain;
@@ -42,9 +43,8 @@ public class Robot extends TimedRobot {
   /** characterization routine **/
   @Override
   public void autonomousPeriodic() {
-
     // Retrieve values to send back before telling the motors to do something
-    double now = Timer.getFPGATimestamp();
+    double timestamp = Timer.getFPGATimestamp();
 
     double battery = RobotController.getBatteryVoltage();
 
@@ -65,18 +65,18 @@ public class Robot extends TimedRobot {
     drivetrain.rawDrive((rotate_entry.getBoolean(false) ? -1 : 1) * autospeed, autospeed);
 
     // send telemetry data array back to NT
-    numberArray[0] = now;
-    numberArray[1] = battery;
-    numberArray[2] = autospeed;
-    numberArray[3] = left_volts;
-    numberArray[4] = right_volts;
-    numberArray[5] = left_pos;
-    numberArray[6] = right_pos;
-    numberArray[7] = left_rate;
-    numberArray[8] = right_rate;
-    numberArray[9] = drivetrain_angle;
-
-    telemetry_entry.setNumberArray(numberArray);
+    telemetry_entry.setNumberArray(new Number[] {
+            timestamp,
+            battery,
+            autospeed,
+            left_volts,
+            right_volts,
+            left_pos,
+            right_pos,
+            left_rate,
+            right_rate,
+            drivetrain_angle
+    });
   }
 
   @Override

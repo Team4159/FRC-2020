@@ -15,8 +15,8 @@ public class Trajectories {
   public static Trajectory fromTrenchRunBalltoShootingPosition() {
 
     // start and end positions and headings of robot
-    var trench_ball_pos = new Pose2d(Units.feetToMeters(4.0), Units.feetToMeters(0.0), Rotation2d.fromDegrees(0.0));
-    var shooting_pos = new Pose2d(Units.feetToMeters(0.0), Units.feetToMeters(15.0), Rotation2d.fromDegrees(0.0));
+    var trench_ball_pos = new Pose2d(Units.feetToMeters(0.0), Units.feetToMeters(0.0), Rotation2d.fromDegrees(180.0));
+    var shooting_pos = new Pose2d(Units.inchesToMeters(27.75), Units.inchesToMeters(250.36), Rotation2d.fromDegrees(0.0));
 
 
     // maximum velocity and acceleration respectively
@@ -35,9 +35,8 @@ public class Trajectories {
 
   // Robot drives 5 ft forward and 1 ft to the left
   public static Trajectory testTrajectory() {
-
-    var initial_pos = new Pose2d(Units.feetToMeters(1.0), Units.feetToMeters(0.0), Rotation2d.fromDegrees(0.0));
-    var end_pos = new Pose2d(Units.feetToMeters(0.0), Units.feetToMeters(5.0), Rotation2d.fromDegrees(0.0));
+    var initial_pos = new Pose2d(Units.feetToMeters(1.0), Units.feetToMeters(0.0), Rotation2d.fromDegrees(90.0));
+    var end_pos = new Pose2d(Units.feetToMeters(0.0), Units.feetToMeters(5.0), Rotation2d.fromDegrees(90.0));
 
     var config = new TrajectoryConfig(3.0, 3.0);
 

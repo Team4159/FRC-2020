@@ -7,9 +7,11 @@ import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.trajectory.Trajectory;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
 import org.team4159.frc.robot.subsystems.Drivetrain;
+import org.team4159.frc.robot.traj.Trajectories;
 
 public class Robot extends TimedRobot {
   private RobotContainer robot_container;
@@ -22,6 +24,9 @@ public class Robot extends TimedRobot {
 
   @Override
   public void robotInit() {
+    for (Trajectory.State state : Trajectories.testTrajectory().getStates()) {
+      System.out.println(state.poseMeters.getTranslation().getX());
+    }
     // set update rate to 10ms, needed for characterization routine
     NetworkTableInstance.getDefault().setUpdateRate(0.010);
 
@@ -38,9 +43,9 @@ public class Robot extends TimedRobot {
     CommandScheduler.getInstance().run();
 
     SmartDashboard.putNumber("l_encoder_pos", drivetrain.getLeftDistance());
-    SmartDashboard.putNumber("l_encoder_rate", drivetrain.getLeftRate());
+    SmartDashboard.putNumber("l_encoder_rate", drivetrain.getLeftVelocity());
     SmartDashboard.putNumber("r_encoder_pos", drivetrain.getRightDistance());
-    SmartDashboard.putNumber("r_encoder_rate", drivetrain.getRightRate());
+    SmartDashboard.putNumber("r_encoder_rate", drivetrain.getRightVelocity());
   }
 
   /** characterization routine **/
@@ -52,13 +57,13 @@ public class Robot extends TimedRobot {
     double battery = RobotController.getBatteryVoltage();
 
     double left_pos = drivetrain.getLeftDistance();
-    double left_rate = drivetrain.getLeftRate();
+    double left_rate = drivetrain.getLeftVelocity();
     double right_pos = drivetrain.getRightDistance();
-    double right_rate = drivetrain.getRightRate();
+    double right_rate = drivetrain.getRightVelocity();
     double left_volts = drivetrain.getLeftVoltage();
     double right_volts = drivetrain.getRightVoltage();
 
-    double drivetrain_angle = Math.toRadians(drivetrain.getHeading());
+    double drivetrain_angle = Math.toRadians(drivetrain.getDirection());
 
     // Retrieve the commanded speed from NetworkTables
     double autospeed = auto_speed_entry.getDouble(0);

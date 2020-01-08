@@ -47,7 +47,7 @@ public class Drivetrain extends SubsystemBase {
             (WPI_TalonSRX) right_rear_talon);
 
     differential_drive = new DifferentialDrive(left_talons, right_talons);
-    odometry = new DifferentialDriveOdometry(Rotation2d.fromDegrees(getHeading()));
+    odometry = new DifferentialDriveOdometry(Rotation2d.fromDegrees(getDirection()));
 
     pigeon = new PigeonIMU(CAN_IDS.PIGEON_IMU);
   }
@@ -62,7 +62,7 @@ public class Drivetrain extends SubsystemBase {
   @Override
   public void periodic() {
     odometry.update(
-            Rotation2d.fromDegrees(getHeading()),
+            Rotation2d.fromDegrees(getDirection()),
             getLeftDistance(),
             getRightDistance());
   }
@@ -89,9 +89,9 @@ public class Drivetrain extends SubsystemBase {
     return right_front_talon.getMotorOutputVoltage();
   }
 
-  public void setOdometry(Pose2d pose) {
+  public void setPose(Pose2d pose) {
     resetEncoders();
-    odometry.resetPosition(pose, Rotation2d.fromDegrees(getHeading()));
+    odometry.resetPosition(pose, Rotation2d.fromDegrees(getDirection()));
   }
 
   public Pose2d getPose() {
@@ -99,7 +99,7 @@ public class Drivetrain extends SubsystemBase {
   }
 
   public DifferentialDriveWheelSpeeds getWheelSpeeds() {
-    return new DifferentialDriveWheelSpeeds(getLeftRate(), getRightRate());
+    return new DifferentialDriveWheelSpeeds(getLeftVelocity(), getRightVelocity());
   }
 
   public void resetEncoders() {
@@ -107,15 +107,13 @@ public class Drivetrain extends SubsystemBase {
     right_front_talon.setSelectedSensorPosition(0);
   }
 
-  public double getAverageEncoderDistance() {
-    return (getLeftDistance() + getRightDistance()) / 2.0;
-  }
-
+  // distance in meters
   public double getLeftDistance() {
     return left_front_talon.getSelectedSensorPosition() * DRIVE_CONSTANTS.METERS_PER_TICK;
   }
 
-  public double getLeftRate() {
+  // velocity in meters / sec
+  public double getLeftVelocity() {
     return left_front_talon.getSelectedSensorVelocity() * DRIVE_CONSTANTS.METERS_PER_TICK;
   }
 
@@ -123,15 +121,15 @@ public class Drivetrain extends SubsystemBase {
     return right_front_talon.getSelectedSensorPosition() * DRIVE_CONSTANTS.METERS_PER_TICK;
   }
 
-  public double getRightRate() {
+  public double getRightVelocity() {
     return right_front_talon.getSelectedSensorVelocity() * DRIVE_CONSTANTS.METERS_PER_TICK;
   }
 
-  public void resetHeading() {
+  public void resetDirection() {
     pigeon.setYaw(0.0);
   }
 
-  public double getHeading() {
+  public double getDirection() {
     var yaw_pitch_roll = new double[3];
     pigeon.getYawPitchRoll(yaw_pitch_roll);
 

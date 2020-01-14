@@ -3,7 +3,7 @@ import org.junit.Test;
 import org.team4159.frc.robot.traj.Trajectories;
 
 public class TrajectoryPrinter {
-  private Trajectory trajectory = Trajectories.testTrajectory();
+  private Trajectory trajectory = Trajectories.fromTrenchRunBalltoShootingPosition();
 
   @Test
   public void PrintTrajectory() {

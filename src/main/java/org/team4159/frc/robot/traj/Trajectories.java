@@ -10,17 +10,19 @@ import edu.wpi.first.wpilibj.util.Units;
 
 import java.util.List;
 
+import static org.team4159.frc.robot.Constants.*;
+
 public class Trajectories {
+  private static final TrajectoryConfig config = new TrajectoryConfig(DRIVE_CONSTANTS.MAX_TRAJECTORY_SPEED, DRIVE_CONSTANTS.MAX_TRAJECTORY_ACCELERATION);
+
   // Robot drives from Trench Run to Shooting Position
   public static Trajectory fromTrenchRunBalltoShootingPosition() {
 
     // start and end positions and headings of robot
-    var trench_ball_pos = new Pose2d(Units.feetToMeters(0.0), Units.feetToMeters(0.0), Rotation2d.fromDegrees(180.0));
-    var shooting_pos = new Pose2d(Units.inchesToMeters(27.75), Units.inchesToMeters(250.36), Rotation2d.fromDegrees(0.0));
-
+    Pose2d trench_ball_pos = new Pose2d(Units.feetToMeters(0.0), Units.feetToMeters(0.0), Rotation2d.fromDegrees(0.0));
+    Pose2d shooting_pos = new Pose2d(Units.inchesToMeters(27.75), Units.inchesToMeters(250.36), Rotation2d.fromDegrees(180.0));
 
     // maximum velocity and acceleration respectively
-    var config = new TrajectoryConfig(3.0, 3.0);
 
     // if IntelliJ doesn't recognize List.of(...), configure IntelliJ to use java 10+
     return TrajectoryGenerator.generateTrajectory(

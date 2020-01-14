@@ -46,10 +46,14 @@ public class Drivetrain extends SubsystemBase {
             (WPI_TalonSRX) right_front_talon,
             (WPI_TalonSRX) right_rear_talon);
 
+    left_talons.setInverted(true);
+
+    pigeon = new PigeonIMU(right_rear_talon);
+
+    resetDirection();
+
     differential_drive = new DifferentialDrive(left_talons, right_talons);
     odometry = new DifferentialDriveOdometry(Rotation2d.fromDegrees(getDirection()));
-
-    pigeon = new PigeonIMU(CAN_IDS.PIGEON_IMU);
   }
 
   private TalonSRX configureTalonSRX(TalonSRX talonSRX) {
@@ -130,16 +134,11 @@ public class Drivetrain extends SubsystemBase {
   }
 
   public double getDirection() {
-    var yaw_pitch_roll = new double[3];
-    pigeon.getYawPitchRoll(yaw_pitch_roll);
-
-    double yaw = yaw_pitch_roll[0];
-
-    return Math.IEEEremainder(yaw, 360);
+    return pigeon.getFusedHeading();
   }
 
   public double getAngularVelocity() {
-    var xyz_degrees_per_second = new double[3];
+    double[] xyz_degrees_per_second = new double[3];
     pigeon.getRawGyro(xyz_degrees_per_second);
 
     return xyz_degrees_per_second[0];

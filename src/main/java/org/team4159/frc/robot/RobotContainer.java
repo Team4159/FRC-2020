@@ -6,7 +6,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 
-import org.team4159.frc.robot.commands.CharacterizationRoutine;
+import org.team4159.frc.robot.commands.Characterization;
 import org.team4159.frc.robot.commands.FollowTrajectory;
 import org.team4159.frc.robot.subsystems.Drivetrain;
 
@@ -24,7 +24,7 @@ public class RobotContainer {
           drivetrain::getPose,
           drivetrain::getWheelSpeeds,
           drivetrain::voltsDrive);
-  private final CharacterizationRoutine characterization_command = new CharacterizationRoutine(
+  private final Characterization characterization_command = new Characterization(
           drivetrain);
   private final InstantCommand default_command = new InstantCommand();
 

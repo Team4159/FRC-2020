@@ -19,6 +19,8 @@ public class FollowTrajectory extends SequentialCommandGroup {
                           Supplier<Pose2d> pose_supplier,
                           Supplier<DifferentialDriveWheelSpeeds> wheel_speeds,
                           BiConsumer<Double, Double> output_voltages) {
+    addRequirements(subsystem);
+
     addCommands(
             new RamseteCommand(
                     trajectory, // desired trajectory to follow
@@ -35,8 +37,11 @@ public class FollowTrajectory extends SequentialCommandGroup {
                     output_voltages, // method reference to pass voltage outputs to motors
                     subsystem // require drivetrain subsystem
             ),
-            new RunCommand(
+            new InstantCommand(
                     () -> output_voltages.accept(0.0, 0.0) // stop after path finished
+            ),
+            new PrintCommand(
+                    "Trajectory Finished!"
             )
     );
   }

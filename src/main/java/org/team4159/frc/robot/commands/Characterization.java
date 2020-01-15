@@ -9,14 +9,14 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import org.team4159.frc.robot.subsystems.Drivetrain;
 
-public class CharacterizationRoutine extends CommandBase {
+public class Characterization extends CommandBase {
   private Drivetrain drivetrain;
 
   private NetworkTableEntry auto_speed_entry;
   private NetworkTableEntry telemetry_entry;
   private NetworkTableEntry rotate_entry;
 
-  public CharacterizationRoutine(Drivetrain drivetrain) {
+  public Characterization(Drivetrain drivetrain) {
     this.drivetrain = drivetrain;
     addRequirements(drivetrain);
   }

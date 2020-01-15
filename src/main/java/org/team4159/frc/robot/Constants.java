@@ -13,10 +13,12 @@ import java.util.List;
 
 public final class Constants {
   public final static class CAN_IDS {
-    public static final int LEFT_FRONT_TALON = 0;
-    public static final int LEFT_REAR_TALON = 1;
-    public static final int RIGHT_FRONT_TALON = 2;
-    public static final int RIGHT_REAR_TALON = 3;
+    public static final int LEFT_FRONT_FALCON_ID = 0;
+    public static final int LEFT_REAR_FALCON_ID = 1;
+    public static final int RIGHT_FRONT_FALCON_ID = 2;
+    public static final int RIGHT_REAR_TALON_ID = 3;
+
+    public static final int PIGEON_ID = 0;
   }
 
   public static final class DRIVE_CONSTANTS {

@@ -1,6 +1,8 @@
 package org.team4159.frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
+import com.ctre.phoenix.motorcontrol.can.TalonFX;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.sensors.PigeonIMU;
 
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
@@ -12,16 +14,14 @@ import edu.wpi.first.wpilibj.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import static org.team4159.frc.robot.Constants.*;
 
 public class Drivetrain extends SubsystemBase {
-  private TalonSRX left_front_talon, left_rear_talon, right_front_talon, right_rear_talon;
+  private TalonFX left_front_falcon, left_rear_falcon, right_front_falcon, right_rear_falcon;
 
-  private SpeedControllerGroup left_talons;
-  private SpeedControllerGroup right_talons;
+  private SpeedControllerGroup left_falcons;
+  private SpeedControllerGroup right_falcons;
 
   private DifferentialDrive differential_drive;
   private DifferentialDriveOdometry odometry;
@@ -29,34 +29,37 @@ public class Drivetrain extends SubsystemBase {
   private PigeonIMU pigeon;
 
   public Drivetrain() {
-    left_front_talon = configureTalonSRX(new WPI_TalonSRX(CAN_IDS.LEFT_FRONT_TALON));
-    left_rear_talon = configureTalonSRX(new WPI_TalonSRX(CAN_IDS.LEFT_REAR_TALON));
-    right_front_talon = configureTalonSRX(new WPI_TalonSRX(CAN_IDS.RIGHT_FRONT_TALON));
-    right_rear_talon = configureTalonSRX(new WPI_TalonSRX(CAN_IDS.RIGHT_REAR_TALON));
+    left_front_falcon = configureTalonFX(new WPI_TalonFX(CAN_IDS.LEFT_FRONT_FALCON_ID));
+    left_rear_falcon = configureTalonFX(new WPI_TalonFX(CAN_IDS.LEFT_REAR_FALCON_ID));
+    right_front_falcon = configureTalonFX(new WPI_TalonFX(CAN_IDS.RIGHT_FRONT_FALCON_ID));
+    right_rear_falcon = configureTalonFX(new WPI_TalonFX(CAN_IDS.RIGHT_REAR_TALON_ID));
 
-    left_front_talon.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative);
-    right_front_talon.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative);
+    left_front_falcon.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative);
+    right_front_falcon.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative);
+
+    //left_front_falcon.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
+    //right_front_falcon.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
 
     resetEncoders();
 
-    left_talons = new SpeedControllerGroup(
-            (WPI_TalonSRX) left_front_talon,
-            (WPI_TalonSRX) left_rear_talon);
-    right_talons = new SpeedControllerGroup(
-            (WPI_TalonSRX) right_front_talon,
-            (WPI_TalonSRX) right_rear_talon);
+    left_falcons = new SpeedControllerGroup(
+            (WPI_TalonFX) left_front_falcon,
+            (WPI_TalonFX) left_rear_falcon);
+    right_falcons = new SpeedControllerGroup(
+            (WPI_TalonFX) right_front_falcon,
+            (WPI_TalonFX) right_rear_falcon);
 
-    left_talons.setInverted(true);
+    left_falcons.setInverted(true);
 
-    pigeon = new PigeonIMU(right_rear_talon);
+    pigeon = new PigeonIMU(CAN_IDS.PIGEON_ID);
 
     resetDirection();
 
-    differential_drive = new DifferentialDrive(left_talons, right_talons);
+    differential_drive = new DifferentialDrive(left_falcons, right_falcons);
     odometry = new DifferentialDriveOdometry(Rotation2d.fromDegrees(getDirection()));
   }
 
-  private TalonSRX configureTalonSRX(TalonSRX talonSRX) {
+  private TalonFX configureTalonFX(TalonFX talonSRX) {
     talonSRX.configFactoryDefault();
     talonSRX.setNeutralMode(NeutralMode.Coast);
 
@@ -71,26 +74,34 @@ public class Drivetrain extends SubsystemBase {
             getRightDistance());
   }
 
+  public void stopMotors() {
+    differential_drive.stopMotor();
+  }
+
   public void arcadeDrive(double forward, double rotation) {
     differential_drive.arcadeDrive(forward, rotation);
   }
 
+  public void tankDrive(double left, double right) {
+    differential_drive.tankDrive(left, right);
+  }
+
   public void rawDrive(double left, double right) {
-    left_talons.set(left);
-    right_talons.set(right);
+    left_falcons.set(left);
+    right_falcons.set(right);
   }
 
   public void voltsDrive(double left_volts, double right_volts) {
-    left_talons.setVoltage(left_volts);
-    right_talons.setVoltage(right_volts);
+    left_falcons.setVoltage(left_volts);
+    right_falcons.setVoltage(right_volts);
   }
 
   public double getLeftVoltage() {
-    return left_front_talon.getMotorOutputVoltage();
+    return left_front_falcon.getMotorOutputVoltage();
   }
 
   public double getRightVoltage() {
-    return right_front_talon.getMotorOutputVoltage();
+    return right_front_falcon.getMotorOutputVoltage();
   }
 
   public void setPose(Pose2d pose) {
@@ -107,26 +118,26 @@ public class Drivetrain extends SubsystemBase {
   }
 
   public void resetEncoders() {
-    left_front_talon.setSelectedSensorPosition(0);
-    right_front_talon.setSelectedSensorPosition(0);
+    left_front_falcon.setSelectedSensorPosition(0);
+    right_front_falcon.setSelectedSensorPosition(0);
   }
 
   // distance in meters
   public double getLeftDistance() {
-    return left_front_talon.getSelectedSensorPosition() * DRIVE_CONSTANTS.METERS_PER_TICK;
+    return left_front_falcon.getSelectedSensorPosition() * DRIVE_CONSTANTS.METERS_PER_TICK;
   }
 
   // velocity in meters / sec
   public double getLeftVelocity() {
-    return left_front_talon.getSelectedSensorVelocity() * DRIVE_CONSTANTS.METERS_PER_TICK;
+    return left_front_falcon.getSelectedSensorVelocity() * DRIVE_CONSTANTS.METERS_PER_TICK;
   }
 
   public double getRightDistance() {
-    return right_front_talon.getSelectedSensorPosition() * DRIVE_CONSTANTS.METERS_PER_TICK;
+    return right_front_falcon.getSelectedSensorPosition() * DRIVE_CONSTANTS.METERS_PER_TICK;
   }
 
   public double getRightVelocity() {
-    return right_front_talon.getSelectedSensorVelocity() * DRIVE_CONSTANTS.METERS_PER_TICK;
+    return right_front_falcon.getSelectedSensorVelocity() * DRIVE_CONSTANTS.METERS_PER_TICK;
   }
 
   public void resetDirection() {

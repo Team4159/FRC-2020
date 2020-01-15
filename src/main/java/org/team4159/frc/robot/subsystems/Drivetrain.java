@@ -141,7 +141,7 @@ public class Drivetrain extends SubsystemBase {
   }
 
   public void resetDirection() {
-    pigeon.setYaw(0.0);
+    pigeon.setFusedHeading(0.0);
   }
 
   public double getDirection() {

@@ -2,10 +2,11 @@ package org.team4159.frc.robot;
 
 import java.io.File;
 
-import badlog.lib.BadLog;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+
+import badlog.lib.BadLog;
 
 import org.team4159.frc.robot.util.LogUtil;
 

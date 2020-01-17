@@ -3,7 +3,6 @@ package org.team4159.frc.robot;
 import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.geometry.Translation2d;
-import edu.wpi.first.wpilibj.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.wpilibj.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryConfig;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryGenerator;
@@ -13,15 +12,24 @@ import java.util.List;
 
 public final class Constants {
   public final static class CAN_IDS {
-    public static final int LEFT_FRONT_FALCON_ID = 0;
-    public static final int LEFT_REAR_FALCON_ID = 1;
-    public static final int RIGHT_FRONT_FALCON_ID = 2;
-    public static final int RIGHT_REAR_TALON_ID = 3;
+    public static final int LEFT_FRONT_FALCON_ID = 1;
+    public static final int LEFT_REAR_FALCON_ID = 2;
+    public static final int RIGHT_FRONT_FALCON_ID = 3;
+    public static final int RIGHT_REAR_TALON_ID = 4;
 
-    public static final int PIGEON_ID = 0;
+    public static final int TURRET_FALCON_ID = 5;
+
+    public static final int LEFT_SHOOTER_SPARK_ID = 1;
+    public static final int RIGHT_SHOOTER_SPARK_ID = 2;
+
+    public static final int INTAKE_TALON_ID = 1;
+    public static final int LIFTER_TALON_ID = 2;
+
+    public static final int PIGEON_ID = 1;
   }
 
   public static final class DRIVE_CONSTANTS {
+    public static final double GEAR_RATIO = 1.0;
     public static final double METERS_PER_TICK = 1.0; // meters / ticks
     public static final double TRACK_WIDTH = 0.69;
 
@@ -70,6 +78,5 @@ public final class Constants {
                             DRIVE_CONSTANTS.MAX_TRAJECTORY_ACCELERATION
                     )
             );
-
   }
 }

@@ -1,4 +1,4 @@
-package org.team4159.frc.robot.commands;
+package org.team4159.frc.robot.commands.characterization;
 
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
@@ -6,17 +6,17 @@ import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import edu.wpi.first.wpilibj2.command.CommandScheduler;
+
 import org.team4159.frc.robot.subsystems.Drivetrain;
 
-public class Characterization extends CommandBase {
+public class DrivetrainCharacterization extends CommandBase {
   private Drivetrain drivetrain;
 
   private NetworkTableEntry auto_speed_entry;
   private NetworkTableEntry telemetry_entry;
   private NetworkTableEntry rotate_entry;
 
-  public Characterization(Drivetrain drivetrain) {
+  public DrivetrainCharacterization(Drivetrain drivetrain) {
     this.drivetrain = drivetrain;
     addRequirements(drivetrain);
   }

@@ -20,10 +20,7 @@ public class RobotContainer {
 
   private final FollowTrajectory follow_trajectory_command = new FollowTrajectory(
           TRAJECTORIES.TEST_TRAJECTORY,
-          drivetrain,
-          drivetrain::getPose,
-          drivetrain::getWheelSpeeds,
-          drivetrain::voltsDrive);
+          drivetrain);
   private final Characterization characterization_command = new Characterization(
           drivetrain);
   private final InstantCommand default_command = new InstantCommand();

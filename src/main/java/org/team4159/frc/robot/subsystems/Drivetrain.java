@@ -34,11 +34,8 @@ public class Drivetrain extends SubsystemBase {
     right_front_falcon = configureTalonFX(new WPI_TalonFX(CAN_IDS.RIGHT_FRONT_FALCON_ID));
     right_rear_falcon = configureTalonFX(new WPI_TalonFX(CAN_IDS.RIGHT_REAR_TALON_ID));
 
-    left_front_falcon.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative);
-    right_front_falcon.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative);
-
-    //left_front_falcon.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
-    //right_front_falcon.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
+    left_front_falcon.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
+    right_front_falcon.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
 
     resetEncoders();
 

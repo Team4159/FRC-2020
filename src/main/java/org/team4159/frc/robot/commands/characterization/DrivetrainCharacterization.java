@@ -66,9 +66,9 @@ public class DrivetrainCharacterization extends CommandBase {
     });
 
     // Provide visuals to humans
-    SmartDashboard.putNumber("l_encoder_pos", left_pos);
-    SmartDashboard.putNumber("l_encoder_rate", left_rate);
-    SmartDashboard.putNumber("r_encoder_pos", right_pos);
-    SmartDashboard.putNumber("r_encoder_rate", right_rate);
+    System.out.println("l_encoder_pos: " + left_pos);
+    System.out.println("l_encoder_rate: " + left_rate);
+    System.out.println("r_encoder_pos: " + right_pos);
+    System.out.println("r_encoder_rate " + right_rate);
   }
 }

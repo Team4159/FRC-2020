@@ -1,5 +1,6 @@
 import edu.wpi.first.wpilibj.trajectory.Trajectory;
 import org.junit.Test;
+import org.team4159.frc.robot.Trajectories;
 import org.team4159.frc.robot.traj.Trajectories;
 
 public class TrajectoryPrinter {

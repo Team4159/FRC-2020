@@ -29,9 +29,14 @@ public final class Constants {
   }
 
   public static final class DRIVE_CONSTANTS {
-    public static final double GEAR_RATIO = 1.0;
-    public static final double METERS_PER_TICK = 1.0; // meters / ticks
-    public static final double TRACK_WIDTH = 0.69;
+    public static final double GEAR_RATIO = 8.48;
+    public static final double WHEEL_RADIUS = Units.inchesToMeters(3.0);
+
+    public static final int FALCON_CPR = 2048;
+
+    public static final double METERS_PER_TICK = (Math.PI * 2.0 * WHEEL_RADIUS) / (FALCON_CPR * GEAR_RATIO);
+
+    public static final double TRACK_WIDTH = Units.inchesToMeters(21.5);
 
     // TODO: MEASURE!
     public static final double MAX_TRAJECTORY_SPEED = 3.0;
@@ -53,30 +58,4 @@ public final class Constants {
     public static final int RIGHT_JOY = 1;
   }
 
-  public static final class TRAJECTORIES {
-    public static final Trajectory TEST_TRAJECTORY =
-            TrajectoryGenerator.generateTrajectory(
-                    List.of(
-                            new Pose2d(Units.feetToMeters(1.0), Units.feetToMeters(0.0), Rotation2d.fromDegrees(90.0)),
-                            new Pose2d(Units.feetToMeters(0.0), Units.feetToMeters(5.0), Rotation2d.fromDegrees(90.0))
-                    ),
-                    new TrajectoryConfig(
-                            DRIVE_CONSTANTS.MAX_TRAJECTORY_SPEED,
-                            DRIVE_CONSTANTS.MAX_TRAJECTORY_ACCELERATION
-                    )
-            );
-
-    public static final Trajectory TRENCH_RUN_BAL_TO_SHOOTING_POS =
-            TrajectoryGenerator.generateTrajectory(
-                    new Pose2d(Units.feetToMeters(0.0), Units.feetToMeters(0.0), Rotation2d.fromDegrees(0.0)),
-                    List.of(
-                            new Translation2d(Units.feetToMeters(2.0), Units.feetToMeters(2.0))
-                    ),
-                    new Pose2d(Units.inchesToMeters(27.75), Units.inchesToMeters(250.36), Rotation2d.fromDegrees(180.0)),
-                    new TrajectoryConfig(
-                            DRIVE_CONSTANTS.MAX_TRAJECTORY_SPEED,
-                            DRIVE_CONSTANTS.MAX_TRAJECTORY_ACCELERATION
-                    )
-            );
-  }
 }

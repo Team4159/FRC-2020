@@ -2,15 +2,21 @@ package org.team4159.lib;
 
 import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
-import org.team4159.frc.robot.subsystems.Drivetrain;
 
-public class DrivetrainPosition {
+/**
+ * Tracks a physical object and its heading (i.e. a Drivetrain) on a Cartesian x, y plane, when fed encoder and gyro values.
+ */
+public class Odometry {
   private Pose2d position;
 
   private double prev_magnitude;
 
-  public DrivetrainPosition(Pose2d current_position) {
+  public Odometry(Pose2d current_position) {
     position = current_position;
+  }
+
+  public Odometry() {
+    this(new Pose2d());
   }
 
   public Pose2d getPose() {

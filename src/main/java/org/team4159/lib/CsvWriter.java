@@ -38,7 +38,7 @@ public class CsvWriter {
     }
   }
 
-  public String finish() {
+  public String closeWriter() {
     try {
       writer.flush();
       writer.close();

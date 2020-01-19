@@ -8,6 +8,9 @@ import edu.wpi.first.wpilibj.trajectory.TrajectoryGenerator;
 
 import java.util.List;
 
+/*
+ * http://docs.wpilib.org/en/latest/docs/software/advanced-control/trajectories/index.html
+ */
 public class Trajectories {
   public static final Trajectory TEST_TRAJECTORY =
           TrajectoryGenerator.generateTrajectory(

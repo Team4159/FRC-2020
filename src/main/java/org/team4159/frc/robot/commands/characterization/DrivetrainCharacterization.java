@@ -8,6 +8,9 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 
 import org.team4159.frc.robot.subsystems.Drivetrain;
 
+/*
+ * http://docs.wpilib.org/en/latest/docs/software/wpilib-tools/robot-characterization
+ */
 public class DrivetrainCharacterization extends CommandBase {
   private Drivetrain drivetrain;
 

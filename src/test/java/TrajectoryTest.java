@@ -9,7 +9,6 @@ import org.junit.Test;
 import org.junit.rules.TestName;
 import org.team4159.frc.robot.Trajectories;
 import org.team4159.lib.CsvWriter;
-import org.team4159.lib.Odometry;
 
 import java.util.List;
 
@@ -36,7 +35,7 @@ public class TrajectoryTest {
                        state.poseMeters.getRotation().getDegrees());
     }
 
-    csv_writer.finish();
+    csv_writer.closeWriter();
 
     final Pose2d final_pose = states.get(states.size() - 1).poseMeters;
 

@@ -65,7 +65,7 @@ public class Drivetrain extends SubsystemBase {
 
   @Override
   public void periodic() {
-    odometry.update(
+    odometry.updateOdometry(
       getLeftDistance(),
       getRightDistance(),
       getDirection());
@@ -116,7 +116,7 @@ public class Drivetrain extends SubsystemBase {
 
   public void setPose(Translation2d coords) {
     resetEncoders();
-    odometry.set(new Pose2d(coords, Rotation2d.fromDegrees(getDirection())));
+    odometry.setPose(new Pose2d(coords, Rotation2d.fromDegrees(getDirection())));
   }
 
   public void zeroSensors() {

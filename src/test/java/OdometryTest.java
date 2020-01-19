@@ -71,7 +71,7 @@ public class OdometryTest {
 
     Assert.assertEquals("Expected Final X: 0.707, Output Final X: " + final_x, Math.sqrt(2.0) / 2.0, final_x, 0.1);
     Assert.assertEquals("Expected Final Y: 0.707, Output Final Y: " + final_y, Math.sqrt(2.0) / 2.0, final_y, 0.1);
-    Assert.assertEquals("Expected Final Direction: 45.0, Output Final Direction: " + final_direction, 0.1, 45.0, 0.1);
+    Assert.assertEquals("Expected Final Direction: 45.0, Output Final Direction: " + final_direction, 45.0, final_direction, 0.1);
   }
 }
 

@@ -2,6 +2,7 @@ package org.team4159.lib;
 
 import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.util.Units;
 
 /**
  * Tracks a physical object and its heading (i.e. a Drivetrain) on a Cartesian x, y plane, when fed encoder and gyro values.
@@ -27,8 +28,8 @@ public class Odometry {
     double magnitude = current_magnitude - prev_magnitude;
     prev_magnitude = current_magnitude;
 
-    double dx = magnitude * Math.cos(current_heading);
-    double dy = magnitude * Math.sin(current_heading);
+    double dx = magnitude * Math.cos(Units.degreesToRadians(current_heading));
+    double dy = magnitude * Math.sin(Units.degreesToRadians(current_heading));
 
     Pose2d new_position = new Pose2d(dx + position.getTranslation().getX(),
                           dy + position.getTranslation().getY(),

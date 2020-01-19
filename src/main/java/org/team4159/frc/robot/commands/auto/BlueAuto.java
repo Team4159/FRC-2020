@@ -12,9 +12,9 @@ public class BlueAuto extends SequentialCommandGroup {
     addRequirements(drivetrain);
 
     addCommands(
-            // start position to trench run
-            // new FollowTrajectory(Trajectories.TRENCH_RUN_BALL_TO_SHOOTING_POS, drivetrain)
-            // shoot ball
+      // start position to trench run
+      // new FollowTrajectory(Trajectories.TRENCH_RUN_BALL_TO_SHOOTING_POS, drivetrain)
+      // shoot ball
     );
   }
 }

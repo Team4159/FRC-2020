@@ -42,11 +42,11 @@ public class Drivetrain extends SubsystemBase {
     right_front_falcon.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
 
     left_falcons = new SpeedControllerGroup(
-            (WPI_TalonFX) left_front_falcon,
-            (WPI_TalonFX) left_rear_falcon);
+      (WPI_TalonFX) left_front_falcon,
+      (WPI_TalonFX) left_rear_falcon);
     right_falcons = new SpeedControllerGroup(
-            (WPI_TalonFX) right_front_falcon,
-            (WPI_TalonFX) right_rear_falcon);
+      (WPI_TalonFX) right_front_falcon,
+      (WPI_TalonFX) right_rear_falcon);
 
     left_falcons.setInverted(true);
 

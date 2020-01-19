@@ -10,7 +10,7 @@ import edu.wpi.first.wpilibj.util.Units;
 public class Odometry {
   private Pose2d position;
 
-  private double prev_magnitude;
+  private double prev_magnitude = 0;
 
   public Odometry(Pose2d current_position) {
     position = current_position;
@@ -42,5 +42,6 @@ public class Odometry {
 
   public void setPose(Pose2d new_position) {
     position = new_position;
+    prev_magnitude = 0;
   }
 }

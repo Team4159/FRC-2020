@@ -3,7 +3,6 @@ package org.team4159.lib;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -20,7 +19,6 @@ public class CsvWriter {
       file = File.createTempFile(filename, suffix);
       writer = new FileWriter(file);
       System.out.println("Output: " + file.getPath());
-
     } catch (IOException exception) {
       System.err.println(exception.toString());
     }
@@ -32,7 +30,6 @@ public class CsvWriter {
         writer.append(line + ", ");
       }
       writer.append("\n");
-
     } catch (IOException exception) {
       System.err.println(exception.toString());
     }

@@ -15,30 +15,28 @@ public class FollowTrajectory extends SequentialCommandGroup {
   public FollowTrajectory(Trajectory trajectory, Drivetrain drivetrain) {
     addRequirements(drivetrain);
 
-    drivetrain.zeroSensors();
-
     addCommands(
-            new RamseteCommand(
-                    trajectory, // desired trajectory to follow
-                    drivetrain::getPose, // method reference to pose supplier
-                    new RamseteController(DRIVE_CONSTANTS.kB,
-                            DRIVE_CONSTANTS.kZeta), // object that performs path-following computation
-                    new SimpleMotorFeedforward(DRIVE_CONSTANTS.kS,
-                            DRIVE_CONSTANTS.kV,
-                            DRIVE_CONSTANTS.kA), // feedforward gains kS, kV, kA obtained from characterization
-                    new DifferentialDriveKinematics(DRIVE_CONSTANTS.TRACK_WIDTH), // track width
-                    drivetrain::getWheelSpeeds, // method reference to wheel speed supplier
-                    new PIDController(DRIVE_CONSTANTS.kP, 0, DRIVE_CONSTANTS.kD), // left side PID using Proportional gain from characterization
-                    new PIDController(DRIVE_CONSTANTS.kP, 0, DRIVE_CONSTANTS.kD), // right side PID using Proportional gain from characterization
-                    drivetrain::voltsDrive, // method reference to pass voltage outputs to motors
-                    drivetrain // require drivetrain subsystem
-            ),
-            new InstantCommand(
-                    () -> drivetrain.voltsDrive(0.0, 0.0) // stop after path finished
-            ),
-            new PrintCommand(
-                    "Trajectory Finished!"
-            )
+      new RamseteCommand(
+        trajectory, // desired trajectory to follow
+        drivetrain::getPose, // method reference to pose supplier
+        new RamseteController(DRIVE_CONSTANTS.kB,
+                              DRIVE_CONSTANTS.kZeta), // object that performs path-following computation
+        new SimpleMotorFeedforward(DRIVE_CONSTANTS.kS,
+                                   DRIVE_CONSTANTS.kV,
+                                   DRIVE_CONSTANTS.kA), // feedforward gains kS, kV, kA obtained from characterization
+        new DifferentialDriveKinematics(DRIVE_CONSTANTS.TRACK_WIDTH), // track width
+        drivetrain::getWheelSpeeds, // method reference to wheel speed supplier
+        new PIDController(DRIVE_CONSTANTS.kP, 0, DRIVE_CONSTANTS.kD), // left side PID using Proportional gain from characterization
+        new PIDController(DRIVE_CONSTANTS.kP, 0, DRIVE_CONSTANTS.kD), // right side PID using Proportional gain from characterization
+        drivetrain::voltsDrive, // method reference to pass voltage outputs to motors
+        drivetrain // require drivetrain subsystem
+      ),
+      new InstantCommand(
+        () -> drivetrain.voltsDrive(0.0, 0.0) // stop after path finished
+      ),
+      new PrintCommand(
+        "Trajectory Finished!"
+      )
     );
   }
 }

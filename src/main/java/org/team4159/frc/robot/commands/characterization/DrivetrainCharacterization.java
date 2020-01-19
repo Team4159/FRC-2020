@@ -54,17 +54,17 @@ public class DrivetrainCharacterization extends CommandBase {
     drivetrain.rawDrive((rotate_entry.getBoolean(false) ? -1 : 1) * autospeed, autospeed);
 
     // send telemetry data array back to NT
-    telemetry_entry.setNumberArray(new Number[] {
-            timestamp,
-            battery,
-            autospeed,
-            left_volts,
-            right_volts,
-            left_pos,
-            right_pos,
-            left_rate,
-            right_rate,
-            drivetrain_angle
+    telemetry_entry.setNumberArray(new Number[]{
+      timestamp,
+      battery,
+      autospeed,
+      left_volts,
+      right_volts,
+      left_pos,
+      right_pos,
+      left_rate,
+      right_rate,
+      drivetrain_angle
     });
 
     // Provide visuals to humans

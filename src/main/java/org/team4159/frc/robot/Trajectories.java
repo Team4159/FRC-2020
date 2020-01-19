@@ -13,15 +13,15 @@ import java.util.List;
  */
 public class Trajectories {
   public static final Trajectory TEST_TRAJECTORY =
-          TrajectoryGenerator.generateTrajectory(
-                  List.of(
-                          new Pose2d(1.0, 0.0, Rotation2d.fromDegrees(0.0)),
-                          new Pose2d(0.0, 3.0, Rotation2d.fromDegrees(90.0))
-                  ),
-                  new TrajectoryConfig(
-                          0.5,
-                          Constants.DRIVE_CONSTANTS.MAX_TRAJECTORY_ACCELERATION
-                  )
-          );
+    TrajectoryGenerator.generateTrajectory(
+      List.of(
+        new Pose2d(1.0, 0.0, Rotation2d.fromDegrees(0.0)),
+        new Pose2d(0.0, 3.0, Rotation2d.fromDegrees(90.0))
+      ),
+      new TrajectoryConfig(
+        0.5,
+        Constants.DRIVE_CONSTANTS.MAX_TRAJECTORY_ACCELERATION
+      )
+    );
 }
 

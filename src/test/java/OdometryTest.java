@@ -11,19 +11,23 @@ public class OdometryTest {
 
   private Odometry odometry;
 
+  private double distance;
+  private double direction;
+
   @Before
   public void reset() {
+    distance = 0.0;
+    direction = 0.0;
+
     odometry = new Odometry();
   }
 
   @Test
   public void GoesForwardOneMeter() {
-    double magnitude = 0.0;
-
     for (int i = 0; i < 100; i++) {
-      magnitude += 0.01;
+      distance += 0.01;
 
-      odometry.update(magnitude, 0.0);
+      odometry.update(distance, direction);
 
       final Pose2d current_pose = odometry.getPose();
 
@@ -40,8 +44,13 @@ public class OdometryTest {
     final double final_y = final_pose.getTranslation().getY();
     final double final_direction = final_pose.getRotation().getDegrees();
 
-    Assert.assertEquals("Expected Final X: 1.0, Output Final X: " + final_x, 1.0, final_x, 0.0);
-    Assert.assertEquals("Expected Final Y: 0.0, Output Final Y: " + final_y, 0.0, final_y, 0.0);
-    Assert.assertEquals("Expected Final Direction: 0.0, Output Final Direction: " + final_direction, 0.0, final_direction, 0.0);
+    Assert.assertEquals("Expected Final X: 1.0, Output Final X: " + final_x, 1.0, final_x, 0.1);
+    Assert.assertEquals("Expected Final Y: 0.0, Output Final Y: " + final_y, 0.0, final_y, 0.1);
+    Assert.assertEquals("Expected Final Direction: 0.0, Output Final Direction: " + final_direction, 0.1, final_direction, 0.1);
+  }
+
+  @Test
+  public void GoesDiagonallyOneMeter() {
+    dou
   }
 }

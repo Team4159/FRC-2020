@@ -18,8 +18,12 @@ public class OdometryTest {
 
   @Test
   public void GoesForwardOneMeter() {
+    double magnitude = 0.0;
+
     for (int i = 0; i < 100; i++) {
-      odometry.update(0.01, 0.0);
+      magnitude += 0.01;
+
+      odometry.update(magnitude, 0.0);
 
       final Pose2d current_pose = odometry.getPose();
 

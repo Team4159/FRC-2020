@@ -15,6 +15,8 @@ public class FollowTrajectory extends SequentialCommandGroup {
   public FollowTrajectory(Trajectory trajectory, Drivetrain drivetrain) {
     addRequirements(drivetrain);
 
+    drivetrain.zeroSensors();
+
     addCommands(
             new RamseteCommand(
                     trajectory, // desired trajectory to follow
@@ -26,8 +28,8 @@ public class FollowTrajectory extends SequentialCommandGroup {
                             DRIVE_CONSTANTS.kA), // feedforward gains kS, kV, kA obtained from characterization
                     new DifferentialDriveKinematics(DRIVE_CONSTANTS.TRACK_WIDTH), // track width
                     drivetrain::getWheelSpeeds, // method reference to wheel speed supplier
-                    new PIDController(DRIVE_CONSTANTS.kP, 0, 0), // left side PID using Proportional gain from characterization
-                    new PIDController(DRIVE_CONSTANTS.kP, 0, 0), // right side PID using Proportional gain from characterization
+                    new PIDController(DRIVE_CONSTANTS.kP, 0, DRIVE_CONSTANTS.kD), // left side PID using Proportional gain from characterization
+                    new PIDController(DRIVE_CONSTANTS.kP, 0, DRIVE_CONSTANTS.kD), // right side PID using Proportional gain from characterization
                     drivetrain::voltsDrive, // method reference to pass voltage outputs to motors
                     drivetrain // require drivetrain subsystem
             ),

@@ -39,9 +39,9 @@ public class DrivetrainCharacterization extends CommandBase {
     double drivetrain_angle = Math.toRadians(drivetrain.getDirection());
 
     double left_pos = drivetrain.getLeftDistance();
-    double left_rate = drivetrain.getLeftVelocity();
+    double left_rate = drivetrain.getLeftVelocity() * 10;
     double right_pos = drivetrain.getRightDistance();
-    double right_rate = drivetrain.getRightVelocity();
+    double right_rate = drivetrain.getRightVelocity() * 10;
     double left_volts = drivetrain.getLeftVoltage();
     double right_volts = drivetrain.getRightVoltage();
 
@@ -66,9 +66,5 @@ public class DrivetrainCharacterization extends CommandBase {
     });
 
     // Provide visuals to humans
-    System.out.println("l_encoder_pos: " + left_pos);
-    System.out.println("l_encoder_rate: " + left_rate);
-    System.out.println("r_encoder_pos: " + right_pos);
-    System.out.println("r_encoder_rate " + right_rate);
   }
 }

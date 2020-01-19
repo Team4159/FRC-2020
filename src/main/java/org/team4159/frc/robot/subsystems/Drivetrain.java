@@ -7,14 +7,15 @@ import com.ctre.phoenix.sensors.PigeonIMU;
 
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
-import edu.wpi.first.wpilibj.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
-import edu.wpi.first.wpilibj.kinematics.DifferentialDriveOdometry;
+import edu.wpi.first.wpilibj.geometry.Translation2d;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveWheelSpeeds;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
+import org.team4159.lib.DrivetrainPosition;
 
 import static org.team4159.frc.robot.Constants.*;
 
@@ -25,11 +26,10 @@ public class Drivetrain extends SubsystemBase {
   private SpeedControllerGroup right_falcons;
 
   private DifferentialDrive differential_drive;
-  private DifferentialDriveOdometry odometry;
+
+  private DrivetrainPosition odometry;
 
   private PigeonIMU pigeon;
-
-  private DifferentialDrive drive;
 
   private boolean is_oriented_forward;
 
@@ -57,23 +57,29 @@ public class Drivetrain extends SubsystemBase {
 
     pigeon = new PigeonIMU(CAN_IDS.PIGEON_ID);
 
-    drive = new DifferentialDrive(left_falcons, right_falcons);
 
     resetDirection();
 
     differential_drive = new DifferentialDrive(left_falcons, right_falcons);
-    odometry = new DifferentialDriveOdometry(Rotation2d.fromDegrees(getDirection()));
+
+    odometry = new DrivetrainPosition(new Pose2d(0.0, 0.0, Rotation2d.fromDegrees(getDirection())));
   }
 
   public void flipOrientation() {
     is_oriented_forward = !is_oriented_forward;
   }
 
+  @Override
   public void periodic() {
     odometry.update(
-      Rotation2d.fromDegrees(getDirection()),
       getLeftDistance(),
-      getRightDistance());
+      getRightDistance(),
+      getDirection());
+
+    SmartDashboard.putNumber("X: ", odometry.getPose().getTranslation().getX());
+    SmartDashboard.putNumber("Y: ", odometry.getPose().getTranslation().getY());
+    SmartDashboard.putNumber("DEG: ", + getDirection());
+    SmartDashboard.putNumber("ODO_DEG: ", + odometry.getPose().getRotation().getDegrees());
   }
 
   private TalonFX configureTalonFX(TalonFX talonSRX) {
@@ -85,9 +91,9 @@ public class Drivetrain extends SubsystemBase {
 
   public void setRawSpeeds(double left, double right) {
     if (is_oriented_forward) {
-      drive.tankDrive(left, right);
+      differential_drive.tankDrive(left, right);
     } else {
-      drive.tankDrive(-right, -left);
+      differential_drive.tankDrive(-right, -left);
     }
   }
 
@@ -102,7 +108,7 @@ public class Drivetrain extends SubsystemBase {
 
   public void voltsDrive(double left_volts, double right_volts) {
     left_falcons.setVoltage(left_volts);
-    right_falcons.setVoltage(right_volts);
+    right_falcons.setVoltage(-right_volts);
   }
 
   public void stopMotors() {
@@ -117,13 +123,13 @@ public class Drivetrain extends SubsystemBase {
     return right_front_falcon.getMotorOutputVoltage();
   }
 
-  public void setPose(Pose2d pose) {
+  public void setPose(Translation2d coords) {
     resetEncoders();
-    odometry.resetPosition(pose, Rotation2d.fromDegrees(getDirection()));
+    odometry.set(new Pose2d(coords, Rotation2d.fromDegrees(getDirection())));
   }
 
   public Pose2d getPose() {
-    return odometry.getPoseMeters();
+    return odometry.getPose();
   }
 
   public DifferentialDriveWheelSpeeds getWheelSpeeds() {
@@ -159,5 +165,11 @@ public class Drivetrain extends SubsystemBase {
 
   public double getDirection() {
     return pigeon.getFusedHeading();
+  }
+
+  public void zeroSensors() {
+    resetEncoders();
+    resetDirection();
+    setPose(new Translation2d(0.0, 0.0));
   }
 }

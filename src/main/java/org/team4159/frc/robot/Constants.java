@@ -22,7 +22,7 @@ public final class Constants {
     public static final int LEFT_SHOOTER_SPARK_ID = 1;
     public static final int RIGHT_SHOOTER_SPARK_ID = 2;
 
-    public static final int INTAKE_TALON_ID = 1;
+    public static final int ARM_SPARK_ID = 3;
     public static final int LIFTER_TALON_ID = 2;
 
     public static final int PIGEON_ID = 1;
@@ -36,17 +36,18 @@ public final class Constants {
 
     public static final double METERS_PER_TICK = (Math.PI * 2.0 * WHEEL_RADIUS) / (FALCON_CPR * GEAR_RATIO);
 
-    public static final double TRACK_WIDTH = Units.inchesToMeters(21.5);
-
     // TODO: MEASURE!
     public static final double MAX_TRAJECTORY_SPEED = 3.0;
     public static final double MAX_TRAJECTORY_ACCELERATION = 3.0;
 
-    public static final double kS = 0.22; // volts
-    public static final double kV = 1.98; // volts * seconds / meters
-    public static final double kA = 0.2; // volts * (seconds ^ 2) / meters
+    public static final double kS = 1.33; // volts
+    public static final double kV = 1.43; // volts * seconds / meters
+    public static final double kA = 0.115; // volts * (seconds ^ 2) / meters
 
-    public static final double kP = 8.5;
+    public static final double kP = 0.00118;
+    public static final double kD = 0.000566;
+
+    public static final double TRACK_WIDTH = 0.026282014850357034;
 
     // ramsete constants (tested for most robots)
     public static final double kB = 2.0;

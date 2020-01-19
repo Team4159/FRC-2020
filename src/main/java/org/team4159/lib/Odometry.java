@@ -30,11 +30,17 @@ public class Odometry {
     double dx = magnitude * Math.cos(current_heading);
     double dy = magnitude * Math.sin(current_heading);
 
+<<<<<<< HEAD
     Pose2d new_position = new Pose2d(dx + position.getTranslation().getX(),
                           dy + position.getTranslation().getY(),
                           Rotation2d.fromDegrees(current_heading));
 
     position = new_position;
+=======
+    position = new Pose2d(dx + position.getTranslation().getX(),
+                          dy + position.getTranslation().getY(),
+                          Rotation2d.fromDegrees(current_heading));
+>>>>>>> d1c14f4eb02defe26bb3761b4d62d2c2d79c45e2
   }
 
   public void update(double left, double right, double current_heading) {

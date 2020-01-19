@@ -2,20 +2,32 @@ import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.trajectory.Trajectory;
 
 import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 
+import org.junit.rules.TestName;
 import org.team4159.frc.robot.Trajectories;
 import org.team4159.lib.CsvWriter;
+import org.team4159.lib.Odometry;
 
 import java.util.List;
 
 public class TrajectoryTest {
-  private final CsvWriter csv_writer = new CsvWriter("trajectory_test");
+  @Rule
+  public TestName name = new TestName();
+
+  private CsvWriter csv_writer;
 
   private final Trajectory test_trajectory = Trajectories.TEST_TRAJECTORY;
 
+  @Before
+  public void reset() {
+    csv_writer = new CsvWriter(name.getMethodName());
+  }
+
   @Test
-  public void TestTrajectory() {
+  public void TestTrajectoryPath() {
     final List<Trajectory.State> states = test_trajectory.getStates();
 
     for (Trajectory.State state : states) {

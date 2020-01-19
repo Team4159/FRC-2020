@@ -1,18 +1,24 @@
 import edu.wpi.first.wpilibj.geometry.Pose2d;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+
+import org.junit.rules.TestName;
 import org.team4159.lib.CsvWriter;
 import org.team4159.lib.Odometry;
 
 public class OdometryTest {
-  private final CsvWriter csv_writer = new CsvWriter("odometry_test");
+  @Rule
+  public TestName name = new TestName();
+
+  private CsvWriter csv_writer;
 
   private Odometry odometry;
 
-  private double distance;
-  private double direction;
+  private double distance = 0.0;
+  private double direction = 0.0;
 
   @Before
   public void reset() {
@@ -20,6 +26,7 @@ public class OdometryTest {
     direction = 0.0;
 
     odometry = new Odometry();
+    csv_writer = new CsvWriter(name.getMethodName());
   }
 
   @Test

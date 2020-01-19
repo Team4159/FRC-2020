@@ -4,6 +4,7 @@ import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.sensors.PigeonIMU;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
@@ -11,10 +12,7 @@ import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.geometry.Translation2d;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveWheelSpeeds;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-
-import com.ctre.phoenix.motorcontrol.NeutralMode;
 
 import org.team4159.lib.Odometry;
 
@@ -32,11 +30,9 @@ public class Drivetrain extends SubsystemBase {
 
   private PigeonIMU pigeon;
 
-  private boolean is_oriented_forward;
+  private boolean is_oriented_forward = true;
 
   public Drivetrain() {
-    is_oriented_forward = true;
-
     left_front_falcon = configureTalonFX(new WPI_TalonFX(CAN_IDS.LEFT_FRONT_FALCON_ID));
     left_rear_falcon = configureTalonFX(new WPI_TalonFX(CAN_IDS.LEFT_REAR_FALCON_ID));
     right_front_falcon = configureTalonFX(new WPI_TalonFX(CAN_IDS.RIGHT_FRONT_FALCON_ID));
@@ -44,8 +40,6 @@ public class Drivetrain extends SubsystemBase {
 
     left_front_falcon.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
     right_front_falcon.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
-
-    resetEncoders();
 
     left_falcons = new SpeedControllerGroup(
             (WPI_TalonFX) left_front_falcon,
@@ -58,12 +52,11 @@ public class Drivetrain extends SubsystemBase {
 
     pigeon = new PigeonIMU(CAN_IDS.PIGEON_ID);
 
+    differential_drive = new DifferentialDrive(left_falcons, right_falcons);
+    odometry = new Odometry(new Pose2d(0.0, 0.0, Rotation2d.fromDegrees(getDirection())));
 
     resetDirection();
-
-    differential_drive = new DifferentialDrive(left_falcons, right_falcons);
-
-    odometry = new Odometry(new Pose2d(0.0, 0.0, Rotation2d.fromDegrees(getDirection())));
+    resetEncoders();
   }
 
   public void flipOrientation() {
@@ -76,11 +69,6 @@ public class Drivetrain extends SubsystemBase {
       getLeftDistance(),
       getRightDistance(),
       getDirection());
-
-    SmartDashboard.putNumber("X: ", odometry.getPose().getTranslation().getX());
-    SmartDashboard.putNumber("Y: ", odometry.getPose().getTranslation().getY());
-    SmartDashboard.putNumber("DEG: ", + getDirection());
-    SmartDashboard.putNumber("ODO_DEG: ", + odometry.getPose().getRotation().getDegrees());
   }
 
   private TalonFX configureTalonFX(TalonFX talonSRX) {
@@ -90,7 +78,7 @@ public class Drivetrain extends SubsystemBase {
     return talonSRX;
   }
 
-  public void setRawSpeeds(double left, double right) {
+  public void tankDrive(double left, double right) {
     if (is_oriented_forward) {
       differential_drive.tankDrive(left, right);
     } else {
@@ -99,21 +87,51 @@ public class Drivetrain extends SubsystemBase {
   }
 
   public void arcadeDrive(double forward, double rotation) {
-    differential_drive.arcadeDrive(forward, rotation);
+    if (is_oriented_forward) {
+      differential_drive.arcadeDrive(forward, rotation);
+    } else {
+      differential_drive.arcadeDrive(-forward, -rotation);
+    }
   }
 
   public void rawDrive(double left, double right) {
-    left_falcons.set(left);
-    right_falcons.set(right);
+    if (is_oriented_forward) {
+      left_falcons.set(left);
+      right_falcons.set(right);
+    } else {
+      left_falcons.set(-right);
+      right_falcons.set(-left);
+    }
   }
 
   public void voltsDrive(double left_volts, double right_volts) {
-    left_falcons.setVoltage(left_volts);
-    right_falcons.setVoltage(-right_volts);
+    if (is_oriented_forward) {
+      left_falcons.setVoltage(left_volts);
+      right_falcons.setVoltage(right_volts);
+    } else {
+      left_falcons.setVoltage(-right_volts);
+      right_falcons.setVoltage(-left_volts);
+    }
   }
 
-  public void stopMotors() {
-    differential_drive.stopMotor();
+  public void setPose(Translation2d coords) {
+    resetEncoders();
+    odometry.set(new Pose2d(coords, Rotation2d.fromDegrees(getDirection())));
+  }
+
+  public void zeroSensors() {
+    resetEncoders();
+    resetDirection();
+    setPose(new Translation2d(0.0, 0.0));
+  }
+
+  public void resetEncoders() {
+    left_front_falcon.setSelectedSensorPosition(0);
+    right_front_falcon.setSelectedSensorPosition(0);
+  }
+
+  public void resetDirection() {
+    pigeon.setFusedHeading(0.0);
   }
 
   public double getLeftVoltage() {
@@ -122,24 +140,6 @@ public class Drivetrain extends SubsystemBase {
 
   public double getRightVoltage() {
     return right_front_falcon.getMotorOutputVoltage();
-  }
-
-  public void setPose(Translation2d coords) {
-    resetEncoders();
-    odometry.set(new Pose2d(coords, Rotation2d.fromDegrees(getDirection())));
-  }
-
-  public Pose2d getPose() {
-    return odometry.getPose();
-  }
-
-  public DifferentialDriveWheelSpeeds getWheelSpeeds() {
-    return new DifferentialDriveWheelSpeeds(getLeftVelocity(), getRightVelocity());
-  }
-
-  public void resetEncoders() {
-    left_front_falcon.setSelectedSensorPosition(0);
-    right_front_falcon.setSelectedSensorPosition(0);
   }
 
   // distance in meters
@@ -160,17 +160,15 @@ public class Drivetrain extends SubsystemBase {
     return right_front_falcon.getSelectedSensorVelocity() * DRIVE_CONSTANTS.METERS_PER_TICK;
   }
 
-  public void resetDirection() {
-    pigeon.setFusedHeading(0.0);
+  public Pose2d getPose() {
+    return odometry.getPose();
+  }
+
+  public DifferentialDriveWheelSpeeds getWheelSpeeds() {
+    return new DifferentialDriveWheelSpeeds(getLeftVelocity(), getRightVelocity());
   }
 
   public double getDirection() {
     return pigeon.getFusedHeading();
-  }
-
-  public void zeroSensors() {
-    resetEncoders();
-    resetDirection();
-    setPose(new Translation2d(0.0, 0.0));
   }
 }

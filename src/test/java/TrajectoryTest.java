@@ -35,7 +35,7 @@ public class TrajectoryTest {
                        state.poseMeters.getRotation().getDegrees());
     }
 
-    csv_writer.closeWriter();
+    csv_writer.close();
 
     final Pose2d final_pose = states.get(states.size() - 1).poseMeters;
 

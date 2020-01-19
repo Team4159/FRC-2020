@@ -65,7 +65,7 @@ public class Drivetrain extends SubsystemBase {
 
   @Override
   public void periodic() {
-    odometry.updateOdometry(
+    odometry.update(
       getLeftDistance(),
       getRightDistance(),
       getDirection());

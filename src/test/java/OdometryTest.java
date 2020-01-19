@@ -33,7 +33,7 @@ public class OdometryTest {
   public void GoesForwardOneMeter() {
     for (int i = 0; i < 100; i++) {
       distance += 0.01;
-      odometry.updateOdometry(distance, direction);
+      odometry.update(distance, direction);
 
       final Pose2d current_pose = odometry.getPose();
       csv_writer.write(current_pose.getTranslation().getX(),
@@ -41,7 +41,7 @@ public class OdometryTest {
         current_pose.getRotation().getDegrees());
     }
 
-    csv_writer.closeWriter();
+    csv_writer.close();
 
     final Pose2d final_pose = odometry.getPose();
 
@@ -60,7 +60,7 @@ public class OdometryTest {
 
     for (int i = 0; i < 100; i++) {
       distance += 0.01;
-      odometry.updateOdometry(distance, direction);
+      odometry.update(distance, direction);
 
       final Pose2d current_pose = odometry.getPose();
       csv_writer.write(current_pose.getTranslation().getX(),
@@ -68,7 +68,7 @@ public class OdometryTest {
         current_pose.getRotation().getDegrees());
     }
 
-    csv_writer.closeWriter();
+    csv_writer.close();
 
     final Pose2d final_pose = odometry.getPose();
 

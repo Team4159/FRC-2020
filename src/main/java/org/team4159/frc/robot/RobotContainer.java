@@ -23,6 +23,6 @@ public class RobotContainer {
         right_joy.getY()
       ), drivetrain));
 
-    new ZeroTurret(turret).schedule();
+    new ZeroTurret(turret).schedule(false);
   }
 }

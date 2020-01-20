@@ -6,6 +6,8 @@ public final class Constants {
     public static final int LEFT_REAR_TALON = 1;
     public static final int RIGHT_FRONT_TALON = 2;
     public static final int RIGHT_REAR_TALON = 3;
+
+    public static final int TURRET_FALCON_ID = 7;
   }
 
   public final static class CONTROLS {

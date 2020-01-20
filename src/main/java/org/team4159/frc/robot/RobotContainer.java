@@ -15,9 +15,9 @@ public class RobotContainer {
 
   public RobotContainer() {
     drivetrain.setDefaultCommand(
-            new RunCommand(() -> drivetrain.setRawSpeeds(
-                    left_joy.getY(),
-                    right_joy.getY()
-            ), drivetrain));
+      new RunCommand(() -> drivetrain.setRawSpeeds(
+        left_joy.getY(),
+        right_joy.getY()
+      ), drivetrain));
   }
 }

@@ -14,4 +14,8 @@ public final class Constants {
     public static final int LEFT_JOY = 0;
     public static final int RIGHT_JOY = 1;
   }
+
+  public final static class TURRET_CONSTANTS {
+    public static final double ZEROING_SPEED = 0.1;
+  }
 }

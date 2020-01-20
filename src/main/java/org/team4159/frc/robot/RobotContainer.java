@@ -30,10 +30,10 @@ public class RobotContainer {
 
   public RobotContainer() {
     drivetrain.setDefaultCommand(
-            new RunCommand(() -> drivetrain.rawDrive(
-                    left_joy.getY(),
-                    right_joy.getY()
-            ), drivetrain));
+      new RunCommand(() -> drivetrain.rawDrive(
+        left_joy.getY(),
+        right_joy.getY()
+      ), drivetrain));
 
     new JoystickButton(left_joy, 1).whenPressed(drivetrain::flipOrientation);
 

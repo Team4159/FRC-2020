@@ -23,10 +23,11 @@ public final class Constants {
   public static final class DRIVE_CONSTANTS {
     public static final double GEAR_RATIO = 8.48;
     public static final double WHEEL_RADIUS = Units.inchesToMeters(3.0);
+    public static final double WHEEL_CIRCUMFERENCE = Math.PI * 2.0 * WHEEL_RADIUS;
 
     public static final int FALCON_CPR = 2048;
 
-    public static final double METERS_PER_TICK = (Math.PI * 2.0 * WHEEL_RADIUS) / (FALCON_CPR * GEAR_RATIO);
+    public static final double METERS_PER_TICK = WHEEL_CIRCUMFERENCE / (FALCON_CPR * GEAR_RATIO);
 
     // TODO: MEASURE!
     public static final double MAX_TRAJECTORY_SPEED = 3.0;

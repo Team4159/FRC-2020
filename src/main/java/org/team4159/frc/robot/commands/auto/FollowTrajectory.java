@@ -31,12 +31,7 @@ public class FollowTrajectory extends SequentialCommandGroup {
         drivetrain::voltsDrive, // method reference to pass voltage outputs to motors
         drivetrain // require drivetrain subsystem
       ),
-      new InstantCommand(
-        () -> drivetrain.voltsDrive(0.0, 0.0) // stop after path finished
-      ),
-      new PrintCommand(
-        "Trajectory Finished!"
-      )
+      new InstantCommand(drivetrain::stop)
     );
   }
 }

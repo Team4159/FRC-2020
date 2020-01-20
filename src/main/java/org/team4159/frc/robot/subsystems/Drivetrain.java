@@ -11,26 +11,29 @@ import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.geometry.Translation2d;
+import edu.wpi.first.wpilibj.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveWheelSpeeds;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.util.Units;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-
-import org.team4159.lib.Odometry;
 
 import static org.team4159.frc.robot.Constants.*;
 
 public class Drivetrain extends SubsystemBase {
   private TalonFX left_front_falcon, left_rear_falcon, right_front_falcon, right_rear_falcon;
-
   private SpeedControllerGroup left_falcons;
   private SpeedControllerGroup right_falcons;
 
   private DifferentialDrive differential_drive;
 
-  private Odometry odometry;
-
+  private DifferentialDriveOdometry odometry;
   private PigeonIMU pigeon;
 
   private boolean is_oriented_forward = true;
+
+  private double dx = 0;
+  private double dy = 0;
+  private double prev_magnitude = 0;
 
   public Drivetrain() {
     left_front_falcon = configureTalonFX(new WPI_TalonFX(CAN_IDS.LEFT_FRONT_FALCON_ID));
@@ -47,16 +50,15 @@ public class Drivetrain extends SubsystemBase {
     right_falcons = new SpeedControllerGroup(
       (WPI_TalonFX) right_front_falcon,
       (WPI_TalonFX) right_rear_falcon);
-
     left_falcons.setInverted(true);
+    right_falcons.setInverted(true);
 
     pigeon = new PigeonIMU(CAN_IDS.PIGEON_ID);
 
     differential_drive = new DifferentialDrive(left_falcons, right_falcons);
-    odometry = new Odometry(new Pose2d(0.0, 0.0, Rotation2d.fromDegrees(getDirection())));
+    odometry = new DifferentialDriveOdometry(Rotation2d.fromDegrees(0));
 
-    resetDirection();
-    resetEncoders();
+    zeroSensors();
   }
 
   public void flipOrientation() {
@@ -66,9 +68,16 @@ public class Drivetrain extends SubsystemBase {
   @Override
   public void periodic() {
     odometry.update(
+      Rotation2d.fromDegrees(getDirection()),
       getLeftDistance(),
-      getRightDistance(),
-      getDirection());
+      getRightDistance()
+    );
+
+    SmartDashboard.putNumber("X", getPose().getTranslation().getX());
+    SmartDashboard.putNumber("Y", getPose().getTranslation().getY());
+    SmartDashboard.putNumber("Angle", getDirection());
+    SmartDashboard.putNumber("Left Encoder", getLeftDistance());
+    SmartDashboard.putNumber("Right Encoder", getRightDistance());
   }
 
   private TalonFX configureTalonFX(TalonFX talonSRX) {
@@ -114,15 +123,8 @@ public class Drivetrain extends SubsystemBase {
     }
   }
 
-  public void setPose(Translation2d coords) {
-    resetEncoders();
-    odometry.setPose(new Pose2d(coords, Rotation2d.fromDegrees(getDirection())));
-  }
-
-  public void zeroSensors() {
-    resetEncoders();
-    resetDirection();
-    setPose(new Translation2d(0.0, 0.0));
+  public void stop() {
+    rawDrive(0, 0);
   }
 
   public void resetEncoders() {
@@ -131,7 +133,16 @@ public class Drivetrain extends SubsystemBase {
   }
 
   public void resetDirection() {
-    pigeon.setFusedHeading(0.0);
+    pigeon.setFusedHeading(0);
+  }
+
+  public void zeroSensors() {
+    resetEncoders();
+    resetDirection();
+    odometry.resetPosition(
+      new Pose2d(new Translation2d(0, 0), Rotation2d.fromDegrees(0)),
+      Rotation2d.fromDegrees(0)
+    );
   }
 
   public double getLeftVoltage() {
@@ -153,7 +164,7 @@ public class Drivetrain extends SubsystemBase {
   }
 
   public double getRightDistance() {
-    return right_front_falcon.getSelectedSensorPosition() * DRIVE_CONSTANTS.METERS_PER_TICK;
+    return right_front_falcon.getSelectedSensorPosition() * -DRIVE_CONSTANTS.METERS_PER_TICK;
   }
 
   public double getRightVelocity() {
@@ -161,7 +172,7 @@ public class Drivetrain extends SubsystemBase {
   }
 
   public Pose2d getPose() {
-    return odometry.getPose();
+    return odometry.getPoseMeters();
   }
 
   public DifferentialDriveWheelSpeeds getWheelSpeeds() {

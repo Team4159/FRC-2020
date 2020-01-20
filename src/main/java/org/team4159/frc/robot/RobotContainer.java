@@ -3,6 +3,7 @@ package org.team4159.frc.robot;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 
+import org.team4159.frc.robot.commands.turret.ZeroTurret;
 import org.team4159.frc.robot.subsystems.Drivetrain;
 import org.team4159.frc.robot.subsystems.Turret;
 
@@ -21,5 +22,7 @@ public class RobotContainer {
         left_joy.getY(),
         right_joy.getY()
       ), drivetrain));
+
+    new ZeroTurret(turret).schedule();
   }
 }

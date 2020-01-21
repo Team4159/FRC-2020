@@ -14,7 +14,6 @@ import edu.wpi.first.wpilibj.geometry.Translation2d;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj.util.Units;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import static org.team4159.frc.robot.Constants.*;
@@ -44,6 +43,8 @@ public class Drivetrain extends SubsystemBase {
     left_front_falcon.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
     right_front_falcon.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
 
+    // setSensorPhase isn't working
+
     left_falcons = new SpeedControllerGroup(
       (WPI_TalonFX) left_front_falcon,
       (WPI_TalonFX) left_rear_falcon);
@@ -56,7 +57,7 @@ public class Drivetrain extends SubsystemBase {
     pigeon = new PigeonIMU(CAN_IDS.PIGEON_ID);
 
     differential_drive = new DifferentialDrive(left_falcons, right_falcons);
-    odometry = new DifferentialDriveOdometry(Rotation2d.fromDegrees(0));
+    odometry = new DifferentialDriveOdometry(new Rotation2d(0));
 
     zeroSensors();
   }
@@ -164,11 +165,11 @@ public class Drivetrain extends SubsystemBase {
   }
 
   public double getRightDistance() {
-    return right_front_falcon.getSelectedSensorPosition() * -DRIVE_CONSTANTS.METERS_PER_TICK;
+    return -1 * right_front_falcon.getSelectedSensorPosition() * DRIVE_CONSTANTS.METERS_PER_TICK;
   }
 
   public double getRightVelocity() {
-    return right_front_falcon.getSelectedSensorVelocity() * DRIVE_CONSTANTS.METERS_PER_TICK;
+    return -1 * right_front_falcon.getSelectedSensorVelocity() * DRIVE_CONSTANTS.METERS_PER_TICK;
   }
 
   public Pose2d getPose() {

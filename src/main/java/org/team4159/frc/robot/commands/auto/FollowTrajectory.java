@@ -17,19 +17,19 @@ public class FollowTrajectory extends SequentialCommandGroup {
 
     addCommands(
       new RamseteCommand(
-        trajectory, // desired trajectory to follow
-        drivetrain::getPose, // method reference to pose supplier
+        trajectory,
+        drivetrain::getPose,
         new RamseteController(DRIVE_CONSTANTS.kB,
-                              DRIVE_CONSTANTS.kZeta), // object that performs path-following computation
+                              DRIVE_CONSTANTS.kZeta),
         new SimpleMotorFeedforward(DRIVE_CONSTANTS.kS,
                                    DRIVE_CONSTANTS.kV,
-                                   DRIVE_CONSTANTS.kA), // feedforward gains kS, kV, kA obtained from characterization
-        new DifferentialDriveKinematics(DRIVE_CONSTANTS.TRACK_WIDTH), // track width
-        drivetrain::getWheelSpeeds, // method reference to wheel speed supplier
-        new PIDController(DRIVE_CONSTANTS.kP, 0, DRIVE_CONSTANTS.kD), // left side PID using Proportional gain from characterization
-        new PIDController(DRIVE_CONSTANTS.kP, 0, DRIVE_CONSTANTS.kD), // right side PID using Proportional gain from characterization
-        drivetrain::voltsDrive, // method reference to pass voltage outputs to motors
-        drivetrain // require drivetrain subsystem
+                                   DRIVE_CONSTANTS.kA),
+        new DifferentialDriveKinematics(DRIVE_CONSTANTS.TRACK_WIDTH),
+        drivetrain::getWheelSpeeds,
+        new PIDController(DRIVE_CONSTANTS.kP, 0, DRIVE_CONSTANTS.kD),
+        new PIDController(DRIVE_CONSTANTS.kP, 0, DRIVE_CONSTANTS.kD),
+        drivetrain::voltsDrive,
+        drivetrain
       ),
       new InstantCommand(drivetrain::stop)
     );

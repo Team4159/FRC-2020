@@ -30,7 +30,7 @@ public final class Constants {
     public static final double METERS_PER_TICK = WHEEL_CIRCUMFERENCE / (FALCON_CPR * GEAR_RATIO);
 
     // TODO: MEASURE!
-    public static final double MAX_TRAJECTORY_SPEED = 3.0;
+    public static final double MAX_TRAJECTORY_SPEED = 0.5;
     public static final double MAX_TRAJECTORY_ACCELERATION = 3.0;
 
     public static final double kS = 1.33; // volts
@@ -40,7 +40,7 @@ public final class Constants {
     public static final double kP = 0.00118;
     public static final double kD = 0.000566;
 
-    public static final double TRACK_WIDTH = 0.026282014850357034;
+    public static final double TRACK_WIDTH = Units.inchesToMeters(20);
 
     // ramsete constants (tested for most robots)
     public static final double kB = 2.0;

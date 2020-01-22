@@ -11,17 +11,17 @@ import static org.team4159.lib.math.units.Units.*;
 public class MultiUnitTest {
   @Test
   public void TestVelocityMultiUnit() {
-    Assert.assertEquals(Velocity.of(METER).symbol(), "m/s");
+    Assert.assertEquals("m/s", Velocity.of(METER).symbol());
   }
 
   @Test
   public void TestAccelerationMultiUnit() {
-    Assert.assertEquals(Acceleration.of(METER).symbol(), "m/s^2");
+    Assert.assertEquals("m/s^2", Acceleration.of(METER).symbol());
   }
 
   @Test
   public void TestUnitsCancel() {
-    Assert.assertEquals(SECOND.div(SECOND).symbol(), "");
+    Assert.assertEquals("", SECOND.div(SECOND).symbol());
   }
 
   @Test
@@ -32,6 +32,11 @@ public class MultiUnitTest {
   @Test
   public void TestDoesntMutate() {
     METER.mult(SECOND);
-    Assert.assertEquals(METER.symbol(), "m");
+    Assert.assertEquals("m", METER.symbol());
+  }
+
+  @Test
+  public void TestEquality() {
+    Assert.assertEquals(Velocity.of(METER), Velocity.of(METER));
   }
 }

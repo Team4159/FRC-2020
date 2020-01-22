@@ -7,20 +7,25 @@ public class Unit {
     return "ul";
   }
 
-  public Unit mult(Unit unit) {
-    if (unit instanceof MultiUnit) {
-      return unit.mult(this);
+  public Unit mult(Unit other) {
+    if (other instanceof MultiUnit) {
+      return other.mult(this);
     } else {
-      return new MultiUnit(Map.of(this, 1, unit, 1));
+      return new MultiUnit(Map.of(this, 1, other, 1));
     }
   }
 
-  public Unit div(Unit unit) {
-    return mult(unit.inv());
+  public Unit div(Unit other) {
+    return mult(other.inv());
   }
 
   public Unit inv() {
     return new MultiUnit(Map.of(this, -1));
+  }
+
+  @Override
+  public String toString() {
+    return symbol();
   }
 
   @Override

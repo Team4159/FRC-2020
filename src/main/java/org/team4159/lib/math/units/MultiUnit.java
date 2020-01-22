@@ -10,15 +10,15 @@ class MultiUnit extends Unit {
   }
 
   @Override
-  public Unit mult(Unit unit) {
+  public Unit mult(Unit other) {
     Map<Unit, Integer> new_units = getUnits();
-    if (unit instanceof MultiUnit) {
-      for (Map.Entry<Unit, Integer> unit_entry: ((MultiUnit) unit).getUnits().entrySet()) {
+    if (other instanceof MultiUnit) {
+      for (Map.Entry<Unit, Integer> unit_entry: ((MultiUnit) other).getUnits().entrySet()) {
         new_units.merge(unit_entry.getKey(), unit_entry.getValue(), Integer::sum);
         if (new_units.get(unit_entry.getKey()) == 0) new_units.remove(unit_entry.getKey());
       }
     } else {
-      new_units.merge(unit, 1, Integer::sum);
+      new_units.merge(other, 1, Integer::sum);
     }
     return new MultiUnit(new_units);
   }
@@ -57,8 +57,7 @@ class MultiUnit extends Unit {
   }
 
   public Map<Unit, Integer> getUnits() {
-    Map<Unit, Integer> clone = new HashMap<>(units);
-    return clone;
+    return new HashMap<>(units);
   }
 
   @Override

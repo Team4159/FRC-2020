@@ -8,11 +8,11 @@ import static org.team4159.lib.math.units.Units.*;
 public class DerivedUnitTest {
   @Test
   public void TestNewton() {
-    Assert.assertEquals(NEWTON.symbol(), "kgm/s^2");
+    Assert.assertEquals("kgm/s^2", NEWTON.symbol());
   }
 
   @Test
   public void TestVolt() {
-    Assert.assertEquals(VOLT.symbol(), "m^2kg/As^3");
+    Assert.assertEquals("m^2kg/As^3", VOLT.symbol());
   }
 }

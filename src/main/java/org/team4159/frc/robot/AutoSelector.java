@@ -11,14 +11,13 @@ import org.team4159.frc.robot.commands.characterization.DrivetrainCharacterizati
 
 public class AutoSelector extends SendableChooser<Command> {
   public AutoSelector(Drivetrain drivetrain) {
-    Command test_auto = new FollowTrajectory(Trajectories.TEST_TRAJECTORY, drivetrain),
-            blue_auto = new BlueAuto(drivetrain),
-            characterization_command = new DrivetrainCharacterization(drivetrain),
-            default_command = new InstantCommand();
+    Command one = new FollowTrajectory(Trajectories.GO_FORWARD_ONE_METER, drivetrain),
+            two = new FollowTrajectory(Trajectories.TURN_RIGHT_90_GO_FORWARD_ONE_METER, drivetrain),
+            three = new FollowTrajectory(Trajectories.TEST_3, drivetrain);
 
-    addOption("Test Auto", test_auto);
-    addOption("Blue Auto", blue_auto);
-    addOption("Characterization Routine", characterization_command);
-    setDefaultOption("No Autonomous", default_command);
+
+    addOption("1", one);
+    addOption("2", two);
+    setDefaultOption("3", three);
   }
 }

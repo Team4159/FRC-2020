@@ -105,13 +105,8 @@ public class Drivetrain extends SubsystemBase {
   }
 
   public void rawDrive(double left, double right) {
-    if (is_oriented_forward) {
-      left_falcons.set(left);
-      right_falcons.set(right);
-    } else {
-      left_falcons.set(-right);
-      right_falcons.set(-left);
-    }
+    left_falcons.set(left);
+    right_falcons.set(right);
   }
 
   public void voltsDrive(double left_volts, double right_volts) {
@@ -181,6 +176,6 @@ public class Drivetrain extends SubsystemBase {
   }
 
   public double getDirection() {
-    return pigeon.getFusedHeading();
+    return Math.IEEEremainder(pigeon.getFusedHeading(), 360) * -1;
   }
 }

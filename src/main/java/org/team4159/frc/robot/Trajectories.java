@@ -13,7 +13,7 @@ import java.util.List;
  * http://docs.wpilib.org/en/latest/docs/software/advanced-control/trajectories/index.html
  */
 public class Trajectories {
-  public static final Trajectory TEST_TRAJECTORY =
+  public static final Trajectory TURN_RIGHT_90_GO_FORWARD_ONE_METER =
      TrajectoryGenerator.generateTrajectory(
        new Pose2d(0, 0, new Rotation2d(0)),
        List.of(
@@ -24,4 +24,28 @@ public class Trajectories {
          Constants.DRIVE_CONSTANTS.MAX_TRAJECTORY_ACCELERATION
        )
      );
+
+  public static final Trajectory GO_FORWARD_ONE_METER =
+    TrajectoryGenerator.generateTrajectory(
+      List.of(
+        new Pose2d(0, 0, Rotation2d.fromDegrees(0)),
+        new Pose2d(1, 0, Rotation2d.fromDegrees(0))
+        ),
+      new TrajectoryConfig(
+        Constants.DRIVE_CONSTANTS.MAX_TRAJECTORY_SPEED,
+        Constants.DRIVE_CONSTANTS.MAX_TRAJECTORY_ACCELERATION
+      )
+    );
+
+  public static final Trajectory TEST_3 =
+    TrajectoryGenerator.generateTrajectory(
+      new Pose2d(0, 0, new Rotation2d(0)),
+      List.of(
+      ),
+      new Pose2d(1, 1, new Rotation2d(0)),
+      new TrajectoryConfig(
+        Constants.DRIVE_CONSTANTS.MAX_TRAJECTORY_SPEED,
+        Constants.DRIVE_CONSTANTS.MAX_TRAJECTORY_ACCELERATION
+      )
+    );
 }

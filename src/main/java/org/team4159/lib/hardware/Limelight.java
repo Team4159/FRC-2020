@@ -1,10 +1,7 @@
 package org.team4159.lib.hardware;
 
-import com.ctre.phoenix.motorcontrol.NeutralMode;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
-
-import java.util.stream.Stream;
 
 public class Limelight {
   public enum LEDMode {

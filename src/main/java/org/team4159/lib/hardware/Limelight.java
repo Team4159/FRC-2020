@@ -186,14 +186,14 @@ public class Limelight {
    * Stops the limelight from taking snapshots
    */
   public void startTakingSnapShots() {
-    setNumber("snapshot", 1);
+    setNumber("snapshot", 0);
   }
 
   /**
    * Sets limelight to take two snapshots per second
    */
   public void stopTakingSnapShots() {
-    setNumber("snapshot", 0);
+    setNumber("snapshot", 1);
   }
 
   private void setNumber(String entry_name, Number num) {

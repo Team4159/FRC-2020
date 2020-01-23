@@ -57,7 +57,7 @@ public class Limelight {
    *
    * @return whether the limelight has any valid targets
    */
-  public boolean getTargetIsVisible() {
+  public boolean isTargetVisible() {
     return getDouble("tv") == 1;
   }
 
@@ -77,6 +77,15 @@ public class Limelight {
    */
   public double getTargetVerticalOffset() {
     return getDouble("ty");
+  }
+
+  /**
+   * Gets the target area
+   *
+   * @return Target Area (0% of image to 100% of image)
+   */
+  public double getTargetArea() {
+    return getDouble("ta");
   }
 
   /**

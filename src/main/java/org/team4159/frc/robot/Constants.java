@@ -6,10 +6,13 @@ public final class Constants {
     public static final int LEFT_REAR_TALON = 1;
     public static final int RIGHT_FRONT_TALON = 2;
     public static final int RIGHT_REAR_TALON = 3;
+    public static final int INTAKE_TALON = 4;
   }
 
   public final static class CONTROLS {
     public static final int LEFT_JOY = 0;
     public static final int RIGHT_JOY = 1;
   }
+
+
 }

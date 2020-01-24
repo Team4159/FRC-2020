@@ -7,24 +7,28 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import org.team4159.frc.robot.Constants;
 
 public class Intake extends SubsystemBase {
-    private TalonSRX intakeTalon;
+    private TalonSRX intake_talon;
 
     private Intake() {
-        intakeTalon = new TalonSRX(Constants.CAN_IDS.INTAKE_TALON);
-        intakeTalon.configFactoryDefault();
-        intakeTalon.setNeutralMode(NeutralMode.Brake);
+        intake_talon = configureTalonSRX(new TalonSRX((Constants.CAN_IDS.INTAKE_TALON)));
     }
 
-    public void in() {
-        intakeTalon.set(ControlMode.PercentOutput, 1.0);
+    private TalonSRX configureTalonSRX(TalonSRX talonSRX) {
+        talonSRX.configFactoryDefault();
+        talonSRX.setNeutralMode(NeutralMode.Brake);
+
+        return talonSRX;
+    }
+    public void intakeCell() {
+        intake_talon.set(ControlMode.PercentOutput, 1);
     }
 
-    public void out() {
-        intakeTalon.set(ControlMode.PercentOutput, -1.0);
+    public void outtakeCell() {
+        intake_talon.set(ControlMode.PercentOutput, -1.0);
     }
 
-    public void stop() {
-        intakeTalon.set(ControlMode.PercentOutput, 0);
+    public void stopIntaking() {
+        intake_talon.set(ControlMode.PercentOutput, 0);
     }
 
 }

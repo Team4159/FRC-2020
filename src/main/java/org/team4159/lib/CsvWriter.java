@@ -14,10 +14,9 @@ public class CsvWriter {
 
   public CsvWriter(String filename) {
     final String suffix = date_format.format(new Date());
-    String bob = filename + suffix;
 
     try {
-      file = new File(bob);
+      file = new File(filename + suffix);
       writer = new FileWriter(file);
       System.out.println("Output: " + file.getPath());
     } catch (IOException exception) {

@@ -90,13 +90,16 @@ public class FollowTrajectory extends CommandBase {
       var left_speed_setpoint = target_wheel_speeds.leftMetersPerSecond;
       var right_speed_setpoint = target_wheel_speeds.rightMetersPerSecond;
 
-      double left_feed_forward =
-        feedforward.calculate(left_speed_setpoint,
-          (left_speed_setpoint - prev_speeds.leftMetersPerSecond) / dt);
+//      double left_feed_forward =
+//        feedforward.calculate(left_speed_setpoint,
+//          (left_speed_setpoint - prev_speeds.leftMetersPerSecond) / dt);
+//
+//      double right_feed_forward =
+//        feedforward.calculate(right_speed_setpoint,
+//          (right_speed_setpoint - prev_speeds.rightMetersPerSecond) / dt);
 
-      double right_feed_forward =
-        feedforward.calculate(right_speed_setpoint,
-          (right_speed_setpoint - prev_speeds.rightMetersPerSecond) / dt);
+    double left_feed_forward = 0.0;
+    double right_feed_forward = 0.0;
 
       double left_PID = pid.calculate(drivetrain.getWheelSpeeds().leftMetersPerSecond,
         left_speed_setpoint);

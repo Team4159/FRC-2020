@@ -13,20 +13,20 @@ public class Drivetrain extends SubsystemBase {
   private SpeedControllerGroup left_talons;
   private SpeedControllerGroup right_talons;
 
-  public Drivetrain() {
-    left_talons = new SpeedControllerGroup(
-            (WPI_TalonSRX) configureTalonSRX(new WPI_TalonSRX(CAN_IDS.LEFT_FRONT_TALON_ID)),
-            (WPI_TalonSRX) configureTalonSRX(new WPI_TalonSRX(CAN_IDS.LEFT_REAR_TALON_ID)));
-    right_talons = new SpeedControllerGroup(
-            (WPI_TalonSRX) configureTalonSRX(new WPI_TalonSRX(CAN_IDS.RIGHT_FRONT_TALON_ID)),
-            (WPI_TalonSRX) configureTalonSRX(new WPI_TalonSRX(CAN_IDS.RIGHT_REAR_TALON_ID)));
-  }
-
   private TalonSRX configureTalonSRX(TalonSRX talonSRX) {
     talonSRX.configFactoryDefault();
     talonSRX.setNeutralMode(NeutralMode.Coast);
 
     return talonSRX;
+  };
+
+  public Drivetrain() {
+    left_talons = new SpeedControllerGroup(
+      (WPI_TalonSRX) configureTalonSRX(new WPI_TalonSRX(CAN_IDS.LEFT_FRONT_TALON_ID)),
+      (WPI_TalonSRX) configureTalonSRX(new WPI_TalonSRX(CAN_IDS.LEFT_REAR_TALON_ID)));
+    right_talons = new SpeedControllerGroup(
+      (WPI_TalonSRX) configureTalonSRX(new WPI_TalonSRX(CAN_IDS.RIGHT_FRONT_TALON_ID)),
+      (WPI_TalonSRX) configureTalonSRX(new WPI_TalonSRX(CAN_IDS.RIGHT_REAR_TALON_ID)));
   }
 
   public void setRawSpeeds(double left, double right) {

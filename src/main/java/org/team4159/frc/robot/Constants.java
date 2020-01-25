@@ -7,8 +7,8 @@ public final class Constants {
     public static final int RIGHT_FRONT_TALON_ID = 2;
     public static final int RIGHT_REAR_TALON_ID = 3;
 
-    public static final int PRIMARY_SHOOTER_TALON_ID = 4;
-    public static final int SECONDARY_SHOOTER_TALON_ID = 5;
+    public static final int PRIMARY_SHOOTER_SPARK_ID = 2;
+    public static final int SECONDARY_SHOOTER_SPARK_ID = 3;
   }
 
   public final static class CONTROLS {

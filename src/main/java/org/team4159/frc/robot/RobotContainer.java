@@ -1,6 +1,7 @@
 package org.team4159.frc.robot;
 
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
@@ -27,26 +28,14 @@ public class RobotContainer {
       drivetrain
     ));
 
-    shooter.setDefaultCommand(new RunCommand(
-      () -> shooter.setRawSpeed(left_joy.getY()),
-      shooter
-    ));
-
     configureButtonBindings();
   }
 
   private void configureButtonBindings() {
     new JoystickButton(left_joy, 1)
-      .whenPressed(new InstantCommand(() -> shooter.setRawSpeed(1), shooter))
-      .whenReleased(new InstantCommand(() -> shooter.setRawSpeed(0), shooter));
-
-    new JoystickButton(left_joy, 2)
       .whenPressed(new ConditionalCommand(
         new InstantCommand(
-          () -> {
-            shooter.enable();
-            shooter.setSetpoint(60);
-          },
+          shooter::enable,
           shooter
         ),
         new InstantCommand(

@@ -1,49 +1,71 @@
 package org.team4159.frc.robot.subsystems;
 
-import com.ctre.phoenix.motorcontrol.SensorCollection;
-import edu.wpi.first.wpilibj.controller.PIDController;
-import edu.wpi.first.wpilibj2.command.PIDSubsystem;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
+import edu.wpi.first.wpilibj.controller.PIDController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.PIDSubsystem;
 
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
-import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANEncoder;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import static org.team4159.frc.robot.Constants.*;
 
 public class Shooter extends PIDSubsystem {
+  private CANEncoder primary_shooter_encoder, secondary_shooter_encoder;
+
   private SpeedControllerGroup shooter_motors;
-  private SensorCollection shooter_encoder;
+
+  private CANSparkMax configureSparkMax(CANSparkMax spark) {
+    spark.restoreFactoryDefaults();
+    spark.setSmartCurrentLimit(40);
+    spark.setIdleMode(CANSparkMax.IdleMode.kCoast);
+    spark.burnFlash();
+
+    return spark;
+  }
 
   public Shooter() {
     super(new PIDController(SHOOTER_CONSTANTS.kP, SHOOTER_CONSTANTS.kI, SHOOTER_CONSTANTS.kD));
 
-    TalonSRX primary_shooter_talon, secondary_shooter_talon;
+    CANSparkMax primary_shooter_spark, secondary_shooter_spark;
 
-    primary_shooter_talon = configureTalonSRX(new WPI_TalonSRX(CAN_IDS.PRIMARY_SHOOTER_TALON_ID));
-    secondary_shooter_talon = configureTalonSRX(new WPI_TalonSRX(CAN_IDS.SECONDARY_SHOOTER_TALON_ID));
+    primary_shooter_spark = configureSparkMax(new CANSparkMax(CAN_IDS.PRIMARY_SHOOTER_SPARK_ID, MotorType.kBrushless));
+    secondary_shooter_spark = configureSparkMax(new CANSparkMax(CAN_IDS.SECONDARY_SHOOTER_SPARK_ID, MotorType.kBrushless));
 
-    shooter_encoder = primary_shooter_talon.getSensorCollection();
+    secondary_shooter_spark.setInverted(true);
+
+    primary_shooter_encoder = primary_shooter_spark.getEncoder();
+    secondary_shooter_encoder = secondary_shooter_spark.getEncoder();
 
     shooter_motors = new SpeedControllerGroup(
-      (WPI_TalonSRX) primary_shooter_talon,
-      (WPI_TalonSRX) secondary_shooter_talon
+      primary_shooter_spark,
+      secondary_shooter_spark
     );
+
+    SmartDashboard.putNumber("target_shooter_speed", 0);
+    SmartDashboard.putNumber("shooter_kp", SHOOTER_CONSTANTS.kP);
+    SmartDashboard.putNumber("shooter_ki", SHOOTER_CONSTANTS.kI);
+    SmartDashboard.putNumber("shooter_kd", SHOOTER_CONSTANTS.kD);
   }
 
-  private TalonSRX configureTalonSRX(TalonSRX talonSRX) {
-    talonSRX.configFactoryDefault();
-    talonSRX.setNeutralMode(NeutralMode.Coast);
+  @Override
+  public void periodic() {
+    super.periodic();
 
-    return talonSRX;
+    SmartDashboard.putNumber("current_shooter_speed", getVelocity());
+    setSetpoint(SmartDashboard.getNumber("target_shooter_speed", 0));
+    getController().setP(SmartDashboard.getNumber("shooter_kp", SHOOTER_CONSTANTS.kP));
+    getController().setI(SmartDashboard.getNumber("shooter_ki", SHOOTER_CONSTANTS.kI));
+    getController().setD(SmartDashboard.getNumber("shooter_kd", SHOOTER_CONSTANTS.kD));
   }
 
   public void setRawSpeed(double speed) {
     shooter_motors.set(speed);
   }
 
-  public double getVelocity() {
-    return shooter_encoder.getQuadratureVelocity();
+  private double getVelocity() {
+    return (primary_shooter_encoder.getVelocity() + secondary_shooter_encoder.getVelocity()) / 2;
   }
 
   @Override

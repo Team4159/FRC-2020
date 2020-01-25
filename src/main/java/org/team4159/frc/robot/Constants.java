@@ -4,20 +4,23 @@ import edu.wpi.first.wpilibj.util.Units;
 
 public final class Constants {
   public final static class CAN_IDS {
-    public static final int LEFT_FRONT_FALCON_ID = 3;
-    public static final int LEFT_REAR_FALCON_ID = 4;
-    public static final int RIGHT_FRONT_FALCON_ID = 5;
-    public static final int RIGHT_REAR_TALON_ID = 6;
+    public static final int LEFT_FRONT_FALCON_ID = 1;
+    public static final int LEFT_REAR_FALCON_ID = 0;
+    public static final int RIGHT_FRONT_FALCON_ID = 2;
+    public static final int RIGHT_REAR_TALON_ID = 3;
+    public static final int TURRET_FALCON_ID = 9;
 
-    public static final int TURRET_FALCON_ID = 7;
+    public static final int FEEDER_TALON_ONE_ID = 4;
+    public static final int FEEDER_TALON_TWO_ID = 5;
+    public static final int INTAKE_TALON_ID = 6;
+    public static final int NECK_TALON_ONE_ID = 7;
+    public static final int NECK_TALON_TWO_ID = 8;
 
     public static final int LEFT_SHOOTER_SPARK_ID = 1;
     public static final int RIGHT_SHOOTER_SPARK_ID = 2;
-
     public static final int ARM_SPARK_ID = 3;
-    public static final int LIFTER_TALON_ID = 2;
 
-    public static final int PIGEON_ID = 1;
+    public static final int PIGEON_ID = 0;
   }
 
   public static final class DRIVE_CONSTANTS {

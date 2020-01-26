@@ -15,7 +15,7 @@ import edu.wpi.first.wpilibj.trajectory.Trajectory;
 
 import org.team4159.frc.robot.Trajectories;
 import org.team4159.lib.logging.CSVWriter;
-import org.team4159.lib.math.Epsilon;
+import org.team4159.lib.math.Baba;
 
 public class TrajectoryTest {
   @Rule
@@ -55,8 +55,8 @@ public class TrajectoryTest {
     final double final_y = final_pose.getTranslation().getY();
     final double final_direction = final_pose.getRotation().getDegrees();
 
-    Assert.assertEquals("Expected Final X: 0.0, Output Final X: " + final_x, 0.0, final_x, Epsilon.kEpsilon);
-    Assert.assertEquals("Expected Final Y: 1.0, Output Final Y: " + final_y, 1.0, final_y, Epsilon.kEpsilon);
+    Assert.assertEquals("Expected Final X: 0.0, Output Final X: " + final_x, 0.0, final_x, Baba.kEpsilon);
+    Assert.assertEquals("Expected Final Y: 1.0, Output Final Y: " + final_y, 1.0, final_y, Baba.kEpsilon);
     Assert.assertEquals("Expected Final Direction: 90.0, Output Final Direction: " + final_direction, 0.0, final_direction, Epsilon.kEpsilon);
   }
 }

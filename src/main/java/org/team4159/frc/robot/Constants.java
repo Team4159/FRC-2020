@@ -2,7 +2,7 @@ package org.team4159.frc.robot;
 
 import edu.wpi.first.wpilibj.util.Units;
 
-import org.team4159.lib.math.Tau;
+import org.team4159.lib.math.Baba;
 
 public final class Constants {
   public final static class CAN_IDS {
@@ -25,7 +25,7 @@ public final class Constants {
   public static final class DRIVE_CONSTANTS {
     public static final double GEAR_RATIO = 8.48;
     public static final double WHEEL_RADIUS = Units.inchesToMeters(3.0);
-    public static final double WHEEL_CIRCUMFERENCE = WHEEL_RADIUS * Tau.kTau;
+    public static final double WHEEL_CIRCUMFERENCE = WHEEL_RADIUS * Baba.kTau;
 
     public static final int FALCON_CPR = 2048;
 

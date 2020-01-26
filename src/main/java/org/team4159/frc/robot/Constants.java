@@ -37,8 +37,6 @@ public final class Constants {
     public static final int UP_POSITION = 0;
     public static final int DOWN_POSITION = -2000;
 
-    public static final double TOLERANCE = 5;
-
     public static final double ZEROING_SPEED = 0.1;
   }
 }

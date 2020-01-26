@@ -63,16 +63,8 @@ public class Arm extends SubsystemBase {
     arm_talon.setSelectedSensorPosition(0);
   }
 
-  public double getPosition() {
-    return arm_talon.getSelectedSensorPosition();
-  }
-
   public int getSetpoint() {
     return setpoint;
-  }
-
-  public boolean atSetpoint() {
-    return Math.abs(getPosition() - setpoint) < ARM_CONSTANTS.TOLERANCE;
   }
 
   public boolean isLimitSwitchClosed() {

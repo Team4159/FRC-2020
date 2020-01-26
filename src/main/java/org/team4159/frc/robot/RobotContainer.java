@@ -28,6 +28,11 @@ public class RobotContainer {
       drivetrain
     ));
 
+    shooter.setDefaultCommand(new RunCommand(
+      () -> shooter.setRawSpeed(left_joy.getY()),
+      shooter
+     ));
+
     configureButtonBindings();
   }
 

@@ -15,6 +15,10 @@ public class CSVWriter {
     }
   }
 
+  public CSVWriter(String filename) {
+    this(new File(filename));
+  }
+
   public void write(Object... columns) {
     try {
       for (Object column : columns) {

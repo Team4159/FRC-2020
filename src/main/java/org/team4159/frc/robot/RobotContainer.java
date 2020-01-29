@@ -39,7 +39,7 @@ public class RobotContainer {
       shooter
      ));
 
-    new ZeroArm(arm).schedule(false);
+    //new ZeroArm(arm).schedule(false);
 
     configureButtonBindings();
   }

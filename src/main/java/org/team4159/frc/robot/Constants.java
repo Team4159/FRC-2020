@@ -25,6 +25,11 @@ public final class Constants {
     public static final int PIGEON_ID = 0;
   }
 
+  public final static class CONTROLS {
+    public static final int LEFT_JOY = 0;
+    public static final int RIGHT_JOY = 1;
+  }
+
   public static final class DRIVE_CONSTANTS {
     public static final double GEAR_RATIO = 8.48;
     public static final double WHEEL_RADIUS = Units.inchesToMeters(3.0);
@@ -52,8 +57,7 @@ public final class Constants {
     public static final double kZeta = 0.7;
   }
 
-  public final static class CONTROLS {
-    public static final int LEFT_JOY = 0;
-    public static final int RIGHT_JOY = 1;
+  public final static class TURRET_CONSTANTS {
+    public static final double LIMELIGHT_kP = -1.0 / 150.0;
   }
 }

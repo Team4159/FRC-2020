@@ -14,7 +14,7 @@ public class Neck extends SubsystemBase {
         neck_talons = new SpeedControllerGroup(
           (WPI_TalonSRX) configureTalonSRX(new WPI_TalonSRX(Constants.CAN_IDS.NECK_TALON_ONE_ID)),
           (WPI_TalonSRX) configureTalonSRX(new WPI_TalonSRX(Constants.CAN_IDS.NECK_TALON_TWO_ID))
-          );
+        );
     }
 
     private TalonSRX configureTalonSRX(TalonSRX talonSRX) {
@@ -22,5 +22,13 @@ public class Neck extends SubsystemBase {
         talonSRX.setNeutralMode(NeutralMode.Brake);
 
         return talonSRX;
+    }
+
+    public void neck() {
+        neck_talons.set(1);
+    }
+
+    public void stop() {
+        neck_talons.set(0);
     }
 }

@@ -12,10 +12,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 import org.team4159.frc.robot.commands.arm.ToggleArm;
 import org.team4159.frc.robot.commands.arm.ZeroArm;
-import org.team4159.frc.robot.subsystems.Arm;
-import org.team4159.frc.robot.subsystems.Drivetrain;
-import org.team4159.frc.robot.subsystems.Intake;
-import org.team4159.frc.robot.subsystems.Shooter;
+import org.team4159.frc.robot.subsystems.*;
 
 import static org.team4159.frc.robot.Constants.*;
 
@@ -23,6 +20,7 @@ public class RobotContainer {
   private final Drivetrain drivetrain = new Drivetrain();
   private final Shooter shooter = new Shooter();
   private final Intake intake = new Intake();
+  private final Neck neck = new Neck();
   private final Arm arm = new Arm();
 
   private final Joystick left_joy = new Joystick(CONTROLS.LEFT_JOY);
@@ -64,6 +62,10 @@ public class RobotContainer {
 
     new JoystickButton(secondary_joy, 3)
       .whenPressed(new ToggleArm(arm));
+
+    new JoystickButton(secondary_joy, 4)
+      .whenPressed(new InstantCommand(neck::neck))
+      .whenReleased(new InstantCommand(neck::stop));
   }
 
   public Command getAutonomousCommand() {

@@ -1,5 +1,6 @@
 package org.team4159.frc.robot.subsystems;
 
+import com.revrobotics.EncoderType;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -26,17 +27,23 @@ public class Shooter extends PIDSubsystem {
   }
 
   public Shooter() {
-    super(new PIDController(SHOOTER_CONSTANTS.kP, SHOOTER_CONSTANTS.kI, SHOOTER_CONSTANTS.kD));
+    super(new PIDController(
+      SHOOTER_CONSTANTS.kP,
+      SHOOTER_CONSTANTS.kI,
+      SHOOTER_CONSTANTS.kD
+    ));
 
     CANSparkMax primary_shooter_spark, secondary_shooter_spark;
 
-    primary_shooter_spark = configureSparkMax(new CANSparkMax(CAN_IDS.PRIMARY_SHOOTER_SPARK_ID, MotorType.kBrushless));
-    secondary_shooter_spark = configureSparkMax(new CANSparkMax(CAN_IDS.SECONDARY_SHOOTER_SPARK_ID, MotorType.kBrushless));
+    primary_shooter_spark = configureSparkMax(
+      new CANSparkMax(CAN_IDS.LEFT_SHOOTER_SPARK_ID, MotorType.kBrushless));
+    secondary_shooter_spark = configureSparkMax(
+      new CANSparkMax(CAN_IDS.RIGHT_SHOOTER_SPARK_ID, MotorType.kBrushless));
 
     secondary_shooter_spark.setInverted(true);
 
-    primary_shooter_encoder = primary_shooter_spark.getEncoder();
-    secondary_shooter_encoder = secondary_shooter_spark.getEncoder();
+    primary_shooter_encoder = primary_shooter_spark.getEncoder(EncoderType.kHallSensor, 42);
+    secondary_shooter_encoder = secondary_shooter_spark.getEncoder(EncoderType.kHallSensor, 42);
 
     shooter_motors = new SpeedControllerGroup(
       primary_shooter_spark,
@@ -65,7 +72,7 @@ public class Shooter extends PIDSubsystem {
   }
 
   private double getVelocity() {
-    return (primary_shooter_encoder.getVelocity() + secondary_shooter_encoder.getVelocity()) / 2;
+    return (primary_shooter_encoder.getVelocity() + secondary_shooter_encoder.getVelocity()) / 2.0;
   }
 
   @Override

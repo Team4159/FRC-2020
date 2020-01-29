@@ -25,7 +25,7 @@ public class Arm extends SubsystemBase {
   }
 
   public Arm() {
-    arm_talon = configureTalonSRX(new TalonSRX(CAN_IDS.ARM_TALON_ID));
+    arm_talon = configureTalonSRX(new TalonSRX(10));
     arm_talon.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative);
 
     int PID_IDX = 0;

@@ -2,10 +2,7 @@ package org.team4159.frc.robot;
 
 import edu.wpi.first.wpilibj.Joystick;
 
-import edu.wpi.first.wpilibj2.command.ConditionalCommand;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.RunCommand;
-import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -13,6 +10,8 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import org.team4159.frc.robot.commands.arm.ToggleArm;
 import org.team4159.frc.robot.commands.arm.ZeroArm;
 import org.team4159.frc.robot.subsystems.*;
+import org.team4159.frc.robot.subsystems.Drivetrain;
+import org.team4159.frc.robot.subsystems.Feeder;
 
 import static org.team4159.frc.robot.Constants.*;
 
@@ -20,6 +19,7 @@ public class RobotContainer {
   private final Drivetrain drivetrain = new Drivetrain();
   private final Shooter shooter = new Shooter();
   private final Intake intake = new Intake();
+  private final Feeder feeder = new Feeder();
   private final Neck neck = new Neck();
   private final Arm arm = new Arm();
 
@@ -38,11 +38,6 @@ public class RobotContainer {
       drivetrain
     ));
 
-    shooter.setDefaultCommand(new RunCommand(
-      () -> shooter.setRawSpeed(secondary_joy.getY()),
-      shooter
-     ));
-
     //new ZeroArm(arm).schedule(false);
 
     configureButtonBindings();
@@ -57,16 +52,36 @@ public class RobotContainer {
       ));
 
     new JoystickButton(secondary_joy, 2)
+      .whenPressed(drivetrain::flipOrientation);
+
+    new JoystickButton(secondary_joy, 3)
       .whenPressed(new InstantCommand(intake::intakeCell, intake))
       .whenReleased(new InstantCommand(intake::stopIntaking, intake));
 
-    new JoystickButton(secondary_joy, 3)
+    new JoystickButton(secondary_joy, 4)
       .whenPressed(new ToggleArm(arm));
 
-    new JoystickButton(secondary_joy, 4)
+    new JoystickButton(secondary_joy, 5)
       .whenPressed(new InstantCommand(neck::neck))
       .whenReleased(new InstantCommand(neck::stop));
+
+    new JoystickButton(secondary_joy, 6)
+      .whenPressed(new InstantCommand(feeder::feed, feeder))
+      .whenReleased(new InstantCommand(feeder::stop, feeder));
+
+    new JoystickButton(secondary_joy, 7)
+      .whenPressed(new ParallelCommandGroup(
+        new InstantCommand(intake::intakeCell, intake),
+        new InstantCommand(feeder::feed, feeder),
+        new InstantCommand(neck::neck),
+        new InstantCommand(() -> shooter.setRawSpeed(1))))
+      .whenReleased(new ParallelCommandGroup(
+        new InstantCommand(intake::stopIntaking, intake),
+        new InstantCommand(feeder::stop, feeder),
+        new InstantCommand(neck::stop),
+        new InstantCommand(() -> shooter.setRawSpeed(0))));
   }
+
 
   public Command getAutonomousCommand() {
     return auto_selector.getSelected();

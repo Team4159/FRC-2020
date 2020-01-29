@@ -13,7 +13,8 @@ public class Neck extends SubsystemBase {
     public Neck() {
         neck_talons = new SpeedControllerGroup(
           (WPI_TalonSRX) configureTalonSRX(new WPI_TalonSRX(Constants.CAN_IDS.NECK_TALON_ONE_ID)),
-          (WPI_TalonSRX) configureTalonSRX(new WPI_TalonSRX(Constants.CAN_IDS.NECK_TALON_TWO_ID))
+          (WPI_TalonSRX) configureTalonSRX(new WPI_TalonSRX(Constants.CAN_IDS.NECK_TALON_TWO_ID)),
+          (WPI_TalonSRX) configureTalonSRX(new WPI_TalonSRX(Constants.CAN_IDS.NECK_TALON_THREE_ID))
         );
     }
 

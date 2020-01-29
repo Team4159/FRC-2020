@@ -12,11 +12,12 @@ public final class Constants {
     public static final int RIGHT_REAR_TALON_ID = 3;
     public static final int TURRET_FALCON_ID = 9;
 
-    public static final int FEEDER_TALON_ONE_ID = 4;
-    public static final int FEEDER_TALON_TWO_ID = 5;
-    public static final int INTAKE_TALON_ID = 7;
-    public static final int NECK_TALON_ONE_ID = 6;
+    public static final int FEEDER_TALON_ONE_ID = 7;
+    public static final int FEEDER_TALON_TWO_ID = 50; // unknown
+    public static final int INTAKE_TALON_ID = 50; // unknown
+    public static final int NECK_TALON_ONE_ID = 5;
     public static final int NECK_TALON_TWO_ID = 8;
+    public static final int NECK_TALON_THREE_ID = 6;
 
     public static final int LEFT_SHOOTER_SPARK_ID = 1;
     public static final int RIGHT_SHOOTER_SPARK_ID = 2;

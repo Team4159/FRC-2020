@@ -36,9 +36,9 @@ public class Shooter extends PIDSubsystem {
     CANSparkMax primary_shooter_spark, secondary_shooter_spark;
 
     primary_shooter_spark = configureSparkMax(
-      new CANSparkMax(CAN_IDS.LEFT_SHOOTER_SPARK_ID, MotorType.kBrushless));
-    secondary_shooter_spark = configureSparkMax(
       new CANSparkMax(CAN_IDS.RIGHT_SHOOTER_SPARK_ID, MotorType.kBrushless));
+    secondary_shooter_spark = configureSparkMax(
+      new CANSparkMax(CAN_IDS.LEFT_SHOOTER_SPARK_ID, MotorType.kBrushless));
 
     secondary_shooter_spark.setInverted(true);
 

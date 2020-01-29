@@ -18,6 +18,7 @@ public final class Constants {
     public static final int NECK_TALON_ONE_ID = 5;
     public static final int NECK_TALON_TWO_ID = 8;
     public static final int NECK_TALON_THREE_ID = 6;
+    public static final int ARM_TALON_ID = 10;
 
     public static final int LEFT_SHOOTER_SPARK_ID = 1;
     public static final int RIGHT_SHOOTER_SPARK_ID = 2;

@@ -8,28 +8,28 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import org.team4159.frc.robot.Constants;
 
 public class Neck extends SubsystemBase {
-    private SpeedControllerGroup neck_talons;
+  private SpeedControllerGroup neck_talons;
 
-    public Neck() {
-        neck_talons = new SpeedControllerGroup(
-          (WPI_TalonSRX) configureTalonSRX(new WPI_TalonSRX(Constants.CAN_IDS.NECK_TALON_ONE_ID)),
-          (WPI_TalonSRX) configureTalonSRX(new WPI_TalonSRX(Constants.CAN_IDS.NECK_TALON_TWO_ID)),
-          (WPI_TalonSRX) configureTalonSRX(new WPI_TalonSRX(Constants.CAN_IDS.NECK_TALON_THREE_ID))
-        );
-    }
+  private TalonSRX configureTalonSRX(TalonSRX talonSRX) {
+    talonSRX.configFactoryDefault();
+    talonSRX.setNeutralMode(NeutralMode.Brake);
 
-    private TalonSRX configureTalonSRX(TalonSRX talonSRX) {
-        talonSRX.configFactoryDefault();
-        talonSRX.setNeutralMode(NeutralMode.Brake);
+    return talonSRX;
+  }
 
-        return talonSRX;
-    }
+  public Neck() {
+    neck_talons = new SpeedControllerGroup(
+      (WPI_TalonSRX) configureTalonSRX(new WPI_TalonSRX(Constants.CAN_IDS.NECK_TALON_ONE_ID)),
+      (WPI_TalonSRX) configureTalonSRX(new WPI_TalonSRX(Constants.CAN_IDS.NECK_TALON_TWO_ID)),
+      (WPI_TalonSRX) configureTalonSRX(new WPI_TalonSRX(Constants.CAN_IDS.NECK_TALON_THREE_ID))
+    );
+  }
 
-    public void neck() {
-        neck_talons.set(1);
-    }
+  public void neck() {
+    neck_talons.set(1);
+  }
 
-    public void stop() {
-        neck_talons.set(0);
-    }
+  public void stop() {
+    neck_talons.set(0);
+  }
 }

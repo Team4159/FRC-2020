@@ -55,5 +55,6 @@ public final class Constants {
   public final static class CONTROLS {
     public static final int LEFT_JOY = 0;
     public static final int RIGHT_JOY = 1;
+    public static final int SECONDARY_JOY = 2;
   }
 }

@@ -7,15 +7,16 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 import org.team4159.frc.robot.subsystems.Drivetrain;
+import org.team4159.frc.robot.subsystems.Feeder;
 
 import static org.team4159.frc.robot.Constants.*;
 
 public class RobotContainer {
   private final Drivetrain drivetrain = new Drivetrain();
-
   private final Joystick left_joy = new Joystick(CONTROLS.LEFT_JOY);
   private final Joystick right_joy = new Joystick(CONTROLS.RIGHT_JOY);
-
+  private final Joystick secondary_joy = new Joystick(CONTROLS.SECONDARY_JOY);
+  private final Feeder feeder = new Feeder();
   private final AutoSelector auto_selector = new AutoSelector(drivetrain);
 
   public RobotContainer() {
@@ -33,7 +34,13 @@ public class RobotContainer {
   private void configureButtonBindings() {
     new JoystickButton(left_joy, 1)
       .whenPressed(drivetrain::flipOrientation);
+
+    new JoystickButton(secondary_joy, 1)
+      .whenPressed(feeder::feed)
+      .whenReleased(feeder::stop);
+
   }
+
 
   public Command getAutonomousCommand() {
     return auto_selector.getSelected();

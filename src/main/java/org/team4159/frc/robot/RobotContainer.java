@@ -1,9 +1,13 @@
 package org.team4159.frc.robot;
 
 import edu.wpi.first.wpilibj.Joystick;
+
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 import org.team4159.frc.robot.commands.arm.ToggleArm;
@@ -25,9 +29,11 @@ public class RobotContainer {
   private final Joystick right_joy = new Joystick(CONTROLS.RIGHT_JOY);
   private final Joystick secondary_joy = new Joystick(CONTROLS.SECONDARY_JOY);
 
+  private final AutoSelector auto_selector = new AutoSelector(drivetrain);
+
   public RobotContainer() {
     drivetrain.setDefaultCommand(new RunCommand(
-      () -> drivetrain.setRawSpeeds(
+      () -> drivetrain.tankDrive(
         left_joy.getY(),
         right_joy.getY()
       ),
@@ -58,5 +64,9 @@ public class RobotContainer {
 
     new JoystickButton(secondary_joy, 3)
       .whenPressed(new ToggleArm(arm));
+  }
+
+  public Command getAutonomousCommand() {
+    return auto_selector.getSelected();
   }
 }

@@ -9,28 +9,28 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import static org.team4159.frc.robot.Constants.*;
 
 public class Intake extends SubsystemBase {
-    private TalonSRX intake_talon;
+  private TalonSRX intake_talon;
 
-    private TalonSRX configureTalonSRX(TalonSRX talonSRX) {
-        talonSRX.configFactoryDefault();
-        talonSRX.setNeutralMode(NeutralMode.Brake);
+  private TalonSRX configureTalonSRX(TalonSRX talonSRX) {
+    talonSRX.configFactoryDefault();
+    talonSRX.setNeutralMode(NeutralMode.Brake);
 
-        return talonSRX;
-    }
+    return talonSRX;
+  }
 
-    public Intake() {
-        intake_talon = configureTalonSRX(new TalonSRX(CAN_IDS.INTAKE_TALON_ID));
-    }
+  public Intake() {
+    intake_talon = configureTalonSRX(new TalonSRX(CAN_IDS.INTAKE_TALON_ID));
+  }
 
-    public void setRawIntakeSpeed(double speed) {
-        intake_talon.set(ControlMode.PercentOutput, speed);
-    }
+  public void setRawIntakeSpeed(double speed) {
+    intake_talon.set(ControlMode.PercentOutput, speed);
+  }
 
-    public void intakeCell() {
-        setRawIntakeSpeed(1);
-    }
+  public void intakeCell() {
+    setRawIntakeSpeed(1);
+  }
 
-    public void stopIntaking() {
-        setRawIntakeSpeed(0);
-    }
+  public void stopIntaking() {
+    setRawIntakeSpeed(0);
+  }
 }

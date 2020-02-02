@@ -3,12 +3,10 @@ package org.team4159.lib.control;
 import edu.wpi.first.wpilibj.TimedRobot;
 
 public class PIDControl {
-  private double kP;
-  private double kI;
-  private double kD;
-  private double interval;
-  private double max_integral;
+  private double kP, kI, kD, interval, max_integral;
 
+  private double error = 0.0;
+  private double delta_error = 0.0;
   private double last_error = 0.0;
   private double sigma_error = 0.0;
   private double goal = 0.0;
@@ -28,9 +26,9 @@ public class PIDControl {
   }
 
   public double calculateOutput(double position) {
-    final double error = goal - position;
-    final double delta_error = (error - last_error) / interval;
-    sigma_error = Math.max(-max_integral, Math.min(max_integral, sigma_error + error);
+    error = goal - position;
+    delta_error = (error - last_error) / interval;
+    sigma_error = Math.max(-max_integral, Math.min(max_integral, sigma_error + error));
 
     final double output =
       kP * error +
@@ -40,6 +38,18 @@ public class PIDControl {
     last_error = error;
 
     return(output);
+  }
+
+  public double getError() {
+    return error;
+  }
+
+  public double getErrorSum() {
+    return sigma_error;
+  }
+
+  public double getErrorChange() {
+    return delta_error;
   }
 
   public double getGoal() {

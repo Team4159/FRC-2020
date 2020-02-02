@@ -32,7 +32,7 @@ public class RobotContainer {
 
   private void configureButtonBindings() {
     new JoystickButton(left_joy, 1)
-      .whenPressed(drivetrain::flipOrientation);
+      .whenPressed(drivetrain::flipDriveOrientation);
   }
 
   public Command getAutonomousCommand() {

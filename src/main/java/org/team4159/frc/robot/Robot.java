@@ -21,11 +21,15 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
     autonomous_command = robot_container.getAutonomousCommand();
-    if (autonomous_command != null) autonomous_command.schedule();
+    if (autonomous_command != null) {
+      autonomous_command.schedule();
+    }
   }
 
   @Override
   public void teleopInit() {
-    if (autonomous_command != null) autonomous_command.cancel();
+    if (autonomous_command != null) {
+      autonomous_command.cancel();
+    }
   }
 }

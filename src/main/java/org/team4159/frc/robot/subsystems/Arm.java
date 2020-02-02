@@ -71,6 +71,6 @@ public class Arm extends SubsystemBase {
   }
 
   public boolean isLimitSwitchClosed() {
-    return arm_limit_switch.get();
+    return !arm_limit_switch.get();
   }
 }

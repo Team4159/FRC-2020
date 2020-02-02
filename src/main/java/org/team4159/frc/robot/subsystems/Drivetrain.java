@@ -63,17 +63,12 @@ public class Drivetrain extends SubsystemBase {
   }
 
   public void rawDrive(DriveSignal signal) {
-    double left, right;
     if (is_oriented_forward) {
-      left = signal.left;
-      right = signal.right;
-    } else {
-      left = -signal.right;
-      right = -signal.left;
+      signal.invert();
     }
 
-    left_falcons.set(left);
-    right_falcons.set(right);
+    left_falcons.set(signal.left);
+    right_falcons.set(signal.right);
   }
 
   public void tankDrive(double left, double right) {

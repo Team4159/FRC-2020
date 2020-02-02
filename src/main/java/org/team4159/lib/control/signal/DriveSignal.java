@@ -19,6 +19,12 @@ public class DriveSignal {
     );
   }
 
+  public void invert() {
+    double temp = left;
+    left = -right;
+    right = -temp;
+  }
+
   public static DriveSignal fromArcade(double speed, double turn) {
     return new DriveSignal(
       clampToPercent(speed) - clampToPercent(turn),

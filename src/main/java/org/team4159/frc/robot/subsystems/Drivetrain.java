@@ -7,17 +7,15 @@ import com.ctre.phoenix.sensors.PigeonIMU;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
-import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
+import org.team4159.lib.math.signal.DriveSignal;
 import static org.team4159.frc.robot.Constants.*;
 
 public class Drivetrain extends SubsystemBase {
   private TalonFX left_front_falcon, left_rear_falcon, right_front_falcon, right_rear_falcon;
   private SpeedControllerGroup left_falcons;
   private SpeedControllerGroup right_falcons;
-
-  private DifferentialDrive differential_drive;
 
   private PigeonIMU pigeon;
 
@@ -52,53 +50,41 @@ public class Drivetrain extends SubsystemBase {
 
     pigeon = new PigeonIMU(CAN_IDS.PIGEON_ID);
 
-    differential_drive = new DifferentialDrive(left_falcons, right_falcons);
-
     zeroSensors();
+  }
+
+  public void rawDrive(DriveSignal signal) {
+    double left, right;
+    if (is_oriented_forward) {
+      left = signal.left;
+      right = signal.right;
+    } else {
+      left = -signal.right;
+      right = -signal.left;
+    }
+
+    left_falcons.set(left);
+    right_falcons.set(right);
+  }
+
+  public void tankDrive(double left, double right) {
+    rawDrive(new DriveSignal(left, right, true));
+  }
+
+  public void arcadeDrive(double speed, double turn) {
+    rawDrive(DriveSignal.fromArcade(speed, turn, true));
+  }
+
+  public void voltsDrive(double left_volts, double right_volts) {
+    rawDrive(DriveSignal.fromVolts(left_volts, right_volts));
+  }
+
+  public void stop() {
+    rawDrive(DriveSignal.NEUTRAL);
   }
 
   public void flipOrientation() {
     is_oriented_forward = !is_oriented_forward;
-  }
-
-  public void tankDrive(double left, double right) {
-    if (is_oriented_forward) {
-      differential_drive.tankDrive(left, right);
-    } else {
-      differential_drive.tankDrive(-right, -left);
-    }
-  }
-
-  public void arcadeDrive(double forward, double rotation) {
-    if (is_oriented_forward) {
-      differential_drive.arcadeDrive(forward, rotation);
-    } else {
-      differential_drive.arcadeDrive(-forward, -rotation);
-    }
-  }
-
-  public void rawDrive(double left, double right) {
-    if (is_oriented_forward) {
-      left_falcons.set(left);
-      right_falcons.set(right);
-    } else {
-      left_falcons.set(-right);
-      right_falcons.set(-left);
-    }
-  }
-
-  public void voltsDrive(double left_volts, double right_volts) {
-    if (is_oriented_forward) {
-      left_falcons.setVoltage(left_volts);
-      right_falcons.setVoltage(right_volts);
-    } else {
-      left_falcons.setVoltage(-right_volts);
-      right_falcons.setVoltage(-left_volts);
-    }
-  }
-
-  public void stop() {
-    rawDrive(0, 0);
   }
 
   public void resetEncoders() {

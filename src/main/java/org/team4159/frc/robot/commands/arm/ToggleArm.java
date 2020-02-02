@@ -16,7 +16,7 @@ public class ToggleArm extends InstantCommand {
 
   @Override
   public void initialize() {
-    if (arm.getSetpoint() == ARM_CONSTANTS.UP_POSITION) {
+    if (arm.getController().getSetpoint() == ARM_CONSTANTS.UP_POSITION) {
       arm.lowerIntake();
     } else {
       arm.raiseIntake();

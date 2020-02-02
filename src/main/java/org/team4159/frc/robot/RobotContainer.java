@@ -4,8 +4,7 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.*;
 
-import org.team4159.frc.robot.commands.arm.ToggleArm;
-import org.team4159.frc.robot.commands.arm.ZeroArm;
+import org.team4159.frc.robot.commands.arm.*;
 import org.team4159.frc.robot.subsystems.*;
 
 import static org.team4159.frc.robot.Constants.*;

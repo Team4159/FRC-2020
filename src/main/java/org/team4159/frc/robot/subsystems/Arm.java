@@ -4,25 +4,21 @@ import com.revrobotics.CANSparkMax;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Encoder;
-import edu.wpi.first.wpilibj.controller.ArmFeedforward;
+import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.PIDSubsystem;
 
 import static org.team4159.frc.robot.Constants.*;
 
-public class Arm extends SubsystemBase {
+public class Arm extends PIDSubsystem {
   private CANSparkMax arm_spark;
+
   private DigitalInput arm_limit_switch;
   private Encoder arm_encoder;
 
-  private int setpoint = ARM_CONSTANTS.UP_POSITION;
-  private int last_error = 0;
-
-  private boolean is_zeroed = false;
-
   private CANSparkMax configureSparkMax(CANSparkMax spark) {
     spark.restoreFactoryDefaults();
-    //spark.setSmartCurrentLimit(40);
+    // spark.setSmartCurrentLimit(40);
     spark.setIdleMode(CANSparkMax.IdleMode.kBrake);
     spark.burnFlash();
 
@@ -30,6 +26,8 @@ public class Arm extends SubsystemBase {
   }
 
   public Arm() {
+    super(new PIDController(ARM_CONSTANTS.kP, 0, ARM_CONSTANTS.kD));
+
     arm_spark = configureSparkMax(new CANSparkMax(
       CAN_IDS.ARM_SPARK_ID,
       CANSparkMax.MotorType.kBrushless
@@ -48,15 +46,6 @@ public class Arm extends SubsystemBase {
   @Override
   public void periodic() {
     SmartDashboard.putNumber("arm_position", arm_encoder.get());
-
-    if (is_zeroed) {
-      final int error = setpoint - arm_encoder.get();
-      final int delta_error = last_error - error;
-
-      setRawVoltage(ARM_CONSTANTS.kP * error + ARM_CONSTANTS.kP * delta_error);
-
-      last_error = error;
-    }
   }
 
   public void setRawSpeed(double speed) {
@@ -68,23 +57,32 @@ public class Arm extends SubsystemBase {
   }
 
   public void raiseIntake() {
-    setpoint = ARM_CONSTANTS.UP_POSITION;
+    setSetpoint(ARM_CONSTANTS.UP_POSITION);
   }
 
   public void lowerIntake() {
-    setpoint = ARM_CONSTANTS.DOWN_POSITION;
+    setSetpoint(ARM_CONSTANTS.DOWN_POSITION);
   }
 
   public void zeroEncoder() {
     arm_encoder.reset();
-    is_zeroed = true;
   }
 
-  public int getSetpoint() {
-    return setpoint;
+  public int getPosition() {
+    return arm_encoder.get();
   }
 
   public boolean isLimitSwitchClosed() {
     return !arm_limit_switch.get();
+  }
+
+  @Override
+  protected void useOutput(double output, double setpoint) {
+    setRawVoltage(output);
+  }
+
+  @Override
+  protected double getMeasurement() {
+    return getPosition();
   }
 }

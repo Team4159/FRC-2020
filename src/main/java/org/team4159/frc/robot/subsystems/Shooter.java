@@ -1,7 +1,13 @@
 package org.team4159.frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.VictorSPX;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 import com.revrobotics.EncoderType;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
+import edu.wpi.first.wpilibj.Talon;
 import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.PIDSubsystem;
@@ -17,13 +23,18 @@ public class Shooter extends PIDSubsystem {
 
   private SpeedControllerGroup shooter_motors;
 
-  private CANSparkMax configureSparkMax(CANSparkMax spark) {
-    spark.restoreFactoryDefaults();
-    spark.setSmartCurrentLimit(40);
-    spark.setIdleMode(CANSparkMax.IdleMode.kCoast);
-    spark.burnFlash();
+  private TalonSRX configureTalonSRX(TalonSRX talonSRX) {
+    talonSRX.configFactoryDefault();
+    talonSRX.setNeutralMode(NeutralMode.Coast);
 
-    return spark;
+    return talonSRX;
+  }
+
+  private VictorSPX configureVictorSPX(VictorSPX victorSPX) {
+    victorSPX.configFactoryDefault();
+    victorSPX.setNeutralMode(NeutralMode.Coast);
+
+    return victorSPX;
   }
 
   public Shooter() {
@@ -33,21 +44,11 @@ public class Shooter extends PIDSubsystem {
       SHOOTER_CONSTANTS.kD
     ));
 
-    CANSparkMax primary_shooter_spark, secondary_shooter_spark;
-
-    primary_shooter_spark = configureSparkMax(
-      new CANSparkMax(CAN_IDS.RIGHT_SHOOTER_SPARK_ID, MotorType.kBrushless));
-    secondary_shooter_spark = configureSparkMax(
-      new CANSparkMax(CAN_IDS.LEFT_SHOOTER_SPARK_ID, MotorType.kBrushless));
-
-    secondary_shooter_spark.setInverted(true);
-
-    primary_shooter_encoder = primary_shooter_spark.getEncoder(EncoderType.kHallSensor, 42);
-    secondary_shooter_encoder = secondary_shooter_spark.getEncoder(EncoderType.kHallSensor, 42);
-
     shooter_motors = new SpeedControllerGroup(
-      primary_shooter_spark,
-      secondary_shooter_spark
+      (WPI_TalonSRX) configureTalonSRX(new WPI_TalonSRX(CAN_IDS.SHOOTER_TALON_ONE_ID)),
+      (WPI_TalonSRX) configureTalonSRX(new WPI_TalonSRX(CAN_IDS.SHOOTER_TALON_TWO_ID)),
+      (WPI_VictorSPX) configureVictorSPX(new WPI_VictorSPX(CAN_IDS.SHOOTER_VICTOR_ONE_ID)),
+      (WPI_VictorSPX) configureVictorSPX(new WPI_VictorSPX(CAN_IDS.SHOOTER_VICTOR_TWO_ID))
     );
 
     SmartDashboard.putNumber("target_shooter_speed", 0);
@@ -72,7 +73,7 @@ public class Shooter extends PIDSubsystem {
   }
 
   private double getVelocity() {
-    return (primary_shooter_encoder.getVelocity() + secondary_shooter_encoder.getVelocity()) / 2.0;
+    return 0;
   }
 
   @Override

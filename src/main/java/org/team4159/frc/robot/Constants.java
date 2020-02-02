@@ -1,29 +1,33 @@
 package org.team4159.frc.robot;
 
+import edu.wpi.first.wpilibj.CounterBase.EncodingType;
 import edu.wpi.first.wpilibj.util.Units;
 
 import org.team4159.lib.math.Baba;
 
 public final class Constants {
   public final static class CAN_IDS {
-    public static final int LEFT_FRONT_FALCON_ID = 1;
-    public static final int LEFT_REAR_FALCON_ID = 0;
+    public static final int LEFT_FRONT_FALCON_ID = 0;
+    public static final int LEFT_REAR_FALCON_ID = 1;
     public static final int RIGHT_FRONT_FALCON_ID = 2;
     public static final int RIGHT_REAR_TALON_ID = 3;
-    public static final int TURRET_FALCON_ID = 9;
+    public static final int TURRET_FALCON_ID = 50; // unknown
 
-    public static final int FEEDER_TALON_ONE_ID = 7;
-    public static final int FEEDER_TALON_TWO_ID = 50; // unknown
-    public static final int INTAKE_TALON_ID = 50; // unknown
+    public static final int FEEDER_TALON_ONE_ID = 4;
+    public static final int FEEDER_TALON_TWO_ID = 5; // unknown
 
-    public static final int NECK_TALON_ONE_ID = 5;
-    public static final int NECK_TALON_TWO_ID = 8;
-    public static final int NECK_TALON_THREE_ID = 6;
-    public static final int ARM_TALON_ID = 10;
+    public static final int SHOOTER_TALON_ONE_ID = 6;
+    public static final int SHOOTER_TALON_TWO_ID = 7;
+    public static final int SHOOTER_VICTOR_ONE_ID = 0;
+    public static final int SHOOTER_VICTOR_TWO_ID = 1;
 
-    public static final int LEFT_SHOOTER_SPARK_ID = 3;
-    public static final int RIGHT_SHOOTER_SPARK_ID = 2;
+    public static final int NECK_TALON_ONE_ID = 8;
+    public static final int NECK_TALON_TWO_ID = 9;
+    public static final int NECK_TALON_THREE_ID = 10;
+
     public static final int ARM_SPARK_ID = 1;
+    public static final int INTAKE_SPARK_ID = 2; // unknown
+
     public static final int PIGEON_ID = 0;
   }
 
@@ -67,15 +71,19 @@ public final class Constants {
   }
 
   public final static class ARM_CONSTANTS {
-    public static final int LIMIT_SWITCH_PORT = 0;
+    public static final int LIMIT_SWITCH_PORT = 9;
 
-    public static final double kP = 1.0;
-    public static final double kI = 0.0;
-    public static final double kD = 20.0;
+    public static final int ENCODER_CHANNEL_A_PORT = 0;
+    public static final int ENCODER_CHANNEL_B_PORT = 1;
+    public static final boolean IS_ENCODER_REVERSED = true;
+    public static final EncodingType ENCODER_ENCODING_TYPE = EncodingType.k4X;
+
+    public static final double kP = 0.0;
+    public static final double kD = 0.0;
 
     // TODO: Find
     public static final int UP_POSITION = 0;
-    public static final int DOWN_POSITION = -2000;
+    public static final int DOWN_POSITION = 816;
 
     public static final double ZEROING_SPEED = 0.1;
   }

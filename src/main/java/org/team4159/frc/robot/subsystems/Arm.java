@@ -1,66 +1,69 @@
 package org.team4159.frc.robot.subsystems;
 
+import com.revrobotics.CANSparkMax;
+
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-
-import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.FeedbackDevice;
-import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 import static org.team4159.frc.robot.Constants.*;
 
 public class Arm extends SubsystemBase {
-  private TalonSRX arm_talon;
-  private DigitalInput limit_switch;
+  private CANSparkMax arm_spark;
+  private DigitalInput arm_limit_switch;
+  private Encoder arm_encoder;
 
   private int setpoint = 0;
 
-  private TalonSRX configureTalonSRX(TalonSRX talonSRX) {
-    talonSRX.configFactoryDefault();
-    talonSRX.setNeutralMode(NeutralMode.Brake);
+  private CANSparkMax configureSparkMax(CANSparkMax spark) {
+    spark.restoreFactoryDefaults();
+    //spark.setSmartCurrentLimit(40);
+    spark.setIdleMode(CANSparkMax.IdleMode.kBrake);
+    spark.burnFlash();
 
-    return talonSRX;
+    return spark;
   }
 
   public Arm() {
-    arm_talon = configureTalonSRX(new TalonSRX(CAN_IDS.ARM_TALON_ID));
-    arm_talon.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative);
+    arm_spark = configureSparkMax(new CANSparkMax(
+      CAN_IDS.ARM_SPARK_ID,
+      CANSparkMax.MotorType.kBrushless
+    ));
 
-    int PID_IDX = 0;
-    arm_talon.config_kP(PID_IDX, ARM_CONSTANTS.kP);
-    arm_talon.config_kP(PID_IDX, ARM_CONSTANTS.kI);
-    arm_talon.config_kP(PID_IDX, ARM_CONSTANTS.kD);
+    arm_encoder = new Encoder(
+      ARM_CONSTANTS.ENCODER_CHANNEL_A_PORT,
+      ARM_CONSTANTS.ENCODER_CHANNEL_B_PORT,
+      ARM_CONSTANTS.IS_ENCODER_REVERSED,
+      ARM_CONSTANTS.ENCODER_ENCODING_TYPE
+    );
 
-    limit_switch = new DigitalInput(ARM_CONSTANTS.LIMIT_SWITCH_PORT);
+    arm_limit_switch = new DigitalInput(ARM_CONSTANTS.LIMIT_SWITCH_PORT);
   }
 
   @Override
   public void periodic() {
-    SmartDashboard.putNumber("arm_position", arm_talon.getSelectedSensorPosition());
+    SmartDashboard.putNumber("arm_position", arm_encoder.get());
   }
 
   public void setRawSpeed(double speed) {
-    arm_talon.set(ControlMode.PercentOutput, speed);
+    arm_spark.set(speed);
   }
 
-  public void updateMotionMagic() {
-    arm_talon.set(ControlMode.MotionMagic, setpoint);
+  public void setRawVoltage(double voltage) {
+    arm_spark.setVoltage(voltage);
   }
 
   public void raiseIntake() {
     setpoint = ARM_CONSTANTS.UP_POSITION;
-    updateMotionMagic();
   }
 
   public void lowerIntake() {
     setpoint = ARM_CONSTANTS.DOWN_POSITION;
-    updateMotionMagic();
   }
 
   public void zeroEncoder() {
-    arm_talon.setSelectedSensorPosition(0);
+    arm_encoder.reset();
   }
 
   public int getSetpoint() {
@@ -68,6 +71,6 @@ public class Arm extends SubsystemBase {
   }
 
   public boolean isLimitSwitchClosed() {
-    return limit_switch.get();
+    return arm_limit_switch.get();
   }
 }

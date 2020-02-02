@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.*;
 
 import org.team4159.frc.robot.commands.arm.ToggleArm;
+import org.team4159.frc.robot.commands.arm.ZeroArm;
 import org.team4159.frc.robot.subsystems.*;
 
 import static org.team4159.frc.robot.Constants.*;
@@ -32,7 +33,7 @@ public class RobotContainer {
       drivetrain
     ));
 
-    //new ZeroArm(arm).schedule(false);
+    arm.setDefaultCommand(new RunCommand(() -> arm.setRawSpeed(secondary_joy.getY()), arm));
 
     configureButtonBindings();
   }

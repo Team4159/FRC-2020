@@ -1,29 +1,29 @@
 package org.team4159.frc.robot.subsystems;
 
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import com.revrobotics.CANSparkMax;
 
-import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import static org.team4159.frc.robot.Constants.*;
 
 public class Intake extends SubsystemBase {
-  private TalonSRX intake_talon;
+  private CANSparkMax intake_spark;
 
-  private TalonSRX configureTalonSRX(TalonSRX talonSRX) {
-    talonSRX.configFactoryDefault();
-    talonSRX.setNeutralMode(NeutralMode.Brake);
+  private CANSparkMax configureSparkMax(CANSparkMax spark) {
+    spark.restoreFactoryDefaults();
+    spark.setSmartCurrentLimit(40);
+    spark.setIdleMode(CANSparkMax.IdleMode.kCoast);
+    spark.burnFlash();
 
-    return talonSRX;
+    return spark;
   }
 
   public Intake() {
-    intake_talon = configureTalonSRX(new TalonSRX(CAN_IDS.INTAKE_TALON_ID));
+    intake_spark = configureSparkMax(new CANSparkMax(CAN_IDS.INTAKE_SPARK_ID, CANSparkMax.MotorType.kBrushless));
   }
 
   public void setRawIntakeSpeed(double speed) {
-    intake_talon.set(ControlMode.PercentOutput, speed);
+    intake_spark.set(speed);
   }
 
   public void intakeCell() {

@@ -30,7 +30,7 @@ public class PIDControl {
   public double calculateOutput(double position) {
     final double error = goal - position;
     final double delta_error = (error - last_error) / interval;
-    sigma_error += error;
+    sigma_error = Math.max(-max_integral, Math.min(max_integral, sigma_error + error);
 
     final double output =
       kP * error +
@@ -73,7 +73,7 @@ public class PIDControl {
   }
 
   public void setMaxIntegral(double max_integral) {
-    this.max_integral = max_integral;
+    this.max_integral = Math.abs(max_integral);
   }
 
   public void resetError() {

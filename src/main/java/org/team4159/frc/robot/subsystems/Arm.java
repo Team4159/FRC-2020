@@ -46,6 +46,10 @@ public class Arm extends PIDSubsystem {
   @Override
   public void periodic() {
     SmartDashboard.putNumber("arm_position", arm_encoder.get());
+
+    if (isLimitSwitchClosed()) {
+      zeroEncoder();
+    }
   }
 
   public void setRawSpeed(double speed) {

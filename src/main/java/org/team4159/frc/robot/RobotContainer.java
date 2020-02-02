@@ -32,7 +32,7 @@ public class RobotContainer {
       drivetrain
     ));
 
-    arm.setDefaultCommand(new RunCommand(() -> arm.setRawSpeed(secondary_joy.getY()), arm));
+    new ZeroArm(arm).schedule(false);
 
     configureButtonBindings();
   }

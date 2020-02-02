@@ -19,6 +19,19 @@ public class CSVWriter {
     this(new File(filename));
   }
 
+  public static CSVWriter createTempFile(String filename) {
+    File file;
+
+    try {
+      file = File.createTempFile("temp-", filename);
+      return new CSVWriter(file);
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+
+    return new CSVWriter(filename);
+  }
+
   public void write(Object... columns) {
     try {
       for (Object column : columns) {

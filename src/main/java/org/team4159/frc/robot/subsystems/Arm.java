@@ -4,6 +4,7 @@ import com.revrobotics.CANSparkMax;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.controller.ArmFeedforward;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -14,7 +15,10 @@ public class Arm extends SubsystemBase {
   private DigitalInput arm_limit_switch;
   private Encoder arm_encoder;
 
-  private int setpoint = 0;
+  private int setpoint = ARM_CONSTANTS.UP_POSITION;
+  private int last_error = 0;
+
+  private boolean is_zeroed = false;
 
   private CANSparkMax configureSparkMax(CANSparkMax spark) {
     spark.restoreFactoryDefaults();
@@ -44,6 +48,15 @@ public class Arm extends SubsystemBase {
   @Override
   public void periodic() {
     SmartDashboard.putNumber("arm_position", arm_encoder.get());
+
+    if (is_zeroed) {
+      final int error = setpoint - arm_encoder.get();
+      final int delta_error = last_error - error;
+
+      setRawVoltage(ARM_CONSTANTS.kP * error + ARM_CONSTANTS.kP * delta_error);
+
+      last_error = error;
+    }
   }
 
   public void setRawSpeed(double speed) {
@@ -64,6 +77,7 @@ public class Arm extends SubsystemBase {
 
   public void zeroEncoder() {
     arm_encoder.reset();
+    is_zeroed = true;
   }
 
   public int getSetpoint() {

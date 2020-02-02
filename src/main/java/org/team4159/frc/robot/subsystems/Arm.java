@@ -4,9 +4,10 @@ import com.revrobotics.CANSparkMax;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Encoder;
-import edu.wpi.first.wpilibj.controller.ArmFeedforward;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+
+import org.team4159.lib.control.PIDControl;
 
 import static org.team4159.frc.robot.Constants.*;
 
@@ -15,8 +16,7 @@ public class Arm extends SubsystemBase {
   private DigitalInput arm_limit_switch;
   private Encoder arm_encoder;
 
-  private int setpoint = ARM_CONSTANTS.UP_POSITION;
-  private int last_error = 0;
+  private PIDControl pid;
 
   private boolean is_zeroed = false;
 
@@ -30,10 +30,9 @@ public class Arm extends SubsystemBase {
   }
 
   public Arm() {
-    arm_spark = configureSparkMax(new CANSparkMax(
-      CAN_IDS.ARM_SPARK_ID,
-      CANSparkMax.MotorType.kBrushless
-    ));
+    arm_spark = configureSparkMax(new CANSparkMax(CAN_IDS.ARM_SPARK_ID, CANSparkMax.MotorType.kBrushless));
+
+    arm_limit_switch = new DigitalInput(ARM_CONSTANTS.LIMIT_SWITCH_PORT);
 
     arm_encoder = new Encoder(
       ARM_CONSTANTS.ENCODER_CHANNEL_A_PORT,
@@ -42,7 +41,13 @@ public class Arm extends SubsystemBase {
       ARM_CONSTANTS.ENCODER_ENCODING_TYPE
     );
 
-    arm_limit_switch = new DigitalInput(ARM_CONSTANTS.LIMIT_SWITCH_PORT);
+    pid = new PIDControl(
+      ARM_CONSTANTS.kP,
+      ARM_CONSTANTS.kI,
+      ARM_CONSTANTS.kD
+    );
+
+    raiseIntake();
   }
 
   @Override
@@ -50,12 +55,7 @@ public class Arm extends SubsystemBase {
     SmartDashboard.putNumber("arm_position", arm_encoder.get());
 
     if (is_zeroed) {
-      final int error = setpoint - arm_encoder.get();
-      final int delta_error = last_error - error;
-
-      setRawVoltage(ARM_CONSTANTS.kP * error + ARM_CONSTANTS.kP * delta_error);
-
-      last_error = error;
+      setRawVoltage(pid.calculateOutput(getPosition()));
     }
   }
 
@@ -68,11 +68,11 @@ public class Arm extends SubsystemBase {
   }
 
   public void raiseIntake() {
-    setpoint = ARM_CONSTANTS.UP_POSITION;
+    pid.setGoal(ARM_CONSTANTS.UP_POSITION);
   }
 
   public void lowerIntake() {
-    setpoint = ARM_CONSTANTS.DOWN_POSITION;
+    pid.setGoal(ARM_CONSTANTS.DOWN_POSITION);
   }
 
   public void zeroEncoder() {
@@ -81,7 +81,11 @@ public class Arm extends SubsystemBase {
   }
 
   public int getSetpoint() {
-    return setpoint;
+    return (int) pid.getGoal();
+  }
+
+  public int getPosition() {
+    return arm_encoder.get();
   }
 
   public boolean isLimitSwitchClosed() {

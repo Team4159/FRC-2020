@@ -5,23 +5,21 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
-import com.revrobotics.EncoderType;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
-import edu.wpi.first.wpilibj.Talon;
-import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.PIDSubsystem;
 
-import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANEncoder;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import org.team4159.lib.control.PIDControl;
 
 import static org.team4159.frc.robot.Constants.*;
 
-public class Shooter extends PIDSubsystem {
+public class Shooter extends SubsystemBase {
   private CANEncoder primary_shooter_encoder, secondary_shooter_encoder;
 
   private SpeedControllerGroup shooter_motors;
+
+  private PIDControl pid;
 
   private TalonSRX configureTalonSRX(TalonSRX talonSRX) {
     talonSRX.configFactoryDefault();
@@ -38,11 +36,11 @@ public class Shooter extends PIDSubsystem {
   }
 
   public Shooter() {
-    super(new PIDController(
+    pid = new PIDControl(
       SHOOTER_CONSTANTS.kP,
       SHOOTER_CONSTANTS.kI,
       SHOOTER_CONSTANTS.kD
-    ));
+    );
 
     shooter_motors = new SpeedControllerGroup(
       (WPI_TalonSRX) configureTalonSRX(new WPI_TalonSRX(CAN_IDS.SHOOTER_TALON_ONE_ID)),
@@ -59,13 +57,13 @@ public class Shooter extends PIDSubsystem {
 
   @Override
   public void periodic() {
-    super.periodic();
+    setRawSpeed(pid.calculateOutput(getVelocity()));
 
     SmartDashboard.putNumber("current_shooter_speed", getVelocity());
-    setSetpoint(SmartDashboard.getNumber("target_shooter_speed", 0));
-    getController().setP(SmartDashboard.getNumber("shooter_kp", SHOOTER_CONSTANTS.kP));
-    getController().setI(SmartDashboard.getNumber("shooter_ki", SHOOTER_CONSTANTS.kI));
-    getController().setD(SmartDashboard.getNumber("shooter_kd", SHOOTER_CONSTANTS.kD));
+    pid.setGoal(SmartDashboard.getNumber("target_shooter_speed", 0));
+    pid.setP(SmartDashboard.getNumber("shooter_kp", SHOOTER_CONSTANTS.kP));
+    pid.setI(SmartDashboard.getNumber("shooter_ki", SHOOTER_CONSTANTS.kI));
+    pid.setD(SmartDashboard.getNumber("shooter_kd", SHOOTER_CONSTANTS.kD));
   }
 
   public void setRawSpeed(double speed) {
@@ -74,15 +72,5 @@ public class Shooter extends PIDSubsystem {
 
   private double getVelocity() {
     return 0;
-  }
-
-  @Override
-  protected void useOutput(double output, double setpoint) {
-    setRawSpeed(output);
-  }
-
-  @Override
-  protected double getMeasurement() {
-    return getVelocity();
   }
 }

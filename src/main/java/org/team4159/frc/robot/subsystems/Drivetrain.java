@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import org.team4159.lib.control.signal.DriveSignal;
+import org.team4159.lib.control.signal.filters.LowPassFilterSource;
 
 import static org.team4159.frc.robot.Constants.*;
 
@@ -19,6 +20,7 @@ public class Drivetrain extends SubsystemBase {
   private SpeedControllerGroup right_falcons;
 
   private PigeonIMU pigeon;
+  private LowPassFilterSource filtered_heading;
 
   private boolean is_oriented_forward = true;
 
@@ -50,8 +52,14 @@ public class Drivetrain extends SubsystemBase {
     right_falcons.setInverted(true);
 
     pigeon = new PigeonIMU(CAN_IDS.PIGEON_ID);
+    filtered_heading = new LowPassFilterSource(pigeon::getFusedHeading, 10);
 
     zeroSensors();
+  }
+
+  @Override
+  public void periodic() {
+    filtered_heading.get();
   }
 
   public void rawDrive(DriveSignal signal) {

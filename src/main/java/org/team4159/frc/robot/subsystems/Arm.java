@@ -4,11 +4,10 @@ import com.revrobotics.CANSparkMax;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.PIDSubsystem;
 
-import org.team4159.lib.control.PIDControl;
-
-import org.team4159.lib.control.subsystem.PIDSubsystem;
 
 import static org.team4159.frc.robot.Constants.*;
 
@@ -29,11 +28,11 @@ public class Arm extends PIDSubsystem {
   }
 
   public Arm() {
-    super(
+    super(new PIDController(
       ARM_CONSTANTS.kP,
       ARM_CONSTANTS.kI,
       ARM_CONSTANTS.kD
-    );
+    ));
 
     arm_encoder = new Encoder(
       ARM_CONSTANTS.ENCODER_CHANNEL_A_PORT,
@@ -65,35 +64,32 @@ public class Arm extends PIDSubsystem {
   }
 
   public void raiseIntake() {
-    setGoal(ARM_CONSTANTS.UP_POSITION);
+    setSetpoint(ARM_CONSTANTS.UP_POSITION);
   }
 
   public void lowerIntake() {
-   setGoal(ARM_CONSTANTS.DOWN_POSITION);
+    setSetpoint(ARM_CONSTANTS.DOWN_POSITION);
   }
 
   public int getSetpoint() {
-    return (int) getGoal();
+    return (int) getSetpoint();
   }
 
   public boolean isLimitSwitchClosed() {
     return !arm_limit_switch.get();
   }
 
-  @Override
-  public void zeroSubsystem() {
-    super.zeroSubsystem();
-
+  public void zeroEncoder() {
     arm_encoder.reset();
   }
 
   @Override
-  public double getPosition() {
+  public double getMeasurement() {
     return arm_encoder.get();
   }
 
   @Override
-  public void setOutput(double voltage) {
+  public void useOutput(double voltage, double setpoint) {
     setRawVoltage(voltage);
   }
 }

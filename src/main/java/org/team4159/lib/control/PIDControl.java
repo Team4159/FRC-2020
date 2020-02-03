@@ -28,7 +28,7 @@ public class PIDControl {
   public double calculateOutput(double position) {
     error = goal - position;
     delta_error = (error - last_error) / interval;
-    sigma_error = Math.max(-max_integral, Math.min(max_integral, sigma_error + error));
+    sigma_error = Math.max(-max_integral, Math.min(max_integral, sigma_error + (error * interval)));
 
     final double output =
       kP * error +

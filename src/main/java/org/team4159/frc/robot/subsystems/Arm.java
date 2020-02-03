@@ -5,18 +5,17 @@ import com.revrobotics.CANSparkMax;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import org.team4159.lib.control.PIDControl;
 
+import org.team4159.lib.control.subsystem.PIDSubsystem;
+
 import static org.team4159.frc.robot.Constants.*;
 
-public class Arm extends SubsystemBase {
+public class Arm extends PIDSubsystem {
   private CANSparkMax arm_spark;
   private DigitalInput arm_limit_switch;
   private Encoder arm_encoder;
-
-  private PIDControl pid;
 
   private boolean is_zeroed = false;
 
@@ -30,9 +29,11 @@ public class Arm extends SubsystemBase {
   }
 
   public Arm() {
-    arm_spark = configureSparkMax(new CANSparkMax(CAN_IDS.ARM_SPARK_ID, CANSparkMax.MotorType.kBrushless));
-
-    arm_limit_switch = new DigitalInput(ARM_CONSTANTS.LIMIT_SWITCH_PORT);
+    super(
+      ARM_CONSTANTS.kP,
+      ARM_CONSTANTS.kI,
+      ARM_CONSTANTS.kD
+    );
 
     arm_encoder = new Encoder(
       ARM_CONSTANTS.ENCODER_CHANNEL_A_PORT,
@@ -41,22 +42,18 @@ public class Arm extends SubsystemBase {
       ARM_CONSTANTS.ENCODER_ENCODING_TYPE
     );
 
-    pid = new PIDControl(
-      ARM_CONSTANTS.kP,
-      ARM_CONSTANTS.kI,
-      ARM_CONSTANTS.kD
-    );
+    arm_spark = configureSparkMax(new CANSparkMax(CAN_IDS.ARM_SPARK_ID, CANSparkMax.MotorType.kBrushless));
+
+    arm_limit_switch = new DigitalInput(ARM_CONSTANTS.LIMIT_SWITCH_PORT);
 
     raiseIntake();
   }
 
   @Override
   public void periodic() {
-    SmartDashboard.putNumber("arm_position", arm_encoder.get());
+    super.periodic();
 
-    if (is_zeroed) {
-      setRawVoltage(pid.calculateOutput(getPosition()));
-    }
+    SmartDashboard.putNumber("arm_position", arm_encoder.get());
   }
 
   public void setRawSpeed(double speed) {
@@ -68,27 +65,35 @@ public class Arm extends SubsystemBase {
   }
 
   public void raiseIntake() {
-    pid.setGoal(ARM_CONSTANTS.UP_POSITION);
+    pid_control.setGoal(ARM_CONSTANTS.UP_POSITION);
   }
 
   public void lowerIntake() {
-    pid.setGoal(ARM_CONSTANTS.DOWN_POSITION);
-  }
-
-  public void zeroEncoder() {
-    arm_encoder.reset();
-    is_zeroed = true;
+    pid_control.setGoal(ARM_CONSTANTS.DOWN_POSITION);
   }
 
   public int getSetpoint() {
-    return (int) pid.getGoal();
-  }
-
-  public int getPosition() {
-    return arm_encoder.get();
+    return (int) pid_control.getGoal();
   }
 
   public boolean isLimitSwitchClosed() {
     return !arm_limit_switch.get();
+  }
+
+  @Override
+  public void zeroSubsystem() {
+    super.zeroSubsystem();
+
+    arm_encoder.reset();
+  }
+
+  @Override
+  public double getPosition() {
+    return arm_encoder.get();
+  }
+
+  @Override
+  public void setOutput(double voltage) {
+    setRawVoltage(voltage);
   }
 }

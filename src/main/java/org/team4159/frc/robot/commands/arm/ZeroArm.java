@@ -26,6 +26,6 @@ public class ZeroArm extends CommandBase {
 
   @Override
   public void end(boolean interrupted) {
-    arm.zeroEncoder();
+    arm.zeroSubsystem();
   }
 }

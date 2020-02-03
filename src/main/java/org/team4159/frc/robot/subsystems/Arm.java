@@ -65,15 +65,15 @@ public class Arm extends PIDSubsystem {
   }
 
   public void raiseIntake() {
-    pid_control.setGoal(ARM_CONSTANTS.UP_POSITION);
+    setGoal(ARM_CONSTANTS.UP_POSITION);
   }
 
   public void lowerIntake() {
-    pid_control.setGoal(ARM_CONSTANTS.DOWN_POSITION);
+   setGoal(ARM_CONSTANTS.DOWN_POSITION);
   }
 
   public int getSetpoint() {
-    return (int) pid_control.getGoal();
+    return (int) getGoal();
   }
 
   public boolean isLimitSwitchClosed() {

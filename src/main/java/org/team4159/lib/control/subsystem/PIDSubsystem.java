@@ -12,7 +12,7 @@ public abstract class PIDSubsystem extends ZeroableSubsystem {
   }
 
   public PIDSubsystem(PIDControl control) {
-    pid_control = control;
+    resetPID(control);
   }
 
   public abstract double getPosition();
@@ -23,5 +23,49 @@ public abstract class PIDSubsystem extends ZeroableSubsystem {
     if (isSubsystemZeroed()) {
       setOutput(pid_control.calculateOutput(getPosition()));
     }
+  }
+
+  public double getError() {
+    return pid_control.getError();
+  }
+
+  public double getErrorSum() {
+    return pid_control.getErrorSum();
+  }
+
+  public double getErrorChange() {
+    return pid_control.getErrorChange();
+  }
+
+  public double getGoal() {
+    return pid_control.getGoal();
+  }
+
+  public void setGoal(double goal) {
+    pid_control.setGoal(goal);
+  }
+
+  public void setInterval(double interval) {
+    pid_control.setInterval(interval);
+  }
+
+  public void setMaxIntegral(double max_integral) {
+    pid_control.setMaxIntegral(max_integral);
+  }
+
+  public void resetPID(PIDControl control) {
+    pid_control = control;
+  }
+
+  public void setP(double kP) {
+    pid_control.setP(kP);
+  }
+
+  public void setI(double kI) {
+    pid_control.setI(kI);
+  }
+
+  public void setD(double kD) {
+    pid_control.setD(kD);
   }
 }

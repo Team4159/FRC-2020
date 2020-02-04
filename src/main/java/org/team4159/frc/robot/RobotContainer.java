@@ -16,7 +16,7 @@ public class RobotContainer {
   private final Intake intake = new Intake();
   private final Feeder feeder = new Feeder();
   private final Neck neck = new Neck();
-  private final Arm arm = new Arm();
+  public final Arm arm = new Arm();
 
   private final Joystick left_joy = new Joystick(CONTROLS.LEFT_JOY);
   private final Joystick right_joy = new Joystick(CONTROLS.RIGHT_JOY);
@@ -33,18 +33,21 @@ public class RobotContainer {
       drivetrain
     ));
 
-    arm.setDefaultCommand(new RunCommand(() -> arm.setRawSpeed(secondary_joy.getY()), arm));
+    //arm.setDefaultCommand(new RunCommand(() -> arm.setRawSpeed(secondary_joy.getY()), arm));
 
     configureButtonBindings();
   }
 
   private void configureButtonBindings() {
+//    new JoystickButton(secondary_joy, 1)
+//      .whenPressed(new ConditionalCommand(
+//        new InstantCommand(shooter::enable, shooter),
+//        new InstantCommand(shooter::disable, shooter),
+//        shooter::isEnabled
+//      ));
+
     new JoystickButton(secondary_joy, 1)
-      .whenPressed(new ConditionalCommand(
-        new InstantCommand(shooter::enable, shooter),
-        new InstantCommand(shooter::disable, shooter),
-        shooter::isEnabled
-      ));
+      .whenPressed(new ToggleArm(arm));
 
     new JoystickButton(secondary_joy, 2)
       .whenPressed(drivetrain::flipOrientation);

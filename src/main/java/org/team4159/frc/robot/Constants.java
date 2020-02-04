@@ -65,7 +65,7 @@ public final class Constants {
   }
 
   public final static class SHOOTER_CONSTANTS {
-    public static final double kP = 0.02;
+    public static final double kP = 0.001;
     public static final double kI = 0.0;
     public static final double kD = 0.0;
   }
@@ -78,14 +78,15 @@ public final class Constants {
     public static final boolean IS_ENCODER_REVERSED = true;
     public static final EncodingType ENCODER_ENCODING_TYPE = EncodingType.k4X;
 
-    public static final double kP = 0.0;
+    public static final double kP = 0.05;
     public static final double kI = 0.0;
-    public static final double kD = 0.0;
+    public static final double kD = 0.00;
 
     // TODO: Find
     public static final int UP_POSITION = 0;
-    public static final int DOWN_POSITION = 816;
+    public static final int DOWN_POSITION = 610;
 
-    public static final double ZEROING_SPEED = 0.1;
+    public static final double ZEROING_SPEED = -0.3;
+    public static final double MAX_VOLTAGE = 10;
   }
 }

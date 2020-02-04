@@ -16,8 +16,6 @@ public class Arm extends PIDSubsystem {
   private DigitalInput arm_limit_switch;
   private Encoder arm_encoder;
 
-  private boolean is_zeroed = false;
-
   private CANSparkMax configureSparkMax(CANSparkMax spark) {
     spark.restoreFactoryDefaults();
     //spark.setSmartCurrentLimit(40);
@@ -43,6 +41,8 @@ public class Arm extends PIDSubsystem {
 
     arm_spark = configureSparkMax(new CANSparkMax(CAN_IDS.ARM_SPARK_ID, CANSparkMax.MotorType.kBrushless));
 
+    arm_spark.setInverted(true);
+
     arm_limit_switch = new DigitalInput(ARM_CONSTANTS.LIMIT_SWITCH_PORT);
 
     raiseIntake();
@@ -52,7 +52,9 @@ public class Arm extends PIDSubsystem {
   public void periodic() {
     super.periodic();
 
-    SmartDashboard.putNumber("arm_position", arm_encoder.get());
+    SmartDashboard.putBoolean("arm limit switch", isLimitSwitchClosed());
+    SmartDashboard.putNumber("arm position", arm_encoder.get());
+    SmartDashboard.putNumber("arm setpoint", getController().getSetpoint());
   }
 
   public void setRawSpeed(double speed) {
@@ -60,6 +62,8 @@ public class Arm extends PIDSubsystem {
   }
 
   public void setRawVoltage(double voltage) {
+    SmartDashboard.putNumber("arm voltage", voltage);
+
     arm_spark.setVoltage(voltage);
   }
 
@@ -71,16 +75,22 @@ public class Arm extends PIDSubsystem {
     setSetpoint(ARM_CONSTANTS.DOWN_POSITION);
   }
 
-  public int getSetpoint() {
-    return (int) getSetpoint();
-  }
-
   public boolean isLimitSwitchClosed() {
     return !arm_limit_switch.get();
   }
 
+  public double getSetpoint() {
+    return m_controller.getSetpoint();
+  }
+
+  public boolean isArmZeroed() {
+    return isEnabled();
+  }
+
   public void zeroEncoder() {
+    System.out.println("zeroed");
     arm_encoder.reset();
+    enable();
   }
 
   @Override

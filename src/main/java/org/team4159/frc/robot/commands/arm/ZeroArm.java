@@ -15,6 +15,10 @@ public class ZeroArm extends CommandBase {
   }
 
   @Override
+  public void initialize() {
+  }
+
+  @Override
   public void execute() {
     arm.setRawSpeed(ARM_CONSTANTS.ZEROING_SPEED);
   }

@@ -1,8 +1,11 @@
 package org.team4159.frc.robot;
 
+import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import org.team4159.frc.robot.commands.arm.ZeroArm;
 
 public class Robot extends TimedRobot {
   private RobotContainer robot_container;
@@ -27,5 +30,9 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopInit() {
     if (autonomous_command != null) autonomous_command.cancel();
+
+    if (!robot_container.arm.isArmZeroed()) {
+      new ZeroArm(robot_container.arm).schedule();
+    }
   }
 }

@@ -17,6 +17,9 @@ public class Shooter extends SubsystemBase {
   private TalonSRX shooter_talon_one, shooter_talon_two;
   private VictorSPX shooter_victor_one, shooter_victor_two;
 
+  private double goal_speed = 0.0;
+  private boolean enabled = false;
+
   private TalonSRX configureTalonSRX(TalonSRX talonSRX) {
     talonSRX.configFactoryDefault();
     talonSRX.setNeutralMode(NeutralMode.Coast);
@@ -48,6 +51,29 @@ public class Shooter extends SubsystemBase {
     SmartDashboard.putNumber("shooter_kd", SHOOTER_CONSTANTS.kD);
   }
 
+  @Override
+  public void periodic() {
+    if (enabled) {
+      setTargetSpeed(goal_speed);
+    } else {
+      setRawSpeed(0);
+    }
+
+    SmartDashboard.putNumber("current_shooter_speed", getPosition());
+    setGoal(SmartDashboard.getNumber("target_shooter_speed", 0));
+    setP(SmartDashboard.getNumber("shooter_kp", SHOOTER_CONSTANTS.kP));
+    setI(SmartDashboard.getNumber("shooter_ki", SHOOTER_CONSTANTS.kI));
+    setD(SmartDashboard.getNumber("shooter_kd", SHOOTER_CONSTANTS.kD));
+  }
+
+  public void setRawSpeed(double percent) {
+    shooter_talon_one.set(ControlMode.PercentOutput, percent);
+  }
+
+  public void setTargetSpeed(double speed) {
+    shooter_talon_one.set(ControlMode.MotionMagic, goal_speed);
+  }
+
   public void setP(double kP) {
     shooter_talon_one.config_kP(0, kP);
   }
@@ -61,25 +87,22 @@ public class Shooter extends SubsystemBase {
   }
 
   public void setGoal(double goal) {
-    shooter_talon_one.set(ControlMode.MotionMagic, goal);
-  }
-
-  @Override
-  public void periodic() {
-    super.periodic();
-
-    SmartDashboard.putNumber("current_shooter_speed", getPosition());
-    setGoal(SmartDashboard.getNumber("target_shooter_speed", 0));
-    setP(SmartDashboard.getNumber("shooter_kp", SHOOTER_CONSTANTS.kP));
-    setI(SmartDashboard.getNumber("shooter_ki", SHOOTER_CONSTANTS.kI));
-    setD(SmartDashboard.getNumber("shooter_kd", SHOOTER_CONSTANTS.kD));
-  }
-
-  public void setRawSpeed(double speed) {
-    shooter_talon_one.set(ControlMode.PercentOutput, speed);
+    goal_speed = goal;
   }
 
   public double getPosition() {
     return (shooter_talon_one.getSelectedSensorVelocity() + shooter_talon_two.getSelectedSensorVelocity()) / 2.0;
+  }
+
+  public void enable() {
+    enabled = true;
+  }
+
+  public void disable() {
+    enabled = false;
+  }
+
+  public boolean isEnabled() {
+    return enabled;
   }
 }

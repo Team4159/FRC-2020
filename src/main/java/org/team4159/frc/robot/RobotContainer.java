@@ -39,12 +39,12 @@ public class RobotContainer {
   }
 
   private void configureButtonBindings() {
-//    new JoystickButton(secondary_joy, CONTROLS.SECONDARY_JOY.RUN_SHOOTER_BTN)
-//      .whenPressed(new ConditionalCommand(
-//        new InstantCommand(shooter::enable, shooter),
-//        new InstantCommand(shooter::disable, shooter),
-//        shooter::isEnabled
-//      ));
+    new JoystickButton(secondary_joy, CONTROLS.SECONDARY_JOY.RUN_SHOOTER_BTN)
+      .whenPressed(new ConditionalCommand(
+        new InstantCommand(shooter::enable, shooter),
+        new InstantCommand(shooter::disable, shooter),
+        shooter::isEnabled
+      ));
 
     new JoystickButton(secondary_joy, CONTROLS.SECONDARY_JOY.FLIP_ORIENTATION_BTN_ID)
       .whenPressed(drivetrain::flipOrientation);

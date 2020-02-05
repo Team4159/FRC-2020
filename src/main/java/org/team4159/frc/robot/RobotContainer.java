@@ -18,9 +18,9 @@ public class RobotContainer {
   private final Neck neck = new Neck();
   public final Arm arm = new Arm();
 
-  private final Joystick left_joy = new Joystick(CONTROLS.LEFT_JOY);
-  private final Joystick right_joy = new Joystick(CONTROLS.RIGHT_JOY);
-  private final Joystick secondary_joy = new Joystick(CONTROLS.SECONDARY_JOY);
+  private final Joystick left_joy = new Joystick(CONTROLS.LEFT_JOY.PORT);
+  private final Joystick right_joy = new Joystick(CONTROLS.RIGHT_JOY.PORT);
+  private final Joystick secondary_joy = new Joystick(CONTROLS.SECONDARY_JOY.PORT);
 
   private final AutoSelector auto_selector = new AutoSelector(drivetrain);
 
@@ -39,35 +39,32 @@ public class RobotContainer {
   }
 
   private void configureButtonBindings() {
-//    new JoystickButton(secondary_joy, 1)
+//    new JoystickButton(secondary_joy, CONTROLS.SECONDARY_JOY.RUN_SHOOTER_BTN)
 //      .whenPressed(new ConditionalCommand(
 //        new InstantCommand(shooter::enable, shooter),
 //        new InstantCommand(shooter::disable, shooter),
 //        shooter::isEnabled
 //      ));
 
-    new JoystickButton(secondary_joy, 1)
-      .whenPressed(new ToggleArm(arm));
-
-    new JoystickButton(secondary_joy, 2)
+    new JoystickButton(secondary_joy, CONTROLS.SECONDARY_JOY.FLIP_ORIENTATION_BTN_ID)
       .whenPressed(drivetrain::flipOrientation);
 
-    new JoystickButton(secondary_joy, 3)
+    new JoystickButton(secondary_joy, CONTROLS.SECONDARY_JOY.RUN_INTAKE_BTN_ID)
       .whenPressed(new InstantCommand(intake::intakeCell, intake))
       .whenReleased(new InstantCommand(intake::stopIntaking, intake));
 
-    new JoystickButton(secondary_joy, 4)
+    new JoystickButton(secondary_joy, CONTROLS.SECONDARY_JOY.TOGGLE_ARM_BTN_ID)
       .whenPressed(new ToggleArm(arm));
 
-    new JoystickButton(secondary_joy, 5)
+    new JoystickButton(secondary_joy, CONTROLS.SECONDARY_JOY.RUN_NECK_BTN_ID)
       .whenPressed(new InstantCommand(neck::neck))
       .whenReleased(new InstantCommand(neck::stop));
 
-    new JoystickButton(secondary_joy, 6)
+    new JoystickButton(secondary_joy, CONTROLS.SECONDARY_JOY.RUN_FEEDER_BTN_ID)
       .whenPressed(new InstantCommand(feeder::feed, feeder))
       .whenReleased(new InstantCommand(feeder::stop, feeder));
 
-    new JoystickButton(secondary_joy, 7)
+    new JoystickButton(secondary_joy, CONTROLS.SECONDARY_JOY.RUN_INTAKE_NECK_FEEDER_SHOOTER_BTN_ID)
       .whenPressed(new ParallelCommandGroup(
         new InstantCommand(intake::intakeCell, intake),
         new InstantCommand(feeder::feed, feeder),

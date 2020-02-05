@@ -68,7 +68,7 @@ public class Shooter extends SubsystemBase {
   public void periodic() {
     super.periodic();
 
-    SmartDashboard.putNumber("current_shooter_speed", getVelocity());
+    SmartDashboard.putNumber("current_shooter_speed", getPosition());
     setGoal(SmartDashboard.getNumber("target_shooter_speed", 0));
     setP(SmartDashboard.getNumber("shooter_kp", SHOOTER_CONSTANTS.kP));
     setI(SmartDashboard.getNumber("shooter_ki", SHOOTER_CONSTANTS.kI));
@@ -79,7 +79,7 @@ public class Shooter extends SubsystemBase {
     shooter_talon_one.set(ControlMode.PercentOutput, speed);
   }
 
-  private double getVelocity() {
-    return (shooter_talon_one.getSelectedSensorPosition() + shooter_talon_two.getSelectedSensorPosition()) / 2.0;
+  public double getPosition() {
+    return (shooter_talon_one.getSelectedSensorVelocity() + shooter_talon_two.getSelectedSensorVelocity()) / 2.0;
   }
 }

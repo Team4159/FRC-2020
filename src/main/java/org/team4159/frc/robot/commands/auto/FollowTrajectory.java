@@ -15,8 +15,6 @@ import edu.wpi.first.wpilibj2.command.*;
 import org.team4159.frc.robot.subsystems.Drivetrain;
 import org.team4159.lib.CsvWriter;
 
-import java.io.File;
-
 import static org.team4159.frc.robot.Constants.*;
 
 public class FollowTrajectory extends CommandBase {
@@ -32,12 +30,12 @@ public class FollowTrajectory extends CommandBase {
   private DifferentialDriveKinematics kinematics = new DifferentialDriveKinematics(DRIVE_CONSTANTS.TRACK_WIDTH);
   private SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(DRIVE_CONSTANTS.kS, DRIVE_CONSTANTS.kV, DRIVE_CONSTANTS.kA);
   private RamseteController controller = new RamseteController(DRIVE_CONSTANTS.kB, DRIVE_CONSTANTS.kZeta);
-  private PIDController pid = new PIDController(DRIVE_CONSTANTS.kP, 0, DRIVE_CONSTANTS.kD);
+  private PIDController pid_left = new PIDController(DRIVE_CONSTANTS.kP, 0, DRIVE_CONSTANTS.kD);
+  private PIDController pid_right = new PIDController(DRIVE_CONSTANTS.kP, 0, DRIVE_CONSTANTS.kD);
   double prev_time = 0;
 
   public FollowTrajectory(Trajectory trajectory, Drivetrain drivetrain) {
     addRequirements(drivetrain);
-
     traj = trajectory;
     this.drivetrain = drivetrain;
     ramsete = new RamseteCommand(
@@ -101,10 +99,10 @@ public class FollowTrajectory extends CommandBase {
     double left_feed_forward = 0.0;
     double right_feed_forward = 0.0;
 
-      double left_PID = pid.calculate(drivetrain.getWheelSpeeds().leftMetersPerSecond,
+      double left_PID = pid_left.calculate(drivetrain.getWheelSpeeds().leftMetersPerSecond,
         left_speed_setpoint);
 
-      double right_PID = pid.calculate(drivetrain.getWheelSpeeds().rightMetersPerSecond,
+      double right_PID = pid_right.calculate(drivetrain.getWheelSpeeds().rightMetersPerSecond,
         right_speed_setpoint);
 
       double left_output = left_feed_forward

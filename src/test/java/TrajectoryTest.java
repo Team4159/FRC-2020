@@ -43,8 +43,8 @@ public class TrajectoryTest {
     final double final_y = final_pose.getTranslation().getY();
     final double final_direction = final_pose.getRotation().getDegrees();
 
-    Assert.assertEquals("Expected Final X: 0.0, Output Final X: " + final_x, 0.0, final_x, 0.1);
-    Assert.assertEquals("Expected Final Y: 3.0, Output Final Y: " + final_y, 0.0, final_y, 0.1);
-    Assert.assertEquals("Expected Final Direction: 90.0, Output Final Direction: " + final_direction, 90.0, final_direction, 1.0);
+    Assert.assertEquals("Expected Final X: 1.0, Output Final X: " + final_x, 1.0, final_x, 0.1);
+    Assert.assertEquals("Expected Final Y: 0.0, Output Final Y: " + final_y, 0.0, final_y, 0.1);
+    Assert.assertEquals("Expected Final Direction: 0.0, Output Final Direction: " + final_direction, 0.0, final_direction, 1.0);
   }
 }

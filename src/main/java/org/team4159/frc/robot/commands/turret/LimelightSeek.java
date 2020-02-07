@@ -7,9 +7,11 @@ import org.team4159.lib.hardware.Limelight;
 
 import static org.team4159.frc.robot.Constants.*;
 
+
 public class LimelightSeek extends CommandBase {
     private Turret turret;
     private Limelight limelight;
+    private double prevError = 0;
 
     public LimelightSeek(Turret turret, Limelight limelight) {
         this.turret = turret;
@@ -26,7 +28,9 @@ public class LimelightSeek extends CommandBase {
     @Override
     public void execute() {
         if (limelight.isTargetVisible()) {
-            double speed = limelight.getTargetHorizontalOffset() * TURRET_CONSTANTS.LIMELIGHT_kP;
+            double error = limelight.getTargetHorizontalOffset();
+            double speed = error* TURRET_CONSTANTS.LIMELIGHT_kP + (error-prevError)*TURRET_CONSTANTS.LIMELIGHT_kD;
+            prevError = error;
             turret.setRawSpeed(speed);
         }
     }

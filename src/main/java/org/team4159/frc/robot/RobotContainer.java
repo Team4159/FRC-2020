@@ -30,11 +30,12 @@ public class RobotContainer {
   }
 
   private void configureButtonBindings() {
-    new JoystickButton(left_joy, 1)
-      .whenPressed(drivetrain::flipOrientation);
+//    new JoystickButton(left_joy, 1)
+//      .whenPressed(drivetrain::flipOrientation);
 
-    new JoystickButton(left_joy, 2)
-      .whenHeld(new LimelightSeek(turret, limelight));
+    new JoystickButton(left_joy, 1)
+      .whenPressed(turret::enable)
+      .whenReleased(turret::disable);
   }
 
   public Command getAutonomousCommand() {

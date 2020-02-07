@@ -102,4 +102,34 @@ public class RamseteControllerTest {
 
     Assert.assertEquals(0, sigma_differences, 0.01);
   }
+
+  @Test
+  public void RamseteWantsToTurn() {
+    final List<Trajectory.State> states = test_trajectory.getStates();
+
+    double sigma_differences = 0;
+
+    robot_pose = new Pose2d(0.0, 0.0, Rotation2d.fromDegrees(90.0));
+
+    for (Trajectory.State state : states) {
+      final ChassisSpeeds chassis_speeds = controller.calculate(robot_pose, state);
+      final DifferentialDriveWheelSpeeds wheel_speeds = toWheelSpeeds(chassis_speeds);
+
+      double x_velocity = chassis_speeds.vxMetersPerSecond,
+        y_velocity = chassis_speeds.vyMetersPerSecond,
+        angular_velocity = chassis_speeds.omegaRadiansPerSecond,
+        left_wheel_speeds = wheel_speeds.leftMetersPerSecond,
+        right_wheel_speeds = wheel_speeds.rightMetersPerSecond;
+
+      sigma_differences += left_wheel_speeds - right_wheel_speeds;
+
+      csv_writer.write(x_velocity, y_velocity, angular_velocity, left_wheel_speeds, right_wheel_speeds);
+    }
+
+    csv_writer.close();
+
+    // Should be greater than zero if turning left
+
+    Assert.assertTrue(sigma_differences > 0);
+  }
 }

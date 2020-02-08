@@ -1,6 +1,6 @@
 package org.team4159.frc.robot.subsystems;
 
-import edu.wpi.first.wpilibj.Ultrasonic;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.PIDSubsystem;
 
@@ -8,15 +8,14 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
+
 import org.team4159.lib.hardware.Limelight;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import static org.team4159.frc.robot.Constants.*;
 
 public class Turret extends PIDSubsystem {
     private TalonFX turret_talon;
     private Limelight limelight;
-    double limelightHeight,targetHeight,limeLightMountingAngle;
 
     private TalonFX configureTalonFX(TalonFX talonFX) {
         talonFX.configFactoryDefault();
@@ -27,16 +26,13 @@ public class Turret extends PIDSubsystem {
 
     public Turret() {
         super(new PIDController(
-          TURRET_CONSTANTS.LIMELIGHT_kP,
+          TURRET_CONSTANTS.LIMELIGHT_TURN_kP,
           0.0,
-          TURRET_CONSTANTS.LIMELIGHT_kD
+          TURRET_CONSTANTS.LIMELIGHT_TURN_kD
         ));
 
         limelight = new Limelight();
         turret_talon = configureTalonFX(new WPI_TalonFX(CAN_IDS.TURRET_FALCON_ID));
-        limelightHeight = 9;
-        targetHeight = 51.5;
-        limeLightMountingAngle = 25;
     }
 
     public void setRawSpeed(double speed){
@@ -59,10 +55,11 @@ public class Turret extends PIDSubsystem {
 
     @Override
     public void periodic() {
-        double yOffset = limelight.getTargetVerticalOffset();
-        double distance = (targetHeight- limelightHeight)/Math.tan(Math.toRadians(limeLightMountingAngle+yOffset));
-        SmartDashboard.putNumber("distance-inches",distance);
-        SmartDashboard.putNumber("distance-feet",distance/12.0);
-        SmartDashboard.putNumber("yOffset",yOffset);
+        double vertical_offset = limelight.getTargetVerticalOffset();
+        double distance = (LIMELIGHT_CONSTANTS.VISION_TARGET_HEIGHT - LIMELIGHT_CONSTANTS.MOUNT_ELEVATION) /
+                          Math.tan(Math.toRadians(LIMELIGHT_CONSTANTS.MOUNT_ANGLE + vertical_offset));
+        SmartDashboard.putNumber("distance in inches", distance);
+        SmartDashboard.putNumber("distance in feet", distance / 12);
+        SmartDashboard.putNumber("vertical offset", vertical_offset);
     }
 }

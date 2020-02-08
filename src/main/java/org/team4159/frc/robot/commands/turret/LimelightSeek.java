@@ -29,7 +29,7 @@ public class LimelightSeek extends CommandBase {
     public void execute() {
         if (limelight.isTargetVisible()) {
             double error = limelight.getTargetHorizontalOffset();
-            double speed = error* TURRET_CONSTANTS.LIMELIGHT_kP + (error-prevError)*TURRET_CONSTANTS.LIMELIGHT_kD;
+            double speed = error* TURRET_CONSTANTS.LIMELIGHT_TURN_kP + (error-prevError)*TURRET_CONSTANTS.LIMELIGHT_TURN_kD;
             prevError = error;
             turret.setRawSpeed(speed);
         }

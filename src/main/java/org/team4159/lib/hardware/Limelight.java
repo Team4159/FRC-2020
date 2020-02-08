@@ -124,8 +124,6 @@ public class Limelight {
     return getDouble("tvert");
   }
 
-  // General Status / Configuration Information
-
   /**
    * Gets skew or rotation
    *
@@ -134,6 +132,8 @@ public class Limelight {
   public double getRotation() {
     return getDouble("ts");
   }
+
+  // General Status / Configuration Information
 
   /**
    * Gets the pipeline's latency contribution

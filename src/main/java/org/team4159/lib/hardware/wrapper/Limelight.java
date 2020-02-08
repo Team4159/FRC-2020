@@ -1,4 +1,4 @@
-package org.team4159.lib.hardware;
+package org.team4159.lib.hardware.wrapper;
 
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;

@@ -1,49 +1,33 @@
 package org.team4159.frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
-import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
-import edu.wpi.first.wpilibj.SpeedControllerGroup;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+
+import org.team4159.lib.hardware.util.ControllerUtil;
 
 import static org.team4159.frc.robot.Constants.*;
 
 public class Shooter extends SubsystemBase {
-  private TalonSRX shooter_talon_one, shooter_talon_two;
-  private VictorSPX shooter_victor_one, shooter_victor_two;
+  private TalonSRX left_shooter_talon, right_shooter_talon;
+  private VictorSPX left_shooter_victor, right_shooter_victor;
 
   private double goal_speed = 0.0;
   private boolean enabled = false;
 
-  private TalonSRX configureTalonSRX(TalonSRX talonSRX) {
-    talonSRX.configFactoryDefault();
-    talonSRX.setNeutralMode(NeutralMode.Coast);
-
-    return talonSRX;
-  }
-
-  private VictorSPX configureVictorSPX(VictorSPX victorSPX) {
-    victorSPX.configFactoryDefault();
-    victorSPX.setNeutralMode(NeutralMode.Coast);
-
-    return victorSPX;
-  }
-
   public Shooter() {
-    shooter_talon_one = configureTalonSRX(new TalonSRX(CAN_IDS.SHOOTER_TALON_ONE_ID));
-    shooter_talon_two = configureTalonSRX(new TalonSRX(CAN_IDS.SHOOTER_TALON_TWO_ID));
+    left_shooter_talon = ControllerUtil.configureTalonSRX(new TalonSRX(CAN_IDS.SHOOTER_TALON_ONE_ID));
+    right_shooter_talon = ControllerUtil.configureTalonSRX(new TalonSRX(CAN_IDS.SHOOTER_TALON_TWO_ID));
 
-    shooter_victor_one = configureVictorSPX(new VictorSPX(CAN_IDS.SHOOTER_VICTOR_ONE_ID));
-    shooter_victor_two = configureVictorSPX(new VictorSPX(CAN_IDS.SHOOTER_VICTOR_TWO_ID));
+    left_shooter_victor = ControllerUtil.configureVictorSPX(new VictorSPX(CAN_IDS.SHOOTER_VICTOR_ONE_ID));
+    right_shooter_victor = ControllerUtil.configureVictorSPX(new VictorSPX(CAN_IDS.SHOOTER_VICTOR_TWO_ID));
 
-    shooter_talon_two.follow(shooter_talon_one);
-    shooter_victor_one.follow(shooter_talon_one);
-    shooter_victor_two.follow(shooter_victor_two);
+    right_shooter_talon.follow(left_shooter_talon);
+    left_shooter_victor.follow(left_shooter_talon);
+    right_shooter_victor.follow(right_shooter_victor);
 
     SmartDashboard.putNumber("target_shooter_speed", 0);
     SmartDashboard.putNumber("shooter_kp", SHOOTER_CONSTANTS.kP);
@@ -67,23 +51,23 @@ public class Shooter extends SubsystemBase {
   }
 
   public void setRawSpeed(double percent) {
-    shooter_talon_one.set(ControlMode.PercentOutput, percent);
+    left_shooter_talon.set(ControlMode.PercentOutput, percent);
   }
 
   public void setTargetSpeed(double speed) {
-    shooter_talon_one.set(ControlMode.MotionMagic, goal_speed);
+    left_shooter_talon.set(ControlMode.MotionMagic, goal_speed);
   }
 
   public void setP(double kP) {
-    shooter_talon_one.config_kP(0, kP);
+    left_shooter_talon.config_kP(0, kP);
   }
 
   public void setI(double kI) {
-    shooter_talon_one.config_kI(0, kI);
+    left_shooter_talon.config_kI(0, kI);
   }
 
   public void setD(double kD) {
-    shooter_talon_one.config_kD(0, kD);
+    left_shooter_talon.config_kD(0, kD);
   }
 
   public void setGoal(double goal) {
@@ -91,7 +75,7 @@ public class Shooter extends SubsystemBase {
   }
 
   public double getPosition() {
-    return (shooter_talon_one.getSelectedSensorVelocity() + shooter_talon_two.getSelectedSensorVelocity()) / 2.0;
+    return (left_shooter_talon.getSelectedSensorVelocity() + right_shooter_talon.getSelectedSensorVelocity()) / 2.0;
   }
 
   public void enable() {

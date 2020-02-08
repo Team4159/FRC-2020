@@ -6,23 +6,18 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
+import org.team4159.lib.hardware.util.ControllerUtil;
+
 import static org.team4159.frc.robot.Constants.*;
 
 public class Feeder extends SubsystemBase {
-  public TalonSRX feeder_talon_1;
-
-  private TalonSRX configureTalonSRX(TalonSRX talonSRX) {
-    talonSRX.configFactoryDefault();
-    talonSRX.setNeutralMode(NeutralMode.Brake);
-
-    return talonSRX;
-  }
+  public TalonSRX feeder_talon;
 
   public Feeder() {
-    feeder_talon_1 = configureTalonSRX(new TalonSRX(CAN_IDS.FEEDER_TALON_ONE_ID));
+    feeder_talon = ControllerUtil.configureTalonSRX(new TalonSRX(CAN_IDS.FEEDER_TALON_ONE_ID), NeutralMode.Brake);
   }
 
-  public void feed() {
+  public void feedCell() {
     setFeederSpeed(1);
   }
 
@@ -31,6 +26,6 @@ public class Feeder extends SubsystemBase {
   }
 
   public void setFeederSpeed(double speed) {
-    feeder_talon_1.set(ControlMode.PercentOutput, speed);
+    feeder_talon.set(ControlMode.PercentOutput, speed);
   }
 }

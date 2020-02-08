@@ -5,7 +5,6 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.*;
 
 import org.team4159.frc.robot.commands.arm.ToggleArm;
-import org.team4159.frc.robot.commands.arm.ZeroArm;
 import org.team4159.frc.robot.subsystems.*;
 
 import static org.team4159.frc.robot.Constants.*;
@@ -57,18 +56,18 @@ public class RobotContainer {
       .whenPressed(new ToggleArm(arm));
 
     new JoystickButton(secondary_joy, CONTROLS.SECONDARY_JOY.RUN_NECK_BTN_ID)
-      .whenPressed(new InstantCommand(neck::neck))
+      .whenPressed(new InstantCommand(neck::feedCell))
       .whenReleased(new InstantCommand(neck::stop));
 
     new JoystickButton(secondary_joy, CONTROLS.SECONDARY_JOY.RUN_FEEDER_BTN_ID)
-      .whenPressed(new InstantCommand(feeder::feed, feeder))
+      .whenPressed(new InstantCommand(feeder::feedCell, feeder))
       .whenReleased(new InstantCommand(feeder::stop, feeder));
 
     new JoystickButton(secondary_joy, CONTROLS.SECONDARY_JOY.RUN_INTAKE_NECK_FEEDER_SHOOTER_BTN_ID)
       .whenPressed(new ParallelCommandGroup(
         new InstantCommand(intake::intakeCell, intake),
-        new InstantCommand(feeder::feed, feeder),
-        new InstantCommand(neck::neck),
+        new InstantCommand(feeder::feedCell, feeder),
+        new InstantCommand(neck::feedCell),
         new InstantCommand(() -> shooter.setRawSpeed(1))))
       .whenReleased(new ParallelCommandGroup(
         new InstantCommand(intake::stopIntaking, intake),

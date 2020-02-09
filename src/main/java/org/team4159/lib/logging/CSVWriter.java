@@ -21,9 +21,11 @@ public class CSVWriter {
 
   public void write(Object... columns) {
     try {
-      for (Object column : columns) {
-        writer.append(column.toString());
-        writer.append(",");
+      for (int i = 0; i < columns.length; i++) {
+        writer.append(columns[i].toString());
+        if (i < columns.length - 1) {
+          writer.append(",");
+        }
       }
       writer.append("\n");
     } catch (IOException e) {

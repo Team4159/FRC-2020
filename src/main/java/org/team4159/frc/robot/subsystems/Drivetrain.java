@@ -88,7 +88,7 @@ public class Drivetrain extends SubsystemBase {
     rawDrive(DriveSignal.NEUTRAL);
   }
 
-  public void flipOrientation() {
+  public void flipDriveOrientation() {
     is_oriented_forward = !is_oriented_forward;
   }
 

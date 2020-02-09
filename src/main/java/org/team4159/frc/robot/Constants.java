@@ -4,10 +4,10 @@ import edu.wpi.first.wpilibj.util.Units;
 
 public final class Constants {
   public final static class CAN_IDS {
-    public static final int LEFT_FRONT_FALCON_ID = 3;
-    public static final int LEFT_REAR_FALCON_ID = 4;
-    public static final int RIGHT_FRONT_FALCON_ID = 5;
-    public static final int RIGHT_REAR_TALON_ID = 6;
+    public static final int LEFT_FRONT_FALCON_ID = 0;
+    public static final int LEFT_REAR_FALCON_ID = 1;
+    public static final int RIGHT_FRONT_FALCON_ID = 2;
+    public static final int RIGHT_REAR_TALON_ID = 3;
 
     public static final int TURRET_FALCON_ID = 7;
 
@@ -17,7 +17,7 @@ public final class Constants {
     public static final int ARM_SPARK_ID = 3;
     public static final int LIFTER_TALON_ID = 2;
 
-    public static final int PIGEON_ID = 1;
+    public static final int PIGEON_ID = 0;
   }
 
   public static final class DRIVE_CONSTANTS {
@@ -25,12 +25,14 @@ public final class Constants {
     public static final double WHEEL_RADIUS = Units.inchesToMeters(3.0);
     public static final double WHEEL_CIRCUMFERENCE = Math.PI * 2.0 * WHEEL_RADIUS;
 
+    public static final boolean IS_GYRO_INVERTED = false;
+
     public static final int FALCON_CPR = 2048;
 
     public static final double METERS_PER_TICK = WHEEL_CIRCUMFERENCE / (FALCON_CPR * GEAR_RATIO);
 
     // TODO: MEASURE!
-    public static final double MAX_TRAJECTORY_SPEED = 1.5;
+    public static final double MAX_TRAJECTORY_SPEED = 3.0;
     public static final double MAX_TRAJECTORY_ACCELERATION = 3.0;
 
     public static final double kS = 0.216; // volts
@@ -40,7 +42,7 @@ public final class Constants {
     public static final double kP = 1.0;
     public static final double kD = 0.0;
 
-    public static final double TRACK_WIDTH = 0.708948183718858;
+    public static final double TRACK_WIDTH = 0.5461;
 
     // ramsete constants (tested for most robots)
     public static final double kB = 2.0;

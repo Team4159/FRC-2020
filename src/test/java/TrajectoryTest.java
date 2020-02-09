@@ -30,7 +30,8 @@ public class TrajectoryTest {
     final List<Trajectory.State> states = test_trajectory.getStates();
 
     for (Trajectory.State state : states) {
-      csv_writer.write(state.poseMeters.getTranslation().getX(),
+      csv_writer.write(state.timeSeconds,
+                       state.poseMeters.getTranslation().getX(),
                        state.poseMeters.getTranslation().getY(),
                        state.poseMeters.getRotation().getDegrees());
     }

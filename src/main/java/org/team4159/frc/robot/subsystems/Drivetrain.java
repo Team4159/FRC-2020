@@ -51,7 +51,7 @@ public class Drivetrain extends SubsystemBase {
     right_falcons = new SpeedControllerGroup(
       (WPI_TalonFX) right_front_falcon,
       (WPI_TalonFX) right_rear_falcon);
-    left_falcons.setInverted(true);
+    left_falcons.setInverted(false);
     right_falcons.setInverted(true);
 
     pigeon = new PigeonIMU(CAN_IDS.PIGEON_ID);
@@ -176,6 +176,6 @@ public class Drivetrain extends SubsystemBase {
   }
 
   public double getDirection() {
-    return Math.IEEEremainder(pigeon.getFusedHeading(), 360) * -1;
+    return Math.IEEEremainder(pigeon.getFusedHeading(), 360) * (DRIVE_CONSTANTS.IS_GYRO_INVERTED ? -1 : 1);
   }
 }

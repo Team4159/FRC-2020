@@ -36,8 +36,11 @@ public class FollowTrajectory extends CommandBase {
 
   public FollowTrajectory(Trajectory trajectory, Drivetrain drivetrain) {
     addRequirements(drivetrain);
-    traj = trajectory;
     this.drivetrain = drivetrain;
+
+    var transform = drivetrain.getPose().minus(trajectory.getInitialPose());
+    traj = trajectory.transformBy(transform);
+
     ramsete = new RamseteCommand(
       trajectory,
       drivetrain::getPose,
@@ -62,8 +65,6 @@ public class FollowTrajectory extends CommandBase {
 
   @Override
   public void initialize() {
-    drivetrain.zeroSensors();
-
     writer = new CsvWriter("/home/lvuser/Output");
 
     prev_time = 0;
@@ -88,27 +89,23 @@ public class FollowTrajectory extends CommandBase {
       var left_speed_setpoint = target_wheel_speeds.leftMetersPerSecond;
       var right_speed_setpoint = target_wheel_speeds.rightMetersPerSecond;
 
-//      double left_feed_forward =
-//        feedforward.calculate(left_speed_setpoint,
-//          (left_speed_setpoint - prev_speeds.leftMetersPerSecond) / dt);
-//
-//      double right_feed_forward =
-//        feedforward.calculate(right_speed_setpoint,
-//          (right_speed_setpoint - prev_speeds.rightMetersPerSecond) / dt);
+      double left_feed_forward =
+        feedforward.calculate(left_speed_setpoint,
+          (left_speed_setpoint - prev_speeds.leftMetersPerSecond) / dt);
 
-    double left_feed_forward = 0.0;
-    double right_feed_forward = 0.0;
+      double right_feed_forward =
+        feedforward.calculate(right_speed_setpoint,
+          (right_speed_setpoint - prev_speeds.rightMetersPerSecond) / dt);
 
-      double left_PID = pid_left.calculate(drivetrain.getWheelSpeeds().leftMetersPerSecond,
-        left_speed_setpoint);
 
-      double right_PID = pid_right.calculate(drivetrain.getWheelSpeeds().rightMetersPerSecond,
-        right_speed_setpoint);
+    double left_PID = pid_left.calculate(drivetrain.getWheelSpeeds().leftMetersPerSecond, left_speed_setpoint);
 
-      double left_output = left_feed_forward
+    double right_PID = pid_right.calculate(drivetrain.getWheelSpeeds().rightMetersPerSecond, right_speed_setpoint);
+
+    double left_output = left_feed_forward
         + left_PID;
 
-      double right_output = right_feed_forward
+    double right_output = right_feed_forward
         + right_PID;
 
 
@@ -154,10 +151,13 @@ public class FollowTrajectory extends CommandBase {
   public void end(boolean interrupted) {
     System.out.println("DONE!");
     System.out.println(writer.close());
+
+    drivetrain.stop();
   }
 
   @Override
   public boolean isFinished() {
-    return false;
-  }
+      return timer.hasPeriodPassed(traj.getTotalTimeSeconds());
+    }
+
 }

@@ -6,7 +6,6 @@ import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
-import org.team4159.frc.robot.commands.auto.FollowTrajectory;
 import org.team4159.frc.robot.subsystems.Drivetrain;
 
 import static org.team4159.frc.robot.Constants.*;
@@ -37,6 +36,6 @@ public class RobotContainer {
   }
 
   public Command getAutonomousCommand() {
-    return new FollowTrajectory(Trajectories.GO_FORWARD_ONE_METER, drivetrain);
+    return auto_selector.getSelected();
   }
 }

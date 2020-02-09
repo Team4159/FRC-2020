@@ -7,7 +7,6 @@ import com.ctre.phoenix.sensors.PigeonIMU;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
-import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.geometry.Translation2d;
@@ -16,6 +15,9 @@ import edu.wpi.first.wpilibj.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
+import org.team4159.lib.control.signal.DriveSignal;
+import org.team4159.lib.control.signal.filters.LowPassFilterSource;
+
 import static org.team4159.frc.robot.Constants.*;
 
 public class Drivetrain extends SubsystemBase {
@@ -23,10 +25,9 @@ public class Drivetrain extends SubsystemBase {
   private SpeedControllerGroup left_falcons;
   private SpeedControllerGroup right_falcons;
 
-  private DifferentialDrive differential_drive;
-
   private DifferentialDriveOdometry odometry;
   private PigeonIMU pigeon;
+  private LowPassFilterSource filtered_heading;
 
   private boolean is_oriented_forward = true;
 
@@ -59,7 +60,6 @@ public class Drivetrain extends SubsystemBase {
 
     pigeon = new PigeonIMU(CAN_IDS.PIGEON_ID);
 
-    differential_drive = new DifferentialDrive(left_falcons, right_falcons);
     odometry = new DifferentialDriveOdometry(new Rotation2d(0));
 
     zeroSensors();
@@ -76,6 +76,7 @@ public class Drivetrain extends SubsystemBase {
       getLeftDistance(),
       getRightDistance()
     );
+    filtered_heading.get();
 
     SmartDashboard.putNumber("X", getPose().getTranslation().getX());
     SmartDashboard.putNumber("Y", getPose().getTranslation().getY());
@@ -84,39 +85,29 @@ public class Drivetrain extends SubsystemBase {
     SmartDashboard.putNumber("Right Encoder", getRightDistance());
   }
 
+  public void rawDrive(DriveSignal signal) {
+    if (is_oriented_forward) {
+      signal.invert();
+    }
+
+    left_falcons.set(signal.left);
+    right_falcons.set(signal.right);
+  }
+
   public void tankDrive(double left, double right) {
-    if (is_oriented_forward) {
-      differential_drive.tankDrive(left, right);
-    } else {
-      differential_drive.tankDrive(-right, -left);
-    }
+    rawDrive(new DriveSignal(left, right, true));
   }
 
-  public void arcadeDrive(double forward, double rotation) {
-    if (is_oriented_forward) {
-      differential_drive.arcadeDrive(forward, rotation);
-    } else {
-      differential_drive.arcadeDrive(-forward, -rotation);
-    }
-  }
-
-  public void rawDrive(double left, double right) {
-    left_falcons.set(left);
-    right_falcons.set(right);
+  public void arcadeDrive(double speed, double turn) {
+    rawDrive(DriveSignal.fromArcade(speed, turn, true));
   }
 
   public void voltsDrive(double left_volts, double right_volts) {
-    if (is_oriented_forward) {
-      left_falcons.setVoltage(left_volts);
-      right_falcons.setVoltage(right_volts);
-    } else {
-      left_falcons.setVoltage(-right_volts);
-      right_falcons.setVoltage(-left_volts);
-    }
+    rawDrive(DriveSignal.fromVolts(left_volts, right_volts));
   }
 
   public void stop() {
-    rawDrive(0, 0);
+    rawDrive(DriveSignal.NEUTRAL);
   }
 
   public void resetEncoders() {
@@ -135,6 +126,14 @@ public class Drivetrain extends SubsystemBase {
       new Pose2d(new Translation2d(0, 0), Rotation2d.fromDegrees(0)),
       Rotation2d.fromDegrees(0)
     );
+  }
+
+  public DifferentialDriveWheelSpeeds getWheelSpeeds() {
+    return new DifferentialDriveWheelSpeeds(getLeftVelocity(), getRightVelocity());
+  }
+
+  public double getDirection() {
+    return Math.IEEEremainder(pigeon.getFusedHeading(), 360) * (DRIVE_CONSTANTS.IS_GYRO_INVERTED ? -1 : 1);
   }
 
   public double getLeftVoltage() {
@@ -165,13 +164,5 @@ public class Drivetrain extends SubsystemBase {
 
   public Pose2d getPose() {
     return odometry.getPoseMeters();
-  }
-
-  public DifferentialDriveWheelSpeeds getWheelSpeeds() {
-    return new DifferentialDriveWheelSpeeds(getLeftVelocity(), getRightVelocity());
-  }
-
-  public double getDirection() {
-    return Math.IEEEremainder(pigeon.getFusedHeading(), 360) * (DRIVE_CONSTANTS.IS_GYRO_INVERTED ? -1 : 1);
   }
 }

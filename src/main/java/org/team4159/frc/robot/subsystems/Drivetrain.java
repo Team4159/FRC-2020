@@ -30,9 +30,12 @@ public class Drivetrain extends SubsystemBase {
 
   private boolean is_oriented_forward = true;
 
-  private double dx = 0;
-  private double dy = 0;
-  private double prev_magnitude = 0;
+  private TalonFX configureTalonFX(TalonFX talonFX) {
+    talonFX.configFactoryDefault();
+    talonFX.setNeutralMode(NeutralMode.Coast);
+
+    return talonFX;
+  }
 
   public Drivetrain() {
     left_front_falcon = configureTalonFX(new WPI_TalonFX(CAN_IDS.LEFT_FRONT_FALCON_ID));
@@ -51,7 +54,7 @@ public class Drivetrain extends SubsystemBase {
     right_falcons = new SpeedControllerGroup(
       (WPI_TalonFX) right_front_falcon,
       (WPI_TalonFX) right_rear_falcon);
-    left_falcons.setInverted(false);
+    left_falcons.setInverted(true);
     right_falcons.setInverted(true);
 
     pigeon = new PigeonIMU(CAN_IDS.PIGEON_ID);
@@ -79,13 +82,6 @@ public class Drivetrain extends SubsystemBase {
     SmartDashboard.putNumber("Angle", getDirection());
     SmartDashboard.putNumber("Left Encoder", getLeftDistance());
     SmartDashboard.putNumber("Right Encoder", getRightDistance());
-  }
-
-  private TalonFX configureTalonFX(TalonFX talonSRX) {
-    talonSRX.configFactoryDefault();
-    talonSRX.setNeutralMode(NeutralMode.Coast);
-
-    return talonSRX;
   }
 
   public void tankDrive(double left, double right) {

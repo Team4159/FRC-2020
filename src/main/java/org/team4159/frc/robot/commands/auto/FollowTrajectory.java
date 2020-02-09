@@ -80,71 +80,65 @@ public class FollowTrajectory extends CommandBase {
 
   @Override
   public void execute() {
-      double cur_time = timer.get();
-      double dt = cur_time - prev_time;
+    double cur_time = timer.get();
+    double dt = cur_time - prev_time;
 
-      var target_wheel_speeds = kinematics.toWheelSpeeds(
-        controller.calculate(drivetrain.getPose(), traj.sample(cur_time)));
+    var target_wheel_speeds = kinematics.toWheelSpeeds(
+      controller.calculate(drivetrain.getPose(), traj.sample(cur_time)));
 
-      var left_speed_setpoint = target_wheel_speeds.leftMetersPerSecond;
-      var right_speed_setpoint = target_wheel_speeds.rightMetersPerSecond;
+    double left_speed_setpoint = target_wheel_speeds.leftMetersPerSecond;
+    double right_speed_setpoint = target_wheel_speeds.rightMetersPerSecond;
 
-      double left_feed_forward =
-        feedforward.calculate(left_speed_setpoint,
-          (left_speed_setpoint - prev_speeds.leftMetersPerSecond) / dt);
-
-      double right_feed_forward =
-        feedforward.calculate(right_speed_setpoint,
-          (right_speed_setpoint - prev_speeds.rightMetersPerSecond) / dt);
-
+    double left_feed_forward =
+      feedforward.calculate(left_speed_setpoint,
+        (left_speed_setpoint - prev_speeds.leftMetersPerSecond) / dt);
+    double right_feed_forward =
+      feedforward.calculate(right_speed_setpoint,
+        (right_speed_setpoint - prev_speeds.rightMetersPerSecond) / dt);
 
     double left_PID = pid_left.calculate(drivetrain.getWheelSpeeds().leftMetersPerSecond, left_speed_setpoint);
-
     double right_PID = pid_right.calculate(drivetrain.getWheelSpeeds().rightMetersPerSecond, right_speed_setpoint);
 
-    double left_output = left_feed_forward
-        + left_PID;
+    double left_output = left_feed_forward + left_PID;
 
-    double right_output = right_feed_forward
-        + right_PID;
+    double right_output = right_feed_forward + right_PID;
 
+    SmartDashboard.putNumber("target left wheel speeds", target_wheel_speeds.leftMetersPerSecond);
+    SmartDashboard.putNumber("target right wheel speeds", target_wheel_speeds.rightMetersPerSecond);
 
-      SmartDashboard.putNumber("target left wheel speeds", target_wheel_speeds.leftMetersPerSecond);
-      SmartDashboard.putNumber("target right wheel speeds", target_wheel_speeds.rightMetersPerSecond);
+    SmartDashboard.putNumber("left feed forward", left_feed_forward);
+    SmartDashboard.putNumber("right feed forward", right_feed_forward);
 
-      SmartDashboard.putNumber("left feed forward", left_feed_forward);
-      SmartDashboard.putNumber("right feed forward", right_feed_forward);
+    SmartDashboard.putNumber("left pid", left_PID);
+    SmartDashboard.putNumber("right pid", right_PID);
 
-      SmartDashboard.putNumber("left pid", left_PID);
-      SmartDashboard.putNumber("right pid", right_PID);
+    SmartDashboard.putNumber("left output", left_output);
+    SmartDashboard.putNumber("right output", right_output);
 
-      SmartDashboard.putNumber("left output", left_output);
-      SmartDashboard.putNumber("right output", right_output);
+    final Pose2d drivetrainPose = drivetrain.getPose();
+    final Pose2d trajSample = traj.sample(cur_time).poseMeters;
 
-      final Pose2d drivetrainPose = drivetrain.getPose();
-      final Pose2d trajSample = traj.sample(cur_time).poseMeters;
+    writer.write(
+      target_wheel_speeds.leftMetersPerSecond, // 1
+      target_wheel_speeds.rightMetersPerSecond, // 2
+      left_feed_forward, // 3
+      right_feed_forward, // 4
+      left_PID, // 5
+      right_PID, // 6
+      left_output, // 7
+      right_output, // 8
+      drivetrainPose.getTranslation().getX(), //9
+      drivetrainPose.getTranslation().getY(), // 10
+      trajSample.getTranslation().getX(), // 11
+      trajSample.getTranslation().getY(), // 12
+      drivetrainPose.getRotation().getDegrees(), // 13
+      trajSample.getRotation().getDegrees() // 14
+    );
 
-      writer.write(
-        target_wheel_speeds.leftMetersPerSecond, // 1
-        target_wheel_speeds.rightMetersPerSecond, // 2
-        left_feed_forward, // 3
-        right_feed_forward, // 4
-        left_PID, // 5
-        right_PID, // 6
-        left_output, // 7
-        right_output, // 8
-        drivetrainPose.getTranslation().getX(), //9
-        drivetrainPose.getTranslation().getY(), // 10
-        trajSample.getTranslation().getX(), // 11
-        trajSample.getTranslation().getY(), // 12
-        drivetrainPose.getRotation().getDegrees(), // 13
-        trajSample.getRotation().getDegrees() // 14
-      );
+    prev_time = cur_time;
+    prev_speeds = target_wheel_speeds;
 
-      prev_time = cur_time;
-      prev_speeds = target_wheel_speeds;
-
-      drivetrain.voltsDrive(left_output, right_output);
+    drivetrain.voltsDrive(left_output, right_output);
   }
 
   @Override

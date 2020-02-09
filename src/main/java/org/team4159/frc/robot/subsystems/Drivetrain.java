@@ -48,6 +48,7 @@ public class Drivetrain extends SubsystemBase {
     right_falcons = new SpeedControllerGroup(
       (WPI_TalonFX) right_front_falcon,
       (WPI_TalonFX) right_rear_falcon);
+
     left_falcons.setInverted(true);
     right_falcons.setInverted(true);
 
@@ -87,7 +88,7 @@ public class Drivetrain extends SubsystemBase {
     rawDrive(DriveSignal.NEUTRAL);
   }
 
-  public void flipOrientation() {
+  public void flipDriveOrientation() {
     is_oriented_forward = !is_oriented_forward;
   }
 

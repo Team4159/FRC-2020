@@ -2,3 +2,6 @@ language: java
 
 script:
   - ./gradlew test
+
+os:
+  - osx

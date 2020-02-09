@@ -1,10 +1,6 @@
 plugins {
     id "java"
-<<<<<<< HEAD
     id "edu.wpi.first.GradleRIO" version "2020.2.2"
-=======
-    id "edu.wpi.first.GradleRIO" version "2020.1.1"
->>>>>>> master
 }
 
 sourceCompatibility = JavaVersion.VERSION_11
@@ -51,10 +47,6 @@ dependencies {
     nativeZip wpi.deps.wpilibJni(wpi.platforms.roborio)
     nativeDesktopZip wpi.deps.wpilibJni(wpi.platforms.desktop)
 
-<<<<<<< HEAD
-=======
-
->>>>>>> master
     implementation wpi.deps.vendor.java()
     nativeZip wpi.deps.vendor.jni(wpi.platforms.roborio)
     nativeDesktopZip wpi.deps.vendor.jni(wpi.platforms.desktop)

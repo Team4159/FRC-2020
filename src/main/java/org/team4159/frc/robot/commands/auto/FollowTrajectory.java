@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.controller.RamseteController;
 import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj.geometry.Pose2d;
+import edu.wpi.first.wpilibj.geometry.Transform2d;
 import edu.wpi.first.wpilibj.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveWheelSpeeds;
@@ -13,18 +14,16 @@ import edu.wpi.first.wpilibj.trajectory.Trajectory;
 import edu.wpi.first.wpilibj2.command.*;
 
 import org.team4159.frc.robot.subsystems.Drivetrain;
-import org.team4159.lib.CsvWriter;
 
 import static org.team4159.frc.robot.Constants.*;
 
 public class FollowTrajectory extends CommandBase {
-  private RamseteCommand ramsete;
   private Trajectory traj;
   private Drivetrain drivetrain;
 
   private Timer timer = new Timer();
 
-  private CsvWriter writer;
+  // private CSVWriter writer;
 
   private DifferentialDriveWheelSpeeds prev_speeds = new DifferentialDriveWheelSpeeds(0,0);
   private DifferentialDriveKinematics kinematics = new DifferentialDriveKinematics(DRIVE_CONSTANTS.TRACK_WIDTH);
@@ -35,37 +34,17 @@ public class FollowTrajectory extends CommandBase {
   double prev_time = 0;
 
   public FollowTrajectory(Trajectory trajectory, Drivetrain drivetrain) {
-    addRequirements(drivetrain);
     this.drivetrain = drivetrain;
 
-    var transform = drivetrain.getPose().minus(trajectory.getInitialPose());
+    Transform2d transform = drivetrain.getPose().minus(trajectory.getInitialPose());
     traj = trajectory.transformBy(transform);
 
-    ramsete = new RamseteCommand(
-      trajectory,
-      drivetrain::getPose,
-      new RamseteController(DRIVE_CONSTANTS.kB,
-        DRIVE_CONSTANTS.kZeta),
-      new SimpleMotorFeedforward(DRIVE_CONSTANTS.kS,
-        DRIVE_CONSTANTS.kV,
-        DRIVE_CONSTANTS.kA),
-      new DifferentialDriveKinematics(DRIVE_CONSTANTS.TRACK_WIDTH),
-      drivetrain::getWheelSpeeds,
-      new PIDController(DRIVE_CONSTANTS.kP, 0, DRIVE_CONSTANTS.kD),
-      new PIDController(DRIVE_CONSTANTS.kP, 0, DRIVE_CONSTANTS.kD),
-      drivetrain::voltsDrive,
-      drivetrain
-    );
-
-//    addCommands(
-//      ramsete,
-//      new InstantCommand(drivetrain::stop)
-//    );
+    addRequirements(drivetrain);
   }
 
   @Override
   public void initialize() {
-    writer = new CsvWriter("/home/lvuser/Output");
+    // writer = new CSVWriter("/home/lvuser/Output");
 
     prev_time = 0;
     var initialState = traj.sample(0);
@@ -83,8 +62,11 @@ public class FollowTrajectory extends CommandBase {
     double cur_time = timer.get();
     double dt = cur_time - prev_time;
 
+    Pose2d drivetrain_pose = drivetrain.getPose();
+    Trajectory.State trajectory_sample = traj.sample(cur_time);
+
     var target_wheel_speeds = kinematics.toWheelSpeeds(
-      controller.calculate(drivetrain.getPose(), traj.sample(cur_time)));
+      controller.calculate(drivetrain_pose, trajectory_sample));
 
     double left_speed_setpoint = target_wheel_speeds.leftMetersPerSecond;
     double right_speed_setpoint = target_wheel_speeds.rightMetersPerSecond;
@@ -115,9 +97,7 @@ public class FollowTrajectory extends CommandBase {
     SmartDashboard.putNumber("left output", left_output);
     SmartDashboard.putNumber("right output", right_output);
 
-    final Pose2d drivetrainPose = drivetrain.getPose();
-    final Pose2d trajSample = traj.sample(cur_time).poseMeters;
-
+    /*
     writer.write(
       target_wheel_speeds.leftMetersPerSecond, // 1
       target_wheel_speeds.rightMetersPerSecond, // 2
@@ -134,6 +114,7 @@ public class FollowTrajectory extends CommandBase {
       drivetrainPose.getRotation().getDegrees(), // 13
       trajSample.getRotation().getDegrees() // 14
     );
+     */
 
     prev_time = cur_time;
     prev_speeds = target_wheel_speeds;
@@ -144,7 +125,6 @@ public class FollowTrajectory extends CommandBase {
   @Override
   public void end(boolean interrupted) {
     System.out.println("DONE!");
-    System.out.println(writer.close());
 
     drivetrain.stop();
   }

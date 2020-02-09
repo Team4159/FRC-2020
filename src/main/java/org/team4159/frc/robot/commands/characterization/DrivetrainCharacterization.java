@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 import org.team4159.frc.robot.subsystems.Drivetrain;
+import org.team4159.lib.control.signal.DriveSignal;
 
 /*
  * http://docs.wpilib.org/en/latest/docs/software/wpilib-tools/robot-characterization
@@ -51,7 +52,7 @@ public class DrivetrainCharacterization extends CommandBase {
     double autospeed = auto_speed_entry.getDouble(0);
 
     // command motors to do things
-    drivetrain.rawDrive((rotate_entry.getBoolean(false) ? 1 : -1) * autospeed, autospeed);
+    drivetrain.rawDrive(new DriveSignal((rotate_entry.getBoolean(false) ? 1 : -1) * autospeed, autospeed));
 
     // send telemetry data array back to NT
     telemetry_entry.setNumberArray(new Number[]{

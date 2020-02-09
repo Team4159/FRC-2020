@@ -119,7 +119,7 @@ public class FollowTrajectory extends CommandBase {
     prev_time = cur_time;
     prev_speeds = target_wheel_speeds;
 
-    drivetrain.voltsDrive(left_output, right_output);
+    drivetrain.voltsDrive(-left_output, right_output);
   }
 
   @Override
@@ -133,5 +133,4 @@ public class FollowTrajectory extends CommandBase {
   public boolean isFinished() {
       return timer.hasPeriodPassed(traj.getTotalTimeSeconds());
     }
-
 }

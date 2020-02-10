@@ -8,7 +8,7 @@ import org.team4159.frc.robot.commands.auto.FollowTrajectory;
 
 public class AutoSelector extends SendableChooser<Command> {
   public AutoSelector(Drivetrain drivetrain) {
-    Command one = new FollowTrajectory(Trajectories.GO_FORWARD_ONE_METER, drivetrain);
+    Command one = new FollowTrajectory(Trajectories.TEST_TRAJECTORY, drivetrain);
 
     setDefaultOption("1", one);
   }

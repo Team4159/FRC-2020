@@ -10,6 +10,7 @@ import org.team4159.frc.robot.commands.arm.ZeroArm;
 import org.team4159.frc.robot.commands.turret.LimelightSeek;
 import org.team4159.lib.hardware.Limelight;
 import org.team4159.frc.robot.subsystems.*;
+import org.team4159.lib.hardware.joysticks.T16000M;
 
 import static org.team4159.frc.robot.Constants.*;
 
@@ -23,9 +24,9 @@ public class RobotContainer {
 
   private final Limelight limelight = new Limelight();
 
-  private final Joystick left_joy = new Joystick(CONTROLS.LEFT_JOY.PORT);
-  private final Joystick right_joy = new Joystick(CONTROLS.RIGHT_JOY.PORT);
-  private final Joystick secondary_joy = new Joystick(CONTROLS.SECONDARY_JOY.PORT);
+  private final Joystick left_joy = new Joystick(CONTROLS.LEFT_JOY);
+  private final Joystick right_joy = new Joystick(CONTROLS.RIGHT_JOY);
+  private final Joystick secondary_joy = new Joystick(CONTROLS.SECONDARY_JOY);
 
  private final AutoSelector auto_selector = new AutoSelector(drivetrain);
 
@@ -44,25 +45,25 @@ public class RobotContainer {
   }
 
   private void configureButtonBindings() {
-    new JoystickButton(secondary_joy, CONTROLS.SECONDARY_JOY.RUN_SHOOTER_BTN)
+    new JoystickButton(secondary_joy, T16000M.TRIGGER_ID)
       .whenPressed(() -> shooter.setTargetSpeed(SmartDashboard.getNumber("target_shooter_speed", 0)))
       .whenReleased(new InstantCommand(shooter::stop, shooter));
 
-    new JoystickButton(secondary_joy, CONTROLS.SECONDARY_JOY.FLIP_ORIENTATION_BTN_ID)
+    new JoystickButton(secondary_joy, T16000M.TOP_MIDDLE_BTN_ID)
       .whenPressed(drivetrain::flipOrientation);
 
-    new JoystickButton(secondary_joy, CONTROLS.SECONDARY_JOY.RUN_INTAKE_BTN_ID)
+    new JoystickButton(secondary_joy, T16000M.TOP_LEFT_BTN_ID)
       .whenPressed(new InstantCommand(intake::intake, intake))
       .whenReleased(new InstantCommand(intake::stop, intake));
 
-    new JoystickButton(secondary_joy, CONTROLS.SECONDARY_JOY.TOGGLE_ARM_BTN_ID)
+    new JoystickButton(secondary_joy, T16000M.TOP_RIGHT_BTN_ID)
       .whenPressed(new ToggleArm(arm));
 
-    new JoystickButton(secondary_joy, CONTROLS.SECONDARY_JOY.RUN_FEEDER_BTN_ID)
+    new JoystickButton(secondary_joy, T16000M.PRIMARY_TOP_OUTER_BTN_ID)
       .whenPressed(new InstantCommand(feeder::feed, feeder))
       .whenReleased(new InstantCommand(feeder::stop, feeder));
 
-    new JoystickButton(secondary_joy, CONTROLS.SECONDARY_JOY.RUN_INTAKE_NECK_FEEDER_SHOOTER_BTN_ID)
+    new JoystickButton(secondary_joy, T16000M.PRIMARY_TOP_MIDDLE_BTN_ID)
       .whenPressed(new ParallelCommandGroup(
         new InstantCommand(intake::intake, intake),
         new InstantCommand(feeder::feed, feeder),

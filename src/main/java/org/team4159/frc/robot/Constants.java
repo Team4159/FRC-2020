@@ -7,26 +7,11 @@ import org.team4159.lib.math.Baba;
 
 public final class Constants {
   public final static class CONTROLS {
-    public static final class LEFT_JOY {
-      public static final int PORT = 0;
-    }
-
-    public final static class RIGHT_JOY {
-      public static final int PORT = 1;
-    }
-
-    public final static class SECONDARY_JOY {
-      public static final int PORT = 2;
-
-      public static final int RUN_SHOOTER_BTN = 1;
-      public static final int FLIP_ORIENTATION_BTN_ID = 2;
-      public static final int RUN_INTAKE_BTN_ID = 3;
-      public static final int TOGGLE_ARM_BTN_ID = 4;
-      public static final int RUN_NECK_BTN_ID = 5;
-      public static final int RUN_FEEDER_BTN_ID = 6;
-      public static final int RUN_INTAKE_NECK_FEEDER_SHOOTER_BTN_ID = 7;
-    }
+    public static final int LEFT_JOY = 0;
+    public static final int RIGHT_JOY = 1;
+    public static final int SECONDARY_JOY = 2;
   }
+
   public final static class CAN_IDS {
     public static final int LEFT_FRONT_FALCON_ID = 0;
     public static final int LEFT_REAR_FALCON_ID = 1;

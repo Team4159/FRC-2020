@@ -2,9 +2,9 @@ package org.team4159.lib.hardware.controller.ctre;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.ctre.phoenix.motorcontrol.can.VictorSPX;
+import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 
-public class CardinalSPX extends VictorSPX {
+public class CardinalSPX extends WPI_VictorSPX {
   private double last_setpoint;
   private ControlMode last_control_mode;
 

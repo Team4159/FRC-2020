@@ -7,7 +7,7 @@ import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.PIDSubsystem;
-import org.team4159.lib.hardware.controller.rev.CardinalSpark;
+import org.team4159.lib.hardware.controller.rev.CardinalMAX;
 
 import static org.team4159.frc.robot.Constants.*;
 
@@ -30,7 +30,7 @@ public class Arm extends PIDSubsystem {
       ARM_CONSTANTS.ENCODER_ENCODING_TYPE
     );
 
-    arm_spark = new CardinalSpark(CAN_IDS.ARM_SPARK_ID, CANSparkMax.IdleMode.kBrake);
+    arm_spark = new CardinalMAX(CAN_IDS.ARM_SPARK_ID, CANSparkMax.IdleMode.kBrake);
 
     arm_spark.setInverted(true);
 

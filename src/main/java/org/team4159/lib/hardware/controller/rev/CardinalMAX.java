@@ -3,18 +3,22 @@ package org.team4159.lib.hardware.controller.rev;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.ControlType;
 
-public class CardinalSpark extends CANSparkMax {
+public class CardinalMAX extends CANSparkMax {
   public static final int DEFAULT_CURRENT_LIMIT = 40;
 
   private double last_setpoint;
   private ControlType last_control_type;
 
-  public CardinalSpark(int id, IdleMode mode) {
-    this(id, mode, DEFAULT_CURRENT_LIMIT);
+  public CardinalMAX(int id, IdleMode mode) {
+    this(id, mode, DEFAULT_CURRENT_LIMIT, MotorType.kBrushless);
   }
 
-  public CardinalSpark(int id, IdleMode mode, int current_limit) {
-    super(id, MotorType.kBrushless);
+  public CardinalMAX(int id, IdleMode mode, int current_limit) {
+    this(id, mode, DEFAULT_CURRENT_LIMIT, MotorType.kBrushless);
+  }
+
+  public CardinalMAX(int id, IdleMode mode, int current_limit, MotorType type) {
+    super(id, type);
 
     super.restoreFactoryDefaults();
     super.setSmartCurrentLimit(current_limit);

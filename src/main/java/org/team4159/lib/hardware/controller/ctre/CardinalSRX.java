@@ -2,9 +2,9 @@ package org.team4159.lib.hardware.controller.ctre;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
-public class CardinalSRX extends TalonSRX {
+public class CardinalSRX extends WPI_TalonSRX {
   private double last_setpoint;
   private ControlMode last_control_mode;
 

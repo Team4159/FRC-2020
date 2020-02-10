@@ -1,6 +1,5 @@
 package org.team4159.frc.robot.subsystems;
 
-import edu.wpi.first.hal.can.CANInvalidBufferException;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 

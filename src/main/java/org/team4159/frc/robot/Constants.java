@@ -6,6 +6,8 @@ import edu.wpi.first.wpilibj.util.Units;
 import org.team4159.lib.math.Baba;
 
 public final class Constants {
+  public static final int FALCON_CPR = 2048;
+
   public final static class CONTROLS {
     public static final int LEFT_JOY = 0;
     public static final int RIGHT_JOY = 1;
@@ -18,6 +20,7 @@ public final class Constants {
     public static final int RIGHT_FRONT_FALCON_ID = 2;
     public static final int RIGHT_REAR_FALCON_ID = 3;
     public static final int TURRET_FALCON_ID = 50; // unknown
+
 
     public static final int FEEDER_TALON_ONE_ID = 4;
     public static final int FEEDER_TALON_TWO_ID = 5;
@@ -38,22 +41,23 @@ public final class Constants {
     public static final double WHEEL_RADIUS = Units.inchesToMeters(3.0);
     public static final double WHEEL_CIRCUMFERENCE = WHEEL_RADIUS * Baba.kTau;
 
-    public static final int FALCON_CPR = 2048;
-
     public static final double METERS_PER_TICK = WHEEL_CIRCUMFERENCE / (FALCON_CPR * GEAR_RATIO);
 
-    // TODO: Tune
-    public static final double MAX_TRAJECTORY_SPEED = 5.0;
+    public static final boolean IS_GYRO_INVERTED = false;
+
+    // TODO: Find
+    public static final double MAX_TRAJECTORY_SPEED = 3.0;
     public static final double MAX_TRAJECTORY_ACCELERATION = 3.0;
+    public static final double MAX_TRAJECTORY_VOLTAGE = 10.0;
 
-    public static final double kS = 1.33; // volts
-    public static final double kV = 1.43; // volts * seconds / meters
-    public static final double kA = 0.115; // volts * (seconds ^ 2) / meters
+    public static final double kS = 0.216; // volts
+    public static final double kV = 1.89; // volts * seconds / meters
+    public static final double kA = 0.135; // volts * (seconds ^ 2) / meters
 
-    public static final double kP = 0.00118;
-    public static final double kD = 0.000566;
+    public static final double kP = 1.0;
+    public static final double kD = 0.0;
 
-    public static final double TRACK_WIDTH = Units.inchesToMeters(20);
+    public static final double TRACK_WIDTH = 0.5461;
 
     // ramsete constants (tested for most robots)
     public static final double kB = 2.0;
@@ -87,6 +91,10 @@ public final class Constants {
   }
 
   public final static class TURRET_CONSTANTS {
+    // TODO: Find
+    public static final double ANGLE_RANGE = 120;
+    public static final double TICK_RANGE = FALCON_CPR * ANGLE_RANGE / 360;
+
     public static final double LIMELIGHT_TURN_kP = 1.0 / 100.0;
     public static final double LIMELIGHT_TURN_kD = 0.0;
 
@@ -96,9 +104,9 @@ public final class Constants {
   public final static class LIMELIGHT_CONSTANTS {
     // TEMPORARY VALUES FOR TESTING SETUP
 
-    public static final double MOUNT_ELEVATION = 9;
+    public static final double MOUNT_HEIGHT = 9;
     public static final double MOUNT_ANGLE = 25;
 
-    public static final double VISION_TARGET_HEIGHT = 51.5;
+    public static final double VISION_TARGET_HEIGHT = 51.5 - MOUNT_HEIGHT;
   }
 }

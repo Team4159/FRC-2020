@@ -26,12 +26,15 @@ public class Turret extends SubsystemBase {
 
   @Override
   public void periodic() {
-    double vertical_offset = limelight.getTargetVerticalOffset();
-    double distance = (LIMELIGHT_CONSTANTS.VISION_TARGET_HEIGHT - LIMELIGHT_CONSTANTS.MOUNT_ELEVATION) /
-      Math.tan(Math.toRadians(LIMELIGHT_CONSTANTS.MOUNT_ANGLE + vertical_offset));
+    if (isForwardLimitSwitchClosed()) {
+      setEncoderPosition(TURRET_CONSTANTS.TICK_RANGE);
+    } else if (isReverseLimitSwitchClosed()) {
+      zeroEncoder();
+    }
+
+    double distance = getDistanceToVisionTarget();
     SmartDashboard.putNumber("distance in inches", distance);
     SmartDashboard.putNumber("distance in feet", distance / 12);
-    SmartDashboard.putNumber("vertical offset", vertical_offset);
   }
 
   public void setRawSpeed(double speed) {
@@ -42,8 +45,12 @@ public class Turret extends SubsystemBase {
     setRawSpeed(0);
   }
 
-  public void zeroSensors() {
+  public void setEncoderPosition(double position) {
     turret_falcon.setSelectedSensorPosition(0);
+  }
+
+  public void zeroEncoder() {
+    setEncoderPosition(0);
   }
 
   public boolean isForwardLimitSwitchClosed() {
@@ -52,6 +59,14 @@ public class Turret extends SubsystemBase {
 
   public boolean isReverseLimitSwitchClosed() {
     return turret_falcon.isRevLimitSwitchClosed() == 1;
+  }
+
+  // not really sure where to put these limelight methods
+
+  public double getDistanceToVisionTarget() {
+    double vertical_offset = limelight.getTargetVerticalOffset();
+    double total_angle_to_target = LIMELIGHT_CONSTANTS.MOUNT_ANGLE + vertical_offset;
+    return LIMELIGHT_CONSTANTS.VISION_TARGET_HEIGHT / Math.tan(total_angle_to_target);
   }
 
   public Limelight getLimelight() {

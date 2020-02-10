@@ -10,8 +10,9 @@ public class ZeroTurret extends CommandBase {
   private Turret turret;
 
   public ZeroTurret(Turret turret) {
-    addRequirements(turret);
     this.turret = turret;
+
+    addRequirements(turret);
   }
 
   @Override
@@ -27,7 +28,7 @@ public class ZeroTurret extends CommandBase {
 
   @Override
   public void end(boolean interrupted) {
-    turret.zeroSensors();
+    turret.setEncoderPosition(TURRET_CONSTANTS.TICK_RANGE);
     turret.stop();
   }
 }

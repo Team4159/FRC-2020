@@ -51,6 +51,10 @@ public class Arm extends PIDSubsystem {
   public void periodic() {
     super.periodic();
 
+    if (isLimitSwitchClosed()) {
+      zeroEncoder();
+    }
+
     SmartDashboard.putBoolean("arm limit switch", isLimitSwitchClosed());
     SmartDashboard.putNumber("arm position", arm_encoder.get());
     SmartDashboard.putNumber("arm setpoint", getController().getSetpoint());

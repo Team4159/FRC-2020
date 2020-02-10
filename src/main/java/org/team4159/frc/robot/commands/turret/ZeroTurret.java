@@ -28,7 +28,7 @@ public class ZeroTurret extends CommandBase {
 
   @Override
   public void end(boolean interrupted) {
-    turret.zeroEncoder();
+    turret.setEncoderPosition(TURRET_CONSTANTS.TICK_RANGE);
     turret.stop();
   }
 }

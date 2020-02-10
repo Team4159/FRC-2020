@@ -34,9 +34,9 @@ public class Turret extends SubsystemBase {
   @Override
   public void periodic() {
     if (isForwardLimitSwitchClosed()) {
-      zeroEncoder();
-    } else {
       setEncoderPosition(TURRET_CONSTANTS.TICK_RANGE);
+    } else if (isReverseLimitSwitchClosed()) {
+      zeroEncoder();
     }
 
     double distance = getDistanceToVisionTarget();

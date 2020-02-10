@@ -73,9 +73,8 @@ public class RobotContainer {
         new InstantCommand(feeder::stop, feeder),
         new InstantCommand(() -> shooter.setRawSpeed(0), shooter)));
 
-    new JoystickButton(left_joy, 1)
-      .whenPressed(turret::enable)
-      .whenReleased(turret::disable);
+    new JoystickButton(secondary_joy, T16000M.PRIMARY_TOP_INNER_BTN_ID)
+      .whileHeld(new LimelightSeek(turret, limelight));
   }
 
   public Command getAutonomousCommand() {

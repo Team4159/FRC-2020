@@ -1,5 +1,6 @@
 package org.team4159.frc.robot.commands.turret;
 
+import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 import org.team4159.frc.robot.subsystems.Turret;
@@ -7,37 +8,37 @@ import org.team4159.lib.hardware.Limelight;
 
 import static org.team4159.frc.robot.Constants.*;
 
-
 public class LimelightSeek extends CommandBase {
-    private Turret turret;
-    private Limelight limelight;
-    private double prevError = 0;
+  private Turret turret;
+  private Limelight limelight;
 
-    public LimelightSeek(Turret turret, Limelight limelight) {
-        this.turret = turret;
-        this.limelight = limelight;
+  private PIDController pid_controller = new PIDController(
+    TURRET_CONSTANTS.LIMELIGHT_TURN_kP,
+    0,
+    TURRET_CONSTANTS.LIMELIGHT_TURN_kD
+  );
 
-        addRequirements(turret);
-    }
+  public LimelightSeek(Turret turret, Limelight limelight) {
+    this.turret = turret;
+    this.limelight = limelight;
 
-    @Override
-    public void initialize() {
-        limelight.setLEDMode(Limelight.LEDMode.ForceOn);
-    }
+    addRequirements(turret);
+  }
 
-    @Override
-    public void execute() {
-        if (limelight.isTargetVisible()) {
-            double error = limelight.getTargetHorizontalOffset();
-            double speed = error* TURRET_CONSTANTS.LIMELIGHT_TURN_kP + (error-prevError)*TURRET_CONSTANTS.LIMELIGHT_TURN_kD;
-            prevError = error;
-            turret.setRawSpeed(speed);
-        }
-    }
+  @Override
+  public void initialize() {
+    limelight.setLEDMode(Limelight.LEDMode.ForceOn);
+    pid_controller.reset();
+  }
 
-    @Override
-    public void end(boolean interrupted) {
-        turret.stop();
-        limelight.setLEDMode(Limelight.LEDMode.ForceOff);
-    }
+  @Override
+  public void execute() {
+    turret.setRawSpeed(pid_controller.calculate(limelight.getTargetHorizontalOffset()));
+  }
+
+  @Override
+  public void end(boolean interrupted) {
+    limelight.setLEDMode(Limelight.LEDMode.ForceOff);
+    turret.stop();
+  }
 }

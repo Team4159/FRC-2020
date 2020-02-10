@@ -13,10 +13,6 @@ public class CardinalMAX extends CANSparkMax {
     this(id, mode, DEFAULT_CURRENT_LIMIT, MotorType.kBrushless);
   }
 
-  public CardinalMAX(int id, IdleMode mode, int current_limit) {
-    this(id, mode, DEFAULT_CURRENT_LIMIT, MotorType.kBrushless);
-  }
-
   public CardinalMAX(int id, IdleMode mode, int current_limit, MotorType type) {
     super(id, type);
 

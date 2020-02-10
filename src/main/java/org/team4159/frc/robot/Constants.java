@@ -21,6 +21,7 @@ public final class Constants {
     public static final int RIGHT_REAR_FALCON_ID = 3;
     public static final int TURRET_FALCON_ID = 50; // unknown
 
+
     public static final int FEEDER_TALON_ONE_ID = 4;
     public static final int FEEDER_TALON_TWO_ID = 5;
 
@@ -42,18 +43,21 @@ public final class Constants {
 
     public static final double METERS_PER_TICK = WHEEL_CIRCUMFERENCE / (FALCON_CPR * GEAR_RATIO);
 
-    // TODO: Tune
-    public static final double MAX_TRAJECTORY_SPEED = 5.0;
+    public static final boolean IS_GYRO_INVERTED = false;
+
+    // TODO: Find
+    public static final double MAX_TRAJECTORY_SPEED = 3.0;
     public static final double MAX_TRAJECTORY_ACCELERATION = 3.0;
+    public static final double MAX_TRAJECTORY_VOLTAGE = 10.0;
 
-    public static final double kS = 1.33; // volts
-    public static final double kV = 1.43; // volts * seconds / meters
-    public static final double kA = 0.115; // volts * (seconds ^ 2) / meters
+    public static final double kS = 0.216; // volts
+    public static final double kV = 1.89; // volts * seconds / meters
+    public static final double kA = 0.135; // volts * (seconds ^ 2) / meters
 
-    public static final double kP = 0.00118;
-    public static final double kD = 0.000566;
+    public static final double kP = 1.0;
+    public static final double kD = 0.0;
 
-    public static final double TRACK_WIDTH = Units.inchesToMeters(20);
+    public static final double TRACK_WIDTH = 0.5461;
 
     // ramsete constants (tested for most robots)
     public static final double kB = 2.0;

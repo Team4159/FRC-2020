@@ -7,6 +7,8 @@ import edu.wpi.first.wpilibj2.command.*;
 
 import org.team4159.frc.robot.commands.arm.ToggleArm;
 import org.team4159.frc.robot.commands.arm.ZeroArm;
+import org.team4159.frc.robot.commands.turret.LimelightSeek;
+import org.team4159.lib.hardware.Limelight;
 import org.team4159.frc.robot.subsystems.*;
 
 import static org.team4159.frc.robot.Constants.*;
@@ -16,13 +18,16 @@ public class RobotContainer {
   private final Shooter shooter = new Shooter();
   private final Intake intake = new Intake();
   private final Feeder feeder = new Feeder();
-  public final Arm arm = new Arm();
+  private final Arm arm = new Arm();
+  private final Turret turret = new Turret();
+
+  private final Limelight limelight = new Limelight();
 
   private final Joystick left_joy = new Joystick(CONTROLS.LEFT_JOY.PORT);
   private final Joystick right_joy = new Joystick(CONTROLS.RIGHT_JOY.PORT);
   private final Joystick secondary_joy = new Joystick(CONTROLS.SECONDARY_JOY.PORT);
 
-  private final AutoSelector auto_selector = new AutoSelector(drivetrain);
+ private final AutoSelector auto_selector = new AutoSelector(drivetrain);
 
   public RobotContainer() {
     drivetrain.setDefaultCommand(new RunCommand(
@@ -66,6 +71,10 @@ public class RobotContainer {
         new InstantCommand(intake::stop, intake),
         new InstantCommand(feeder::stop, feeder),
         new InstantCommand(() -> shooter.setRawSpeed(0), shooter)));
+
+    new JoystickButton(left_joy, 1)
+      .whenPressed(turret::enable)
+      .whenReleased(turret::disable);
   }
 
   public Command getAutonomousCommand() {

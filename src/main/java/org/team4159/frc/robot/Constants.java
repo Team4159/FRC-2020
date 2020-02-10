@@ -100,4 +100,18 @@ public final class Constants {
     public static final double ZEROING_SPEED = -0.3;
     public static final double MAX_VOLTAGE = 10;
   }
+
+  public final static class TURRET_CONSTANTS {
+    public static final double LIMELIGHT_TURN_kP = 1.0 / 100.0;
+    public static final double LIMELIGHT_TURN_kD = 0.0;
+  }
+
+  public final static class LIMELIGHT_CONSTANTS {
+    // TEMPORARY VALUES FOR TESTING SETUP
+
+    public static final double MOUNT_ELEVATION = 9;
+    public static final double MOUNT_ANGLE = 25;
+
+    public static final double VISION_TARGET_HEIGHT = 51.5;
+  }
 }

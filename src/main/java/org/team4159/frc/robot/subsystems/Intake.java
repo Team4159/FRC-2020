@@ -26,11 +26,11 @@ public class Intake extends SubsystemBase {
     intake_spark.set(speed);
   }
 
-  public void intakeCell() {
+  public void intake() {
     setRawIntakeSpeed(1);
   }
 
-  public void stopIntaking() {
+  public void stop() {
     setRawIntakeSpeed(0);
   }
 }

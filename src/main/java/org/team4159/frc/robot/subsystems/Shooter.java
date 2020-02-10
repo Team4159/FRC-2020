@@ -1,24 +1,17 @@
 package org.team4159.frc.robot.subsystems;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
+
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
-import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
-import edu.wpi.first.wpilibj.SpeedControllerGroup;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import static org.team4159.frc.robot.Constants.*;
 
 public class Shooter extends SubsystemBase {
-  private TalonSRX shooter_talon_one, shooter_talon_two;
-  private VictorSPX shooter_victor_one, shooter_victor_two;
-
-  private double goal_speed = 0.0;
-  private boolean enabled = false;
+  private TalonSRX primary_shooter_talon;
 
   private TalonSRX configureTalonSRX(TalonSRX talonSRX) {
     talonSRX.configFactoryDefault();
@@ -35,15 +28,18 @@ public class Shooter extends SubsystemBase {
   }
 
   public Shooter() {
-    shooter_talon_one = configureTalonSRX(new TalonSRX(CAN_IDS.SHOOTER_TALON_ONE_ID));
+    TalonSRX shooter_talon_two;
+    VictorSPX shooter_victor_one, shooter_victor_two;
+
+    primary_shooter_talon = configureTalonSRX(new TalonSRX(CAN_IDS.PRIMARY_SHOOTER_TALON_ID));
     shooter_talon_two = configureTalonSRX(new TalonSRX(CAN_IDS.SHOOTER_TALON_TWO_ID));
 
     shooter_victor_one = configureVictorSPX(new VictorSPX(CAN_IDS.SHOOTER_VICTOR_ONE_ID));
     shooter_victor_two = configureVictorSPX(new VictorSPX(CAN_IDS.SHOOTER_VICTOR_TWO_ID));
 
-    shooter_talon_two.follow(shooter_talon_one);
-    shooter_victor_one.follow(shooter_talon_one);
-    shooter_victor_two.follow(shooter_victor_two);
+    shooter_talon_two.follow(primary_shooter_talon);
+    shooter_victor_one.follow(primary_shooter_talon);
+    shooter_victor_two.follow(primary_shooter_talon);
 
     SmartDashboard.putNumber("target_shooter_speed", 0);
     SmartDashboard.putNumber("shooter_kp", SHOOTER_CONSTANTS.kP);
@@ -53,56 +49,37 @@ public class Shooter extends SubsystemBase {
 
   @Override
   public void periodic() {
-    if (enabled) {
-      setTargetSpeed(goal_speed);
-    } else {
-      setRawSpeed(0);
-    }
-
-    SmartDashboard.putNumber("current_shooter_speed", getPosition());
-    setGoal(SmartDashboard.getNumber("target_shooter_speed", 0));
+    SmartDashboard.putNumber("current_shooter_speed", getVelocity());
     setP(SmartDashboard.getNumber("shooter_kp", SHOOTER_CONSTANTS.kP));
     setI(SmartDashboard.getNumber("shooter_ki", SHOOTER_CONSTANTS.kI));
     setD(SmartDashboard.getNumber("shooter_kd", SHOOTER_CONSTANTS.kD));
   }
 
   public void setRawSpeed(double percent) {
-    shooter_talon_one.set(ControlMode.PercentOutput, percent);
+    primary_shooter_talon.set(ControlMode.PercentOutput, percent);
   }
 
   public void setTargetSpeed(double speed) {
-    shooter_talon_one.set(ControlMode.MotionMagic, goal_speed);
+    primary_shooter_talon.set(ControlMode.Velocity, speed);
+  }
+
+  public void stop() {
+    setRawSpeed(0);
   }
 
   public void setP(double kP) {
-    shooter_talon_one.config_kP(0, kP);
+    primary_shooter_talon.config_kP(0, kP);
   }
 
   public void setI(double kI) {
-    shooter_talon_one.config_kI(0, kI);
+    primary_shooter_talon.config_kI(0, kI);
   }
 
   public void setD(double kD) {
-    shooter_talon_one.config_kD(0, kD);
+    primary_shooter_talon.config_kD(0, kD);
   }
 
-  public void setGoal(double goal) {
-    goal_speed = goal;
-  }
-
-  public double getPosition() {
-    return (shooter_talon_one.getSelectedSensorVelocity() + shooter_talon_two.getSelectedSensorVelocity()) / 2.0;
-  }
-
-  public void enable() {
-    enabled = true;
-  }
-
-  public void disable() {
-    enabled = false;
-  }
-
-  public boolean isEnabled() {
-    return enabled;
+  public double getVelocity() {
+    return primary_shooter_talon.getSelectedSensorVelocity();
   }
 }

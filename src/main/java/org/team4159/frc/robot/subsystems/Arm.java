@@ -8,7 +8,6 @@ import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.PIDSubsystem;
 
-
 import static org.team4159.frc.robot.Constants.*;
 
 public class Arm extends PIDSubsystem {
@@ -57,6 +56,16 @@ public class Arm extends PIDSubsystem {
     SmartDashboard.putNumber("arm setpoint", getController().getSetpoint());
   }
 
+  @Override
+  public double getMeasurement() {
+    return arm_encoder.get();
+  }
+
+  @Override
+  public void useOutput(double voltage, double setpoint) {
+    setRawVoltage(voltage);
+  }
+
   public void setRawSpeed(double speed) {
     arm_spark.set(speed);
   }
@@ -75,31 +84,15 @@ public class Arm extends PIDSubsystem {
     setSetpoint(ARM_CONSTANTS.DOWN_POSITION);
   }
 
+  public void zeroEncoder() {
+    arm_encoder.reset();
+  }
+
   public boolean isLimitSwitchClosed() {
     return !arm_limit_switch.get();
   }
 
   public double getSetpoint() {
     return m_controller.getSetpoint();
-  }
-
-  public boolean isArmZeroed() {
-    return isEnabled();
-  }
-
-  public void zeroEncoder() {
-    System.out.println("zeroed");
-    arm_encoder.reset();
-    enable();
-  }
-
-  @Override
-  public double getMeasurement() {
-    return arm_encoder.get();
-  }
-
-  @Override
-  public void useOutput(double voltage, double setpoint) {
-    setRawVoltage(voltage);
   }
 }

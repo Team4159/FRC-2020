@@ -31,20 +31,16 @@ public final class Constants {
     public static final int LEFT_FRONT_FALCON_ID = 0;
     public static final int LEFT_REAR_FALCON_ID = 1;
     public static final int RIGHT_FRONT_FALCON_ID = 2;
-    public static final int RIGHT_REAR_TALON_ID = 3;
+    public static final int RIGHT_REAR_FALCON_ID = 3;
     public static final int TURRET_FALCON_ID = 50; // unknown
 
     public static final int FEEDER_TALON_ONE_ID = 4;
-    public static final int FEEDER_TALON_TWO_ID = 5; // unknown
+    public static final int FEEDER_TALON_TWO_ID = 5;
 
-    public static final int SHOOTER_TALON_ONE_ID = 6;
+    public static final int PRIMARY_SHOOTER_TALON_ID = 6;
     public static final int SHOOTER_TALON_TWO_ID = 7;
     public static final int SHOOTER_VICTOR_ONE_ID = 0;
     public static final int SHOOTER_VICTOR_TWO_ID = 1;
-
-    public static final int NECK_TALON_ONE_ID = 8;
-    public static final int NECK_TALON_TWO_ID = 9;
-    public static final int NECK_TALON_THREE_ID = 10;
 
     public static final int ARM_SPARK_ID = 1;
     public static final int INTAKE_SPARK_ID = 2; // unknown
@@ -62,7 +58,7 @@ public final class Constants {
     public static final double METERS_PER_TICK = WHEEL_CIRCUMFERENCE / (FALCON_CPR * GEAR_RATIO);
 
     // TODO: Tune
-    public static final double MAX_TRAJECTORY_SPEED = 0.5;
+    public static final double MAX_TRAJECTORY_SPEED = 5.0;
     public static final double MAX_TRAJECTORY_ACCELERATION = 3.0;
 
     public static final double kS = 1.33; // volts

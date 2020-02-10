@@ -6,24 +6,18 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import org.team4159.lib.hardware.controller.ctre.CardinalSRX;
 
 import static org.team4159.frc.robot.Constants.*;
 
 public class Feeder extends SubsystemBase {
   private SpeedControllerGroup feeder_motors;
 
-  private TalonSRX configureTalonSRX(TalonSRX talonSRX) {
-    talonSRX.configFactoryDefault();
-    talonSRX.setNeutralMode(NeutralMode.Brake);
-
-    return talonSRX;
-  }
-
   public Feeder() {
     TalonSRX feeder_talon_1, feeder_talon_2;
 
-    feeder_talon_1 = configureTalonSRX(new WPI_TalonSRX(CAN_IDS.FEEDER_TALON_ONE_ID));
-    feeder_talon_2 = configureTalonSRX(new WPI_TalonSRX(CAN_IDS.FEEDER_TALON_TWO_ID));
+    feeder_talon_1 = new CardinalSRX(CAN_IDS.FEEDER_TALON_ONE_ID, NeutralMode.Brake);
+    feeder_talon_2 = new CardinalSRX(CAN_IDS.FEEDER_TALON_TWO_ID, NeutralMode.Brake);
 
     feeder_motors = new SpeedControllerGroup(
       (WPI_TalonSRX) feeder_talon_1,

@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.PIDSubsystem;
+import org.team4159.lib.hardware.controller.rev.CardinalSpark;
 
 import static org.team4159.frc.robot.Constants.*;
 
@@ -14,15 +15,6 @@ public class Arm extends PIDSubsystem {
   private CANSparkMax arm_spark;
   private DigitalInput arm_limit_switch;
   private Encoder arm_encoder;
-
-  private CANSparkMax configureSparkMax(CANSparkMax spark) {
-    spark.restoreFactoryDefaults();
-    //spark.setSmartCurrentLimit(40);
-    spark.setIdleMode(CANSparkMax.IdleMode.kBrake);
-    spark.burnFlash();
-
-    return spark;
-  }
 
   public Arm() {
     super(new PIDController(
@@ -38,7 +30,7 @@ public class Arm extends PIDSubsystem {
       ARM_CONSTANTS.ENCODER_ENCODING_TYPE
     );
 
-    arm_spark = configureSparkMax(new CANSparkMax(CAN_IDS.ARM_SPARK_ID, CANSparkMax.MotorType.kBrushless));
+    arm_spark = new CardinalSpark(CAN_IDS.ARM_SPARK_ID, CANSparkMax.IdleMode.kBrake);
 
     arm_spark.setInverted(true);
 

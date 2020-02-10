@@ -1,5 +1,6 @@
 package org.team4159.frc.robot.subsystems;
 
+import edu.wpi.first.hal.can.CANInvalidBufferException;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -7,35 +8,23 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
+import org.team4159.lib.hardware.controller.ctre.CardinalSPX;
+import org.team4159.lib.hardware.controller.ctre.CardinalSRX;
 
 import static org.team4159.frc.robot.Constants.*;
 
 public class Shooter extends SubsystemBase {
   private TalonSRX primary_shooter_talon;
 
-  private TalonSRX configureTalonSRX(TalonSRX talonSRX) {
-    talonSRX.configFactoryDefault();
-    talonSRX.setNeutralMode(NeutralMode.Coast);
-
-    return talonSRX;
-  }
-
-  private VictorSPX configureVictorSPX(VictorSPX victorSPX) {
-    victorSPX.configFactoryDefault();
-    victorSPX.setNeutralMode(NeutralMode.Coast);
-
-    return victorSPX;
-  }
-
   public Shooter() {
     TalonSRX shooter_talon_two;
     VictorSPX shooter_victor_one, shooter_victor_two;
 
-    primary_shooter_talon = configureTalonSRX(new TalonSRX(CAN_IDS.PRIMARY_SHOOTER_TALON_ID));
-    shooter_talon_two = configureTalonSRX(new TalonSRX(CAN_IDS.SHOOTER_TALON_TWO_ID));
+    primary_shooter_talon = new CardinalSRX(CAN_IDS.PRIMARY_SHOOTER_TALON_ID, NeutralMode.Coast);
+    shooter_talon_two = new CardinalSRX(CAN_IDS.SHOOTER_TALON_TWO_ID, NeutralMode.Coast);
 
-    shooter_victor_one = configureVictorSPX(new VictorSPX(CAN_IDS.SHOOTER_VICTOR_ONE_ID));
-    shooter_victor_two = configureVictorSPX(new VictorSPX(CAN_IDS.SHOOTER_VICTOR_TWO_ID));
+    shooter_victor_one = new CardinalSPX(CAN_IDS.SHOOTER_VICTOR_ONE_ID, NeutralMode.Coast);
+    shooter_victor_two = new CardinalSPX(CAN_IDS.SHOOTER_VICTOR_TWO_ID, NeutralMode.Coast);
 
     shooter_talon_two.follow(primary_shooter_talon);
     shooter_victor_one.follow(primary_shooter_talon);

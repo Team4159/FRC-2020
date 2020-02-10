@@ -10,6 +10,7 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 
 import org.team4159.lib.hardware.Limelight;
+import org.team4159.lib.hardware.controller.ctre.CardinalFX;
 
 import static org.team4159.frc.robot.Constants.*;
 
@@ -18,17 +19,9 @@ public class Turret extends SubsystemBase {
 
   private Limelight limelight;
 
-  private TalonFX configureTalonFX(TalonFX talonFX) {
-    talonFX.configFactoryDefault();
-    talonFX.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
-    talonFX.setNeutralMode(NeutralMode.Brake);
-
-    return talonFX;
-  }
-
   public Turret() {
     limelight = new Limelight();
-    turret_falcon = configureTalonFX(new WPI_TalonFX(CAN_IDS.TURRET_FALCON_ID));
+    turret_falcon = new CardinalFX(CAN_IDS.TURRET_FALCON_ID, NeutralMode.Brake);
   }
 
   @Override

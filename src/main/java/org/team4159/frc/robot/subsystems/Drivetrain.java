@@ -1,6 +1,7 @@
 package org.team4159.frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
+import edu.wpi.first.wpilibj.Talon;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
@@ -11,6 +12,7 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 
 import org.team4159.lib.control.signal.DriveSignal;
 import org.team4159.lib.control.signal.filters.LowPassFilterSource;
+import org.team4159.lib.hardware.controller.ctre.CardinalFX;
 
 import static org.team4159.frc.robot.Constants.*;
 
@@ -24,18 +26,11 @@ public class Drivetrain extends SubsystemBase {
 
   private boolean is_oriented_forward = true;
 
-  private TalonFX configureTalonFX(TalonFX talonSRX) {
-    talonSRX.configFactoryDefault();
-    talonSRX.setNeutralMode(NeutralMode.Coast);
-
-    return talonSRX;
-  }
-
   public Drivetrain() {
-    left_front_falcon = configureTalonFX(new WPI_TalonFX(CAN_IDS.LEFT_FRONT_FALCON_ID));
-    left_rear_falcon = configureTalonFX(new WPI_TalonFX(CAN_IDS.LEFT_REAR_FALCON_ID));
-    right_front_falcon = configureTalonFX(new WPI_TalonFX(CAN_IDS.RIGHT_FRONT_FALCON_ID));
-    right_rear_falcon = configureTalonFX(new WPI_TalonFX(CAN_IDS.RIGHT_REAR_FALCON_ID));
+    left_front_falcon = new CardinalFX(CAN_IDS.LEFT_FRONT_FALCON_ID, NeutralMode.Coast);
+    left_rear_falcon = new CardinalFX(CAN_IDS.LEFT_REAR_FALCON_ID, NeutralMode.Coast);
+    right_front_falcon = new CardinalFX(CAN_IDS.RIGHT_FRONT_FALCON_ID, NeutralMode.Coast);
+    right_rear_falcon = new CardinalFX(CAN_IDS.RIGHT_REAR_FALCON_ID, NeutralMode.Coast);
 
     left_front_falcon.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
     right_front_falcon.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);

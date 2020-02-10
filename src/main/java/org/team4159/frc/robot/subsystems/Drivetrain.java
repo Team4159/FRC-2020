@@ -62,6 +62,7 @@ public class Drivetrain extends SubsystemBase {
     pigeon = new PigeonIMU(CAN_IDS.PIGEON_ID);
 
     odometry = new DifferentialDriveOdometry(new Rotation2d(0));
+    filtered_heading = new LowPassFilterSource(pigeon::getFusedHeading, 10);
 
     zeroSensors();
   }

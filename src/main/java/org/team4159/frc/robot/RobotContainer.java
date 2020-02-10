@@ -5,12 +5,12 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.*;
 
+import org.team4159.lib.hardware.joysticks.T16000M;
 import org.team4159.frc.robot.commands.arm.ToggleArm;
 import org.team4159.frc.robot.commands.arm.ZeroArm;
 import org.team4159.frc.robot.commands.turret.LimelightSeek;
-import org.team4159.lib.hardware.Limelight;
+import org.team4159.frc.robot.commands.turret.ZeroTurret;
 import org.team4159.frc.robot.subsystems.*;
-import org.team4159.lib.hardware.joysticks.T16000M;
 
 import static org.team4159.frc.robot.Constants.*;
 
@@ -21,8 +21,6 @@ public class RobotContainer {
   private final Feeder feeder = new Feeder();
   private final Arm arm = new Arm();
   private final Turret turret = new Turret();
-
-  private final Limelight limelight = new Limelight();
 
   private final Joystick left_joy = new Joystick(CONTROLS.LEFT_JOY);
   private final Joystick right_joy = new Joystick(CONTROLS.RIGHT_JOY);
@@ -40,6 +38,7 @@ public class RobotContainer {
     ));
 
     new ZeroArm(arm).schedule(false);
+    new ZeroTurret(turret).schedule(false);
 
     configureButtonBindings();
   }
@@ -74,7 +73,7 @@ public class RobotContainer {
         new InstantCommand(() -> shooter.setRawSpeed(0), shooter)));
 
     new JoystickButton(secondary_joy, T16000M.PRIMARY_TOP_INNER_BTN_ID)
-      .whileHeld(new LimelightSeek(turret, limelight));
+      .whileHeld(new LimelightSeek(turret));
   }
 
   public Command getAutonomousCommand() {

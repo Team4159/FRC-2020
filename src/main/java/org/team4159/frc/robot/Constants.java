@@ -89,6 +89,8 @@ public final class Constants {
   public final static class TURRET_CONSTANTS {
     public static final double LIMELIGHT_TURN_kP = 1.0 / 100.0;
     public static final double LIMELIGHT_TURN_kD = 0.0;
+
+    public static final double ZEROING_SPEED = 0.1;
   }
 
   public final static class LIMELIGHT_CONSTANTS {

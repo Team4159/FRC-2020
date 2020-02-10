@@ -18,9 +18,9 @@ public class LimelightSeek extends CommandBase {
     TURRET_CONSTANTS.LIMELIGHT_TURN_kD
   );
 
-  public LimelightSeek(Turret turret, Limelight limelight) {
+  public LimelightSeek(Turret turret) {
     this.turret = turret;
-    this.limelight = limelight;
+    this.limelight = turret.getLimelight();
 
     addRequirements(turret);
   }

@@ -38,10 +38,13 @@ public class TestLowPassFilter {
     try {
       raw_data_file = File.createTempFile("low-pass-", "-raw.csv");
       System.out.println(raw_data_file);
+
       raw_writer = new CSVWriter(raw_data_file);
       raw_reader = new BufferedReader(new FileReader(raw_data_file));
+
       smoothed_data_file = File.createTempFile("low-pass-", "-smoothed.csv");
       System.out.println(smoothed_data_file);
+
       smoothed_writer = new CSVWriter(smoothed_data_file);
       smoothed_reader = new BufferedReader(new FileReader(smoothed_data_file));
     } catch (IOException e) {
@@ -52,7 +55,9 @@ public class TestLowPassFilter {
     for (int i = 0; i < 1000; i++) {
       double signal_delta = Math.random() - 0.5;
       signal += signal_delta;
+
       double smoothed_value = filter.calculate(signal);
+
       raw_writer.write(i, signal);
       smoothed_writer.write(i, smoothed_value);
     }
@@ -70,8 +75,10 @@ public class TestLowPassFilter {
       for (int i = 0; i < 1000; i++) {
         double raw_signal = Double.parseDouble(raw_reader.readLine().split(",")[1]);
         double smoothed_signal = Double.parseDouble(smoothed_reader.readLine().split(",")[1]);
+
         raw_noise += Math.sqrt(Math.pow(last_raw_signal - raw_signal, 2) + 1);
         smoothed_noise += Math.sqrt(Math.pow(last_smoothed_signal - smoothed_signal, 2) + 1);
+
         last_raw_signal = raw_signal;
         last_smoothed_signal = smoothed_signal;
       }

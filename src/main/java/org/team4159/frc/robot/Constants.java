@@ -46,9 +46,9 @@ public final class Constants {
     public static final boolean IS_GYRO_INVERTED = false;
 
     // TODO: Find
-    public static final double MAX_TRAJECTORY_SPEED = 3.0;
-    public static final double MAX_TRAJECTORY_ACCELERATION = 3.0;
-    public static final double MAX_TRAJECTORY_VOLTAGE = 10.0;
+    public static final double MAX_TRAJECTORY_SPEED = 1.0;
+    public static final double MAX_TRAJECTORY_ACCELERATION = 2.0;
+    public static final double MAX_TRAJECTORY_VOLTAGE = 5.0;
 
     public static final double kS = 0.216; // volts
     public static final double kV = 1.89; // volts * seconds / meters

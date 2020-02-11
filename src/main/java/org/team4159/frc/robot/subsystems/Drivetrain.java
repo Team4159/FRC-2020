@@ -50,7 +50,8 @@ public class Drivetrain extends SubsystemBase {
     right_falcons = new SpeedControllerGroup(
       (WPI_TalonFX) right_front_falcon,
       (WPI_TalonFX) right_rear_falcon);
-    left_falcons.setInverted(true);
+
+    left_falcons.setInverted(false);
     right_falcons.setInverted(true);
 
     pigeon = new PigeonIMU(CAN_IDS.PIGEON_ID);
@@ -79,6 +80,8 @@ public class Drivetrain extends SubsystemBase {
     SmartDashboard.putNumber("Angle", getDirection());
     SmartDashboard.putNumber("Left Encoder", getLeftDistance());
     SmartDashboard.putNumber("Right Encoder", getRightDistance());
+
+    System.out.println(getDirection());
   }
 
   public void rawDrive(DriveSignal signal) {

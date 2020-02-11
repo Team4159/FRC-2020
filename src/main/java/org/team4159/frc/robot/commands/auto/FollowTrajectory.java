@@ -14,16 +14,17 @@ import edu.wpi.first.wpilibj.trajectory.Trajectory;
 import edu.wpi.first.wpilibj2.command.*;
 
 import org.team4159.frc.robot.subsystems.Drivetrain;
+import org.team4159.lib.logging.CSVWriter;
 
 import static org.team4159.frc.robot.Constants.*;
 
 public class FollowTrajectory extends CommandBase {
-  private Trajectory traj;
+  private Trajectory trajectory;
   private Drivetrain drivetrain;
 
   private Timer timer = new Timer();
 
-  // private CSVWriter writer;
+  private CSVWriter writer;
 
   private DifferentialDriveWheelSpeeds prev_speeds = new DifferentialDriveWheelSpeeds(0,0);
   private DifferentialDriveKinematics kinematics = new DifferentialDriveKinematics(DRIVE_CONSTANTS.TRACK_WIDTH);
@@ -34,20 +35,21 @@ public class FollowTrajectory extends CommandBase {
   double prev_time = 0;
 
   public FollowTrajectory(Trajectory trajectory, Drivetrain drivetrain) {
+    this.trajectory = trajectory;
     this.drivetrain = drivetrain;
-
-    Transform2d transform = drivetrain.getPose().minus(trajectory.getInitialPose());
-    traj = trajectory.transformBy(transform);
 
     addRequirements(drivetrain);
   }
 
   @Override
   public void initialize() {
-    // writer = new CSVWriter("/home/lvuser/Output");
+    writer = new CSVWriter("/home/lvuser/Output");
+
+    Transform2d transform = drivetrain.getPose().minus(trajectory.getInitialPose());
+    trajectory = trajectory.transformBy(transform);
 
     prev_time = 0;
-    var initialState = traj.sample(0);
+    var initialState = trajectory.sample(0);
     prev_speeds = kinematics.toWheelSpeeds(
       new ChassisSpeeds(initialState.velocityMetersPerSecond,
         0,
@@ -63,7 +65,7 @@ public class FollowTrajectory extends CommandBase {
     double dt = cur_time - prev_time;
 
     Pose2d drivetrain_pose = drivetrain.getPose();
-    Trajectory.State trajectory_sample = traj.sample(cur_time);
+    Trajectory.State trajectory_sample = trajectory.sample(cur_time);
 
     var target_wheel_speeds = kinematics.toWheelSpeeds(
       controller.calculate(drivetrain_pose, trajectory_sample));
@@ -97,7 +99,9 @@ public class FollowTrajectory extends CommandBase {
     SmartDashboard.putNumber("left output", left_output);
     SmartDashboard.putNumber("right output", right_output);
 
-    /*
+    Pose2d trajectory_pose = trajectory_sample.poseMeters;
+
+
     writer.write(
       target_wheel_speeds.leftMetersPerSecond, // 1
       target_wheel_speeds.rightMetersPerSecond, // 2
@@ -107,19 +111,19 @@ public class FollowTrajectory extends CommandBase {
       right_PID, // 6
       left_output, // 7
       right_output, // 8
-      drivetrainPose.getTranslation().getX(), //9
-      drivetrainPose.getTranslation().getY(), // 10
-      trajSample.getTranslation().getX(), // 11
-      trajSample.getTranslation().getY(), // 12
-      drivetrainPose.getRotation().getDegrees(), // 13
-      trajSample.getRotation().getDegrees() // 14
+      drivetrain_pose.getTranslation().getX(), //9
+      drivetrain_pose.getTranslation().getY(), // 10
+      trajectory_pose.getTranslation().getX(), // 11
+      trajectory_pose.getTranslation().getY(), // 12
+      drivetrain_pose.getRotation().getDegrees(), // 13
+      trajectory_pose.getRotation().getDegrees() // 14
     );
-     */
+
 
     prev_time = cur_time;
     prev_speeds = target_wheel_speeds;
 
-    drivetrain.voltsDrive(-left_output, right_output);
+    drivetrain.voltsDrive(-left_output, -right_output);
   }
 
   @Override
@@ -127,10 +131,11 @@ public class FollowTrajectory extends CommandBase {
     System.out.println("DONE!");
 
     drivetrain.stop();
+    writer.close();
   }
 
   @Override
   public boolean isFinished() {
-      return timer.hasPeriodPassed(traj.getTotalTimeSeconds());
+      return timer.hasPeriodPassed(trajectory.getTotalTimeSeconds());
     }
 }

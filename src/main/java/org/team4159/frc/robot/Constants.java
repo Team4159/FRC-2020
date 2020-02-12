@@ -12,27 +12,23 @@ import org.team4159.lib.math.Baba;
 public final class Constants {
   public static final int FALCON_CPR = 2048;
 
-  public final static class CONTROLS {
-    public final static class LEFT_JOY {
+  public static final class CONTROLS {
+    public static final class LEFT_JOY {
       public static final int USB_PORT = 0;
 
-      public final static class BUTTON_IDS {
-
-      }
+      public static final class BUTTON_IDS { }
     }
 
-    public final static class RIGHT_JOY {
+    public static final class RIGHT_JOY {
       public static final int USB_PORT = 1;
 
-      public final static class BUTTON_IDS {
-
-      }
+      public static final class BUTTON_IDS { }
     }
 
-    public final static class SECONDARY_JOY {
+    public static final class SECONDARY_JOY {
       public static final int USB_PORT = 2;
 
-      public final static class BUTTON_IDS {
+      public static final class BUTTON_IDS {
         public static final int ENABLE_SHOOTER = T16000M.TRIGGER_ID;
         public static final int FLIP_ROBOT_ORIENTATION = T16000M.TOP_MIDDLE_BTN_ID;
         public static final int TOGGLE_ARM = T16000M.TOP_RIGHT_BTN_ID;
@@ -47,7 +43,7 @@ public final class Constants {
     }
   }
 
-  public final static class CAN_IDS {
+  public static final class CAN_IDS {
     public static final int LEFT_FRONT_FALCON = 2;
     public static final int LEFT_REAR_FALCON = 3;
     public static final int RIGHT_FRONT_FALCON = 0;
@@ -97,13 +93,13 @@ public final class Constants {
     public static final double kZeta = 0.7;
   }
 
-  public final static class SHOOTER_CONSTANTS {
+  public static final class SHOOTER_CONSTANTS {
     public static final double kP = 0.001;
     public static final double kI = 0.0;
     public static final double kD = 0.0;
   }
 
-  public final static class ARM_CONSTANTS {
+  public static final class ARM_CONSTANTS {
     public static final int LIMIT_SWITCH_PORT = 9;
 
     public static final int ENCODER_CHANNEL_A_PORT = 0;
@@ -123,7 +119,7 @@ public final class Constants {
     public static final double MAX_VOLTAGE = 10;
   }
 
-  public final static class TURRET_CONSTANTS {
+  public static final class TURRET_CONSTANTS {
     // TODO: Find
     public static final double ANGLE_RANGE = 120;
     public static final double TICK_RANGE = FALCON_CPR * ANGLE_RANGE / 360;
@@ -134,7 +130,7 @@ public final class Constants {
     public static final double ZEROING_SPEED = 0.1;
   }
 
-  public final static class LIMELIGHT_CONSTANTS {
+  public static final class LIMELIGHT_CONSTANTS {
     // TEMPORARY VALUES FOR TESTING SETUP
 
     public static final double MOUNT_HEIGHT = 9;
@@ -143,7 +139,7 @@ public final class Constants {
     public static final double VISION_TARGET_HEIGHT = 51.5 - MOUNT_HEIGHT;
   }
 
-  public final static class FIELD_CONSTANTS {
+  public static final class FIELD_CONSTANTS {
     public static final Color CONTROL_SPINNER_BLUE = ColorMatch.makeColor(0.143, 0.427, 0.429);
     public static final Color CONTROL_SPINNER_GREEN = ColorMatch.makeColor(0.197, 0.561, 0.240);
     public static final Color CONTROL_SPINNER_RED = ColorMatch.makeColor(0.561, 0.232, 0.114);

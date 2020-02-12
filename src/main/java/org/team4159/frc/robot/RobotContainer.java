@@ -29,16 +29,16 @@ public class RobotContainer {
  private final AutoSelector auto_selector = new AutoSelector(drivetrain);
 
   public RobotContainer() {
-    setupCamera();
-    setupCommands();
-    setupButtonBindings();
+    configureCamera();
+    configureCommands();
+    configureButtonBindings();
   }
 
-  private void setupCamera() {
+  private void configureCamera() {
     CameraServer.getInstance().startAutomaticCapture();
   }
 
-  private void setupCommands() {
+  private void configureCommands() {
     drivetrain.setDefaultCommand(new RunCommand(
       () -> drivetrain.tankDrive(
         left_joy.getY(),
@@ -51,7 +51,7 @@ public class RobotContainer {
     new ZeroTurret(turret).schedule(false);
   }
 
-  private void setupButtonBindings() {
+  private void configureButtonBindings() {
     new JoystickButton(secondary_joy, CONTROLS.SECONDARY_JOY.BUTTON_IDS.ENABLE_SHOOTER)
       .whenPressed(() -> shooter.setTargetSpeed(SmartDashboard.getNumber("target_shooter_speed", 0)))
       .whenReleased(new InstantCommand(shooter::stop, shooter));

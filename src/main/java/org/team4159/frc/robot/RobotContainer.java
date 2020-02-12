@@ -1,5 +1,6 @@
 package org.team4159.frc.robot;
 
+import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -29,6 +30,16 @@ public class RobotContainer {
  private final AutoSelector auto_selector = new AutoSelector(drivetrain);
 
   public RobotContainer() {
+    setupCamera();
+    setAndScheduleCommands();
+    configureButtonBindings();
+  }
+
+  private void setupCamera() {
+    CameraServer.getInstance().startAutomaticCapture();
+  }
+
+  private void setAndScheduleCommands() {
     drivetrain.setDefaultCommand(new RunCommand(
       () -> drivetrain.tankDrive(
         left_joy.getY(),
@@ -39,8 +50,6 @@ public class RobotContainer {
 
     new ZeroArm(arm).schedule(false);
     new ZeroTurret(turret).schedule(false);
-
-    configureButtonBindings();
   }
 
   private void configureButtonBindings() {

@@ -13,21 +13,37 @@ public final class Constants {
   public static final int FALCON_CPR = 2048;
 
   public final static class CONTROLS {
-    public static final int LEFT_JOY = 0;
-    public static final int RIGHT_JOY = 1;
-    public static final int SECONDARY_JOY = 2;
+    public final static class LEFT_JOY {
+      public static final int USB_PORT = 0;
 
-    public final static class BUTTON_IDS {
-      public static final int ENABLE_SHOOTER = T16000M.TRIGGER_ID;
-      public static final int FLIP_ROBOT_ORIENTATION = T16000M.TOP_MIDDLE_BTN_ID;
-      public static final int TOGGLE_ARM = T16000M.TOP_RIGHT_BTN_ID;
-      public static final int RUN_ALL_INTAKE_SUBSYSTEMS = T16000M.PRIMARY_BOTTOM_MIDDLE_BTN_ID;
-      public static final int LIMELIGHT_SEEK = T16000M.PRIMARY_TOP_INNER_BTN_ID;
+      public final static class BUTTON_IDS {
 
-      // Debug buttons
-      public static final int
-        RUN_INTAKE = T16000M.TOP_LEFT_BTN_ID,
-        RUN_FEEDER = T16000M.PRIMARY_TOP_OUTER_BTN_ID;
+      }
+    }
+
+    public final static class RIGHT_JOY {
+      public static final int USB_PORT = 1;
+
+      public final static class BUTTON_IDS {
+
+      }
+    }
+
+    public final static class SECONDARY_JOY {
+      public static final int USB_PORT = 2;
+
+      public final static class BUTTON_IDS {
+        public static final int ENABLE_SHOOTER = T16000M.TRIGGER_ID;
+        public static final int FLIP_ROBOT_ORIENTATION = T16000M.TOP_MIDDLE_BTN_ID;
+        public static final int TOGGLE_ARM = T16000M.TOP_RIGHT_BTN_ID;
+        public static final int RUN_ALL_INTAKE_SUBSYSTEMS = T16000M.PRIMARY_BOTTOM_MIDDLE_BTN_ID;
+        public static final int LIMELIGHT_SEEK = T16000M.PRIMARY_TOP_INNER_BTN_ID;
+
+        // Debug buttons
+        public static final int
+          RUN_INTAKE = T16000M.TOP_LEFT_BTN_ID,
+          RUN_FEEDER = T16000M.PRIMARY_TOP_OUTER_BTN_ID;
+      }
     }
   }
 

@@ -6,7 +6,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.*;
 
-import org.team4159.lib.hardware.joystick.T16000M;
 import org.team4159.frc.robot.commands.arm.ToggleArm;
 import org.team4159.frc.robot.commands.arm.ZeroArm;
 import org.team4159.frc.robot.commands.turret.LimelightSeek;
@@ -23,23 +22,23 @@ public class RobotContainer {
   private final Arm arm = new Arm();
   private final Turret turret = new Turret();
 
-  private final Joystick left_joy = new Joystick(CONTROLS.LEFT_JOY);
-  private final Joystick right_joy = new Joystick(CONTROLS.RIGHT_JOY);
-  private final Joystick secondary_joy = new Joystick(CONTROLS.SECONDARY_JOY);
+  private final Joystick left_joy = new Joystick(CONTROLS.LEFT_JOY.USB_PORT);
+  private final Joystick right_joy = new Joystick(CONTROLS.RIGHT_JOY.USB_PORT);
+  private final Joystick secondary_joy = new Joystick(CONTROLS.SECONDARY_JOY.USB_PORT);
 
  private final AutoSelector auto_selector = new AutoSelector(drivetrain);
 
   public RobotContainer() {
     setupCamera();
-    setAndScheduleCommands();
-    configureButtonBindings();
+    setupCommands();
+    setupButtonBindings();
   }
 
   private void setupCamera() {
     CameraServer.getInstance().startAutomaticCapture();
   }
 
-  private void setAndScheduleCommands() {
+  private void setupCommands() {
     drivetrain.setDefaultCommand(new RunCommand(
       () -> drivetrain.tankDrive(
         left_joy.getY(),
@@ -52,26 +51,26 @@ public class RobotContainer {
     new ZeroTurret(turret).schedule(false);
   }
 
-  private void configureButtonBindings() {
-    new JoystickButton(secondary_joy, CONTROLS.BUTTON_IDS.ENABLE_SHOOTER)
+  private void setupButtonBindings() {
+    new JoystickButton(secondary_joy, CONTROLS.SECONDARY_JOY.BUTTON_IDS.ENABLE_SHOOTER)
       .whenPressed(() -> shooter.setTargetSpeed(SmartDashboard.getNumber("target_shooter_speed", 0)))
       .whenReleased(new InstantCommand(shooter::stop, shooter));
 
-    new JoystickButton(secondary_joy, CONTROLS.BUTTON_IDS.FLIP_ROBOT_ORIENTATION)
+    new JoystickButton(secondary_joy, CONTROLS.SECONDARY_JOY.BUTTON_IDS.FLIP_ROBOT_ORIENTATION)
       .whenPressed(drivetrain::flipOrientation);
 
-    new JoystickButton(secondary_joy, CONTROLS.BUTTON_IDS.RUN_INTAKE)
+    new JoystickButton(secondary_joy, CONTROLS.SECONDARY_JOY.BUTTON_IDS.RUN_INTAKE)
       .whenPressed(new InstantCommand(intake::intake, intake))
       .whenReleased(new InstantCommand(intake::stop, intake));
 
-    new JoystickButton(secondary_joy, CONTROLS.BUTTON_IDS.TOGGLE_ARM)
+    new JoystickButton(secondary_joy, CONTROLS.SECONDARY_JOY.BUTTON_IDS.TOGGLE_ARM)
       .whenPressed(new ToggleArm(arm));
 
-    new JoystickButton(secondary_joy, CONTROLS.BUTTON_IDS.RUN_FEEDER)
+    new JoystickButton(secondary_joy, CONTROLS.SECONDARY_JOY.BUTTON_IDS.RUN_FEEDER)
       .whenPressed(new InstantCommand(feeder::feed, feeder))
       .whenReleased(new InstantCommand(feeder::stop, feeder));
 
-    new JoystickButton(secondary_joy, CONTROLS.BUTTON_IDS.RUN_ALL_INTAKE_SUBSYSTEMS)
+    new JoystickButton(secondary_joy, CONTROLS.SECONDARY_JOY.BUTTON_IDS.RUN_ALL_INTAKE_SUBSYSTEMS)
       .whenPressed(new ParallelCommandGroup(
         new InstantCommand(intake::intake, intake),
         new InstantCommand(feeder::feed, feeder),
@@ -81,7 +80,7 @@ public class RobotContainer {
         new InstantCommand(feeder::stop, feeder),
         new InstantCommand(() -> shooter.setRawSpeed(0), shooter)));
 
-    new JoystickButton(secondary_joy, CONTROLS.BUTTON_IDS.LIMELIGHT_SEEK)
+    new JoystickButton(secondary_joy, CONTROLS.SECONDARY_JOY.BUTTON_IDS.LIMELIGHT_SEEK)
       .whileHeld(new LimelightSeek(turret));
   }
 

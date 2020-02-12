@@ -51,8 +51,8 @@ public class Drivetrain extends SubsystemBase {
       (WPI_TalonFX) right_front_falcon,
       (WPI_TalonFX) right_rear_falcon);
 
-    left_falcons.setInverted(false);
-    right_falcons.setInverted(true);
+    left_falcons.setInverted(true);
+    right_falcons.setInverted(false);
 
     pigeon = new PigeonIMU(CAN_IDS.PIGEON_ID);
 
@@ -125,6 +125,8 @@ public class Drivetrain extends SubsystemBase {
       new Pose2d(new Translation2d(0, 0), Rotation2d.fromDegrees(0)),
       Rotation2d.fromDegrees(0)
     );
+
+    System.out.println(getDirection());
   }
 
   public DifferentialDriveWheelSpeeds getWheelSpeeds() {
@@ -145,20 +147,20 @@ public class Drivetrain extends SubsystemBase {
 
   // distance in meters
   public double getLeftDistance() {
-    return left_front_falcon.getSelectedSensorPosition() * DRIVE_CONSTANTS.METERS_PER_TICK;
+    return -1 * left_front_falcon.getSelectedSensorPosition() * DRIVE_CONSTANTS.METERS_PER_TICK;
   }
 
   // velocity in meters / sec
   public double getLeftVelocity() {
-    return left_front_falcon.getSelectedSensorVelocity() * DRIVE_CONSTANTS.METERS_PER_TICK;
+    return -1 * left_front_falcon.getSelectedSensorVelocity() * DRIVE_CONSTANTS.METERS_PER_TICK;
   }
 
   public double getRightDistance() {
-    return -1 * right_front_falcon.getSelectedSensorPosition() * DRIVE_CONSTANTS.METERS_PER_TICK;
+    return right_front_falcon.getSelectedSensorPosition() * DRIVE_CONSTANTS.METERS_PER_TICK;
   }
 
   public double getRightVelocity() {
-    return -1 * right_front_falcon.getSelectedSensorVelocity() * DRIVE_CONSTANTS.METERS_PER_TICK;
+    return right_front_falcon.getSelectedSensorVelocity() * DRIVE_CONSTANTS.METERS_PER_TICK;
   }
 
   public Pose2d getPose() {

@@ -34,11 +34,11 @@ public class Trajectories {
     .setKinematics(kinematics)
     .addConstraint(constraint);
 
-  public static final Trajectory GO_FORWARD_ONE_METER =
+  public static final Trajectory TEST_TRAJECTORY =
     TrajectoryGenerator.generateTrajectory(
       List.of(
         new Pose2d(0, 0, Rotation2d.fromDegrees(0)),
-        new Pose2d(1, 1, Rotation2d.fromDegrees(0))
+        new Pose2d(1, 0.5, Rotation2d.fromDegrees(0))
       ),
       config
     );

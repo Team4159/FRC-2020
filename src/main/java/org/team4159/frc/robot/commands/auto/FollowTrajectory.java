@@ -43,7 +43,7 @@ public class FollowTrajectory extends CommandBase {
 
   @Override
   public void initialize() {
-    writer = new CSVWriter("/home/lvuser/Output");
+    writer = new CSVWriter("/home/lvuser/Output.csv");
 
     Transform2d transform = drivetrain.getPose().minus(trajectory.getInitialPose());
     trajectory = trajectory.transformBy(transform);

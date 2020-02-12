@@ -15,10 +15,10 @@ public final class Constants {
   }
 
   public final static class CAN_IDS {
-    public static final int LEFT_FRONT_FALCON_ID = 0;
-    public static final int LEFT_REAR_FALCON_ID = 1;
-    public static final int RIGHT_FRONT_FALCON_ID = 2;
-    public static final int RIGHT_REAR_FALCON_ID = 3;
+    public static final int LEFT_FRONT_FALCON_ID = 2;
+    public static final int LEFT_REAR_FALCON_ID = 3;
+    public static final int RIGHT_FRONT_FALCON_ID = 0;
+    public static final int RIGHT_REAR_FALCON_ID = 1;
     public static final int TURRET_FALCON_ID = 50; // unknown
 
 
@@ -46,9 +46,9 @@ public final class Constants {
     public static final boolean IS_GYRO_INVERTED = false;
 
     // TODO: Find
-    public static final double MAX_TRAJECTORY_SPEED = 1.0;
-    public static final double MAX_TRAJECTORY_ACCELERATION = 2.0;
-    public static final double MAX_TRAJECTORY_VOLTAGE = 5.0;
+    public static final double MAX_TRAJECTORY_SPEED = 5.0;
+    public static final double MAX_TRAJECTORY_ACCELERATION = 3.0;
+    public static final double MAX_TRAJECTORY_VOLTAGE = 10.0;
 
     public static final double kS = 0.216; // volts
     public static final double kV = 1.89; // volts * seconds / meters

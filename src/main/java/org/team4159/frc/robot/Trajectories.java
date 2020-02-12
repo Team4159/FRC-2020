@@ -17,8 +17,8 @@ import java.util.List;
  * http://docs.wpilib.org/en/latest/docs/software/advanced-control/trajectories/index.html
  */
 public class Trajectories {
-  private static DifferentialDriveKinematics kinematics = new DifferentialDriveKinematics(DRIVE_CONSTANTS.TRACK_WIDTH);
-  private static DifferentialDriveVoltageConstraint constraint = new DifferentialDriveVoltageConstraint(
+  private static final DifferentialDriveKinematics kinematics = new DifferentialDriveKinematics(DRIVE_CONSTANTS.TRACK_WIDTH);
+  private static final DifferentialDriveVoltageConstraint constraint = new DifferentialDriveVoltageConstraint(
     new SimpleMotorFeedforward(
       DRIVE_CONSTANTS.kS,
       DRIVE_CONSTANTS.kV,
@@ -27,7 +27,7 @@ public class Trajectories {
     DRIVE_CONSTANTS.MAX_TRAJECTORY_VOLTAGE
   );
 
-  private static TrajectoryConfig config = new TrajectoryConfig(
+  private static final TrajectoryConfig config = new TrajectoryConfig(
     DRIVE_CONSTANTS.MAX_TRAJECTORY_SPEED,
     DRIVE_CONSTANTS.MAX_TRAJECTORY_ACCELERATION
   )

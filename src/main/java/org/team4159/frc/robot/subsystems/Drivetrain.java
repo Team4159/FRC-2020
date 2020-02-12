@@ -34,10 +34,10 @@ public class Drivetrain extends SubsystemBase {
   private boolean is_oriented_forward = true;
 
   public Drivetrain() {
-    left_front_falcon = new CardinalFX(CAN_IDS.LEFT_FRONT_FALCON_ID, NeutralMode.Coast);
-    left_rear_falcon = new CardinalFX(CAN_IDS.LEFT_REAR_FALCON_ID, NeutralMode.Coast);
-    right_front_falcon = new CardinalFX(CAN_IDS.RIGHT_FRONT_FALCON_ID, NeutralMode.Coast);
-    right_rear_falcon = new CardinalFX(CAN_IDS.RIGHT_REAR_FALCON_ID, NeutralMode.Coast);
+    left_front_falcon = new CardinalFX(CAN_IDS.LEFT_FRONT_FALCON, NeutralMode.Coast);
+    left_rear_falcon = new CardinalFX(CAN_IDS.LEFT_REAR_FALCON, NeutralMode.Coast);
+    right_front_falcon = new CardinalFX(CAN_IDS.RIGHT_FRONT_FALCON, NeutralMode.Coast);
+    right_rear_falcon = new CardinalFX(CAN_IDS.RIGHT_REAR_FALCON, NeutralMode.Coast);
 
     left_front_falcon.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
     right_front_falcon.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
@@ -54,7 +54,7 @@ public class Drivetrain extends SubsystemBase {
     left_falcons.setInverted(true);
     right_falcons.setInverted(false);
 
-    pigeon = new PigeonIMU(CAN_IDS.PIGEON_ID);
+    pigeon = new PigeonIMU(CAN_IDS.PIGEON);
 
     odometry = new DifferentialDriveOdometry(new Rotation2d(0));
     filtered_heading = new LowPassFilterSource(pigeon::getFusedHeading, 10);

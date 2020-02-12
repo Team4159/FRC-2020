@@ -19,11 +19,11 @@ public class Shooter extends SubsystemBase {
     TalonSRX shooter_talon_two;
     VictorSPX shooter_victor_one, shooter_victor_two;
 
-    primary_shooter_talon = new CardinalSRX(CAN_IDS.PRIMARY_SHOOTER_TALON_ID, NeutralMode.Coast);
-    shooter_talon_two = new CardinalSRX(CAN_IDS.SHOOTER_TALON_TWO_ID, NeutralMode.Coast);
+    primary_shooter_talon = new CardinalSRX(CAN_IDS.PRIMARY_SHOOTER_TALON, NeutralMode.Coast);
+    shooter_talon_two = new CardinalSRX(CAN_IDS.SHOOTER_TALON_TWO, NeutralMode.Coast);
 
-    shooter_victor_one = new CardinalSPX(CAN_IDS.SHOOTER_VICTOR_ONE_ID, NeutralMode.Coast);
-    shooter_victor_two = new CardinalSPX(CAN_IDS.SHOOTER_VICTOR_TWO_ID, NeutralMode.Coast);
+    shooter_victor_one = new CardinalSPX(CAN_IDS.SHOOTER_VICTOR_ONE, NeutralMode.Coast);
+    shooter_victor_two = new CardinalSPX(CAN_IDS.SHOOTER_VICTOR_TWO, NeutralMode.Coast);
 
     shooter_talon_two.follow(primary_shooter_talon);
     shooter_victor_one.follow(primary_shooter_talon);

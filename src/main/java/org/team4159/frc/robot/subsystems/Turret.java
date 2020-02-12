@@ -21,7 +21,7 @@ public class Turret extends SubsystemBase {
 
   public Turret() {
     limelight = new Limelight();
-    turret_falcon = new CardinalFX(CAN_IDS.TURRET_FALCON_ID, NeutralMode.Brake);
+    turret_falcon = new CardinalFX(CAN_IDS.TURRET_FALCON, NeutralMode.Brake);
   }
 
   @Override

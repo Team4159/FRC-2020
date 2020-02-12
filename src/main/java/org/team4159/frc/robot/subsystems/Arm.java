@@ -30,7 +30,7 @@ public class Arm extends PIDSubsystem {
       ARM_CONSTANTS.ENCODER_ENCODING_TYPE
     );
 
-    arm_spark = new CardinalMAX(CAN_IDS.ARM_SPARK_ID, CANSparkMax.IdleMode.kBrake);
+    arm_spark = new CardinalMAX(CAN_IDS.ARM_SPARK, CANSparkMax.IdleMode.kBrake);
 
     arm_spark.setInverted(true);
 

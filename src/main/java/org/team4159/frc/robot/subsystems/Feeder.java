@@ -16,8 +16,8 @@ public class Feeder extends SubsystemBase {
   public Feeder() {
     TalonSRX feeder_talon_1, feeder_talon_2;
 
-    feeder_talon_1 = new CardinalSRX(CAN_IDS.FEEDER_TALON_ONE_ID, NeutralMode.Brake);
-    feeder_talon_2 = new CardinalSRX(CAN_IDS.FEEDER_TALON_TWO_ID, NeutralMode.Brake);
+    feeder_talon_1 = new CardinalSRX(CAN_IDS.FEEDER_TALON_ONE, NeutralMode.Brake);
+    feeder_talon_2 = new CardinalSRX(CAN_IDS.FEEDER_TALON_TWO, NeutralMode.Brake);
 
     feeder_motors = new SpeedControllerGroup(
       (WPI_TalonSRX) feeder_talon_1,

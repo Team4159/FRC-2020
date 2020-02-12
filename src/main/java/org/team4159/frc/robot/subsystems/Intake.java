@@ -11,7 +11,7 @@ public class Intake extends SubsystemBase {
   private CANSparkMax intake_spark;
 
   public Intake() {
-    intake_spark = new CardinalMAX(CAN_IDS.INTAKE_SPARK_ID, CANSparkMax.IdleMode.kCoast);
+    intake_spark = new CardinalMAX(CAN_IDS.INTAKE_SPARK, CANSparkMax.IdleMode.kCoast);
   }
 
   public void setRawIntakeSpeed(double speed) {

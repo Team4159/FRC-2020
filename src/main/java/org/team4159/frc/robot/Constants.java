@@ -1,5 +1,6 @@
 package org.team4159.frc.robot;
 
+import com.revrobotics.ColorMatch;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj.util.ColorShim;
 
@@ -17,9 +18,9 @@ public final class Constants {
   }
 
   public final static class FIELD_CONSTANTS {
-    public static final Color CONTROL_SPINNER_BLUE = new ColorShim(0, 1, 1);
-    public static final Color CONTROL_SPINNER_GREEN = new ColorShim(0, 1, 0);
-    public static final Color CONTROL_SPINNER_RED = new ColorShim(1, 0, 0);
-    public static final Color CONTROL_SPINNER_YELLOW = new ColorShim(1, 1, 0);
+    public static final Color CONTROL_SPINNER_BLUE = ColorMatch.makeColor(0.143, 0.427, 0.429);
+    public static final Color CONTROL_SPINNER_GREEN = ColorMatch.makeColor(0.197, 0.561, 0.240);
+    public static final Color CONTROL_SPINNER_RED = ColorMatch.makeColor(0.561, 0.232, 0.114);
+    public static final Color CONTROL_SPINNER_YELLOW = ColorMatch.makeColor(0.361, 0.524, 0.113);
   }
 }

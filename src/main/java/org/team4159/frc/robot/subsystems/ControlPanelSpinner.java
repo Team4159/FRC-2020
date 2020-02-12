@@ -1,5 +1,6 @@
 package org.team4159.frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.util.Color;
 
@@ -14,7 +15,8 @@ public class ControlPanelSpinner {
     BLUE,
     GREEN,
     RED,
-    YELLOW
+    YELLOW,
+    NONE
   }
 
   private ColorSensorV3 color_sensor;
@@ -33,14 +35,17 @@ public class ControlPanelSpinner {
   public ControlPanelColor getColor() {
     Color detected_color = color_sensor.getColor();
     ColorMatchResult color_match_result = color_match.matchClosestColor(detected_color);
+
     if (color_match_result.color == FIELD_CONSTANTS.CONTROL_SPINNER_BLUE) {
       return ControlPanelColor.BLUE;
     } else if (color_match_result.color == FIELD_CONSTANTS.CONTROL_SPINNER_GREEN) {
       return ControlPanelColor.GREEN;
     } else if (color_match_result.color == FIELD_CONSTANTS.CONTROL_SPINNER_RED) {
       return ControlPanelColor.RED;
-    } else {
+    } else if (color_match_result.color == FIELD_CONSTANTS.CONTROL_SPINNER_YELLOW) {
       return ControlPanelColor.YELLOW;
+    } else {
+      return ControlPanelColor.NONE;
     }
   }
 }

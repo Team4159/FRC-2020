@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj.util.Units;
 import edu.wpi.first.wpilibj.CounterBase.EncodingType;
 
+import org.team4159.lib.hardware.joystick.T16000M;
 import org.team4159.lib.math.Baba;
 
 public final class Constants {
@@ -15,28 +16,41 @@ public final class Constants {
     public static final int LEFT_JOY = 0;
     public static final int RIGHT_JOY = 1;
     public static final int SECONDARY_JOY = 2;
+
+    public final static class BUTTON_IDS {
+      public static final int ENABLE_SHOOTER = T16000M.TRIGGER_ID;
+      public static final int FLIP_ROBOT_ORIENTATION = T16000M.TOP_MIDDLE_BTN_ID;
+      public static final int TOGGLE_ARM = T16000M.TOP_RIGHT_BTN_ID;
+      public static final int RUN_ALL_INTAKE_SUBSYSTEMS = T16000M.PRIMARY_BOTTOM_MIDDLE_BTN_ID;
+      public static final int LIMELIGHT_SEEK = T16000M.PRIMARY_TOP_INNER_BTN_ID;
+
+      // Debug buttons
+      public static final int
+        RUN_INTAKE = T16000M.TOP_LEFT_BTN_ID,
+        RUN_FEEDER = T16000M.PRIMARY_TOP_OUTER_BTN_ID;
+    }
   }
 
   public final static class CAN_IDS {
-    public static final int LEFT_FRONT_FALCON_ID = 2;
-    public static final int LEFT_REAR_FALCON_ID = 3;
-    public static final int RIGHT_FRONT_FALCON_ID = 0;
-    public static final int RIGHT_REAR_FALCON_ID = 1;
-    public static final int TURRET_FALCON_ID = 50; // unknown
+    public static final int LEFT_FRONT_FALCON = 2;
+    public static final int LEFT_REAR_FALCON = 3;
+    public static final int RIGHT_FRONT_FALCON = 0;
+    public static final int RIGHT_REAR_FALCON = 1;
+    public static final int TURRET_FALCON = 50; // unknown
 
 
-    public static final int FEEDER_TALON_ONE_ID = 4;
-    public static final int FEEDER_TALON_TWO_ID = 5;
+    public static final int FEEDER_TALON_ONE = 4;
+    public static final int FEEDER_TALON_TWO = 5;
 
-    public static final int PRIMARY_SHOOTER_TALON_ID = 6;
-    public static final int SHOOTER_TALON_TWO_ID = 7;
-    public static final int SHOOTER_VICTOR_ONE_ID = 0;
-    public static final int SHOOTER_VICTOR_TWO_ID = 1;
+    public static final int PRIMARY_SHOOTER_TALON = 6;
+    public static final int SHOOTER_TALON_TWO = 7;
+    public static final int SHOOTER_VICTOR_ONE = 0;
+    public static final int SHOOTER_VICTOR_TWO = 1;
 
-    public static final int ARM_SPARK_ID = 1;
-    public static final int INTAKE_SPARK_ID = 2; // unknown
+    public static final int ARM_SPARK = 1;
+    public static final int INTAKE_SPARK = 2; // unknown
 
-    public static final int PIGEON_ID = 0;
+    public static final int PIGEON = 0;
   }
 
   public static final class DRIVE_CONSTANTS {

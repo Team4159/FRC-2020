@@ -53,25 +53,25 @@ public class RobotContainer {
   }
 
   private void configureButtonBindings() {
-    new JoystickButton(secondary_joy, T16000M.TRIGGER_ID)
+    new JoystickButton(secondary_joy, CONTROLS.BUTTON_IDS.ENABLE_SHOOTER)
       .whenPressed(() -> shooter.setTargetSpeed(SmartDashboard.getNumber("target_shooter_speed", 0)))
       .whenReleased(new InstantCommand(shooter::stop, shooter));
 
-    new JoystickButton(secondary_joy, T16000M.TOP_MIDDLE_BTN_ID)
+    new JoystickButton(secondary_joy, CONTROLS.BUTTON_IDS.FLIP_ROBOT_ORIENTATION)
       .whenPressed(drivetrain::flipOrientation);
 
-    new JoystickButton(secondary_joy, T16000M.TOP_LEFT_BTN_ID)
+    new JoystickButton(secondary_joy, CONTROLS.BUTTON_IDS.RUN_INTAKE)
       .whenPressed(new InstantCommand(intake::intake, intake))
       .whenReleased(new InstantCommand(intake::stop, intake));
 
-    new JoystickButton(secondary_joy, T16000M.TOP_RIGHT_BTN_ID)
+    new JoystickButton(secondary_joy, CONTROLS.BUTTON_IDS.TOGGLE_ARM)
       .whenPressed(new ToggleArm(arm));
 
-    new JoystickButton(secondary_joy, T16000M.PRIMARY_TOP_OUTER_BTN_ID)
+    new JoystickButton(secondary_joy, CONTROLS.BUTTON_IDS.RUN_FEEDER)
       .whenPressed(new InstantCommand(feeder::feed, feeder))
       .whenReleased(new InstantCommand(feeder::stop, feeder));
 
-    new JoystickButton(secondary_joy, T16000M.PRIMARY_TOP_MIDDLE_BTN_ID)
+    new JoystickButton(secondary_joy, CONTROLS.BUTTON_IDS.RUN_ALL_INTAKE_SUBSYSTEMS)
       .whenPressed(new ParallelCommandGroup(
         new InstantCommand(intake::intake, intake),
         new InstantCommand(feeder::feed, feeder),
@@ -81,7 +81,7 @@ public class RobotContainer {
         new InstantCommand(feeder::stop, feeder),
         new InstantCommand(() -> shooter.setRawSpeed(0), shooter)));
 
-    new JoystickButton(secondary_joy, T16000M.PRIMARY_TOP_INNER_BTN_ID)
+    new JoystickButton(secondary_joy, CONTROLS.BUTTON_IDS.LIMELIGHT_SEEK)
       .whileHeld(new LimelightSeek(turret));
   }
 

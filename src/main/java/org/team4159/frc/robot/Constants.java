@@ -1,7 +1,10 @@
 package org.team4159.frc.robot;
 
-import edu.wpi.first.wpilibj.CounterBase.EncodingType;
+import com.revrobotics.ColorMatch;
+
+import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj.util.Units;
+import edu.wpi.first.wpilibj.CounterBase.EncodingType;
 
 import org.team4159.lib.math.Baba;
 
@@ -108,5 +111,12 @@ public final class Constants {
     public static final double MOUNT_ANGLE = 25;
 
     public static final double VISION_TARGET_HEIGHT = 51.5 - MOUNT_HEIGHT;
+  }
+
+  public final static class FIELD_CONSTANTS {
+    public static final Color CONTROL_SPINNER_BLUE = ColorMatch.makeColor(0.143, 0.427, 0.429);
+    public static final Color CONTROL_SPINNER_GREEN = ColorMatch.makeColor(0.197, 0.561, 0.240);
+    public static final Color CONTROL_SPINNER_RED = ColorMatch.makeColor(0.561, 0.232, 0.114);
+    public static final Color CONTROL_SPINNER_YELLOW = ColorMatch.makeColor(0.361, 0.524, 0.113);
   }
 }

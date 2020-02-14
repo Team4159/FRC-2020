@@ -94,6 +94,11 @@ public final class Constants {
   }
 
   public static final class SHOOTER_CONSTANTS {
+    public static final int ENCODER_CHANNEL_A_PORT = 2;
+    public static final int ENCODER_CHANNEL_B_PORT = 3;
+    public static final boolean IS_ENCODER_REVERSED = true;
+    public static final EncodingType ENCODER_ENCODING_TYPE = EncodingType.k4X;
+
     public static final double kP = 0.001;
     public static final double kI = 0.0;
     public static final double kD = 0.0;

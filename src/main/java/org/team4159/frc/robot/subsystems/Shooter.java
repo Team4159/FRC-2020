@@ -1,6 +1,9 @@
 package org.team4159.frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -12,18 +15,23 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import org.team4159.frc.robot.Robot;
+import org.team4159.lib.hardware.Limelight;
 import org.team4159.lib.hardware.controller.ctre.CardinalSPX;
 import org.team4159.lib.hardware.controller.ctre.CardinalSRX;
 
 import static org.team4159.frc.robot.Constants.*;
 
 public class Shooter extends PIDSubsystem {
-  private TalonSRX primary_shooter_talon;
+  private TalonSRX primary_shooter_talon,shooter_talon_two;
+  private VictorSPX shooter_victor_one, shooter_victor_two;
+  private SpeedControllerGroup shooter_motors;
   private Encoder shooter_encoder;
+  private Limelight limelight;
 
   private int last_position;
 
-  public Shooter() {
+
+  public Shooter(Limelight limelight) {
     super(new PIDController(
         SHOOTER_CONSTANTS.kP,
         SHOOTER_CONSTANTS.kI,
@@ -31,8 +39,7 @@ public class Shooter extends PIDSubsystem {
       )
     );
 
-    TalonSRX shooter_talon_two;
-    VictorSPX shooter_victor_one, shooter_victor_two;
+    this.limelight = limelight;
 
     primary_shooter_talon = new CardinalSRX(CAN_IDS.PRIMARY_SHOOTER_TALON, NeutralMode.Coast);
     shooter_talon_two = new CardinalSRX(CAN_IDS.SHOOTER_TALON_TWO, NeutralMode.Coast);
@@ -40,9 +47,12 @@ public class Shooter extends PIDSubsystem {
     shooter_victor_one = new CardinalSPX(CAN_IDS.SHOOTER_VICTOR_ONE, NeutralMode.Coast);
     shooter_victor_two = new CardinalSPX(CAN_IDS.SHOOTER_VICTOR_TWO, NeutralMode.Coast);
 
-    shooter_talon_two.follow(primary_shooter_talon);
-    shooter_victor_one.follow(primary_shooter_talon);
-    shooter_victor_two.follow(primary_shooter_talon);
+    shooter_motors = new SpeedControllerGroup(
+      (WPI_TalonSRX)primary_shooter_talon,
+      (WPI_TalonSRX)shooter_talon_two,
+      (WPI_VictorSPX)shooter_victor_one,
+      (WPI_VictorSPX)shooter_victor_two
+      );
 
     shooter_encoder = new Encoder(
       SHOOTER_CONSTANTS.ENCODER_CHANNEL_A_PORT,
@@ -62,6 +72,10 @@ public class Shooter extends PIDSubsystem {
   @Override
   public void periodic() {
     SmartDashboard.putNumber("current_shooter_speed", getVelocity());
+    double distance = getDistanceToVisionTarget();
+    SmartDashboard.putNumber("distance in inches", distance);
+    SmartDashboard.putNumber("distance in feet", distance / 12);
+
   }
 
   public void setRawSpeed(double percent) {
@@ -87,6 +101,16 @@ public class Shooter extends PIDSubsystem {
     last_position = getPosition();
 
     return delta;
+  }
+
+  public double getDistanceToVisionTarget() {
+    double vertical_offset = limelight.getTargetVerticalOffset();
+    double total_angle_to_target = LIMELIGHT_CONSTANTS.MOUNT_ANGLE + vertical_offset;
+    return LIMELIGHT_CONSTANTS.VISION_TARGET_HEIGHT / Math.tan(total_angle_to_target);
+  }
+
+  public Limelight getLimelight() {
+    return limelight;
   }
 
   @Override

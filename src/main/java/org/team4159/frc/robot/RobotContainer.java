@@ -47,6 +47,16 @@ public class RobotContainer {
       drivetrain
     ));
 
+    turret.setDefaultCommand(new ConditionalCommand(
+      new LimelightSeek(turret),
+      new RunCommand(
+        () -> turret.setRawSpeed(
+          secondary_joy.getY()
+        )
+      ),
+      turret::isSeeking
+    ));
+
     new ZeroArm(arm).schedule(false);
     new ZeroTurret(turret).schedule(false);
   }
@@ -81,7 +91,7 @@ public class RobotContainer {
         new InstantCommand(() -> shooter.setRawSpeed(0), shooter)));
 
     new JoystickButton(secondary_joy, CONTROLS.SECONDARY_JOY.BUTTON_IDS.LIMELIGHT_SEEK)
-      .whileHeld(new LimelightSeek(turret));
+      .whenPressed(new InstantCommand(turret::toggleSeeking));
   }
 
   public Command getAutonomousCommand() {

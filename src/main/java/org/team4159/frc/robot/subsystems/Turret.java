@@ -18,6 +18,7 @@ public class Turret extends SubsystemBase {
   private TalonFX turret_falcon;
 
   private Limelight limelight;
+  private boolean seeking = false;
 
   public Turret() {
     limelight = new Limelight();
@@ -59,6 +60,14 @@ public class Turret extends SubsystemBase {
 
   public boolean isReverseLimitSwitchClosed() {
     return turret_falcon.isRevLimitSwitchClosed() == 1;
+  }
+
+  public void toggleSeeking() {
+    seeking = !seeking;
+  }
+
+  public boolean isSeeking() {
+    return seeking;
   }
 
   // not really sure where to put these limelight methods

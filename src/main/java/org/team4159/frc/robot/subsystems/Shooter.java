@@ -69,10 +69,11 @@ public class Shooter extends PIDSubsystem {
   }
 
   public void setTargetSpeed(double speed) {
-    super.setSetpoint(speed);
+    setSetpoint(speed);
   }
 
   public void stop() {
+    setSetpoint(0);
     setRawSpeed(0);
   }
 

@@ -19,8 +19,8 @@ public class Turret extends SubsystemBase {
 
   private Limelight limelight;
 
-  public Turret() {
-    limelight = new Limelight();
+  public Turret(Limelight limelight) {
+    this.limelight = limelight;
     turret_falcon = new CardinalFX(CAN_IDS.TURRET_FALCON, NeutralMode.Brake);
   }
 
@@ -32,9 +32,6 @@ public class Turret extends SubsystemBase {
       zeroEncoder();
     }
 
-    double distance = getDistanceToVisionTarget();
-    SmartDashboard.putNumber("distance in inches", distance);
-    SmartDashboard.putNumber("distance in feet", distance / 12);
   }
 
   public void setRawSpeed(double speed) {
@@ -62,13 +59,6 @@ public class Turret extends SubsystemBase {
   }
 
   // not really sure where to put these limelight methods
-
-  public double getDistanceToVisionTarget() {
-    double vertical_offset = limelight.getTargetVerticalOffset();
-    double total_angle_to_target = LIMELIGHT_CONSTANTS.MOUNT_ANGLE + vertical_offset;
-    return LIMELIGHT_CONSTANTS.VISION_TARGET_HEIGHT / Math.tan(total_angle_to_target);
-  }
-
   public Limelight getLimelight() {
     return limelight;
   }

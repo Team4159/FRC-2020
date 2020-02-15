@@ -11,16 +11,18 @@ import org.team4159.frc.robot.commands.arm.ZeroArm;
 import org.team4159.frc.robot.commands.turret.LimelightSeek;
 import org.team4159.frc.robot.commands.turret.ZeroTurret;
 import org.team4159.frc.robot.subsystems.*;
+import org.team4159.lib.hardware.Limelight;
 
 import static org.team4159.frc.robot.Constants.*;
 
 public class RobotContainer {
   private final Drivetrain drivetrain = new Drivetrain();
-  private final Shooter shooter = new Shooter();
+  private final Limelight limelight = new Limelight();
+  private final Shooter shooter = new Shooter(limelight);
   private final Intake intake = new Intake();
   private final Feeder feeder = new Feeder();
   private final Arm arm = new Arm();
-  private final Turret turret = new Turret();
+  private final Turret turret = new Turret(limelight);
 
   private final Joystick left_joy = new Joystick(CONTROLS.LEFT_JOY.USB_PORT);
   private final Joystick right_joy = new Joystick(CONTROLS.RIGHT_JOY.USB_PORT);

@@ -54,9 +54,6 @@ public final class Constants {
     public static final int RIGHT_REAR_FALCON = 1;
     public static final int TURRET_FALCON = 8; // unknown
 
-    public static final int FEEDER_TALON_ONE = 4;
-    public static final int FEEDER_TALON_TWO = 5;
-
     public static final int PRIMARY_SHOOTER_TALON = 6;
     public static final int SHOOTER_TALON_TWO = 7;
     public static final int SHOOTER_VICTOR_ONE = 0;
@@ -64,6 +61,10 @@ public final class Constants {
 
     public static final int ARM_SPARK = 1;
     public static final int INTAKE_SPARK = 2; // unknown
+    // TODO: Change!
+    public static final int LOWER_FEEDER_TALON = 9;
+    public static final int UPPER_FEEDER_SPARK = 3;
+    public static final int NECK_SPARK = 4;
 
     public static final int PIGEON = 0;
   }

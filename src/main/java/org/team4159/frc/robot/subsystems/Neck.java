@@ -7,18 +7,18 @@ import org.team4159.lib.hardware.controller.rev.CardinalMAX;
 
 import static org.team4159.frc.robot.Constants.*;
 
-public class Intake extends SubsystemBase {
+public class Neck extends SubsystemBase {
   private CANSparkMax intake_spark;
 
-  public Intake() {
+  public Neck() {
     intake_spark = new CardinalMAX(CAN_IDS.INTAKE_SPARK, CANSparkMax.IdleMode.kCoast);
   }
 
   public void setRawSpeed(double speed) {
-    intake_spark.sets(speed);
+    intake_spark.set(speed);
   }
 
-  public void intake() {
+  public void neck() {
     setRawSpeed(1);
   }
 

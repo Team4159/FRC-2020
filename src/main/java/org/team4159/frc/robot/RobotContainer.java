@@ -21,6 +21,7 @@ public class RobotContainer {
   private final Shooter shooter = new Shooter(limelight);
   private final Intake intake = new Intake();
   private final Feeder feeder = new Feeder();
+  private final Neck neck = new Neck();
   private final Arm arm = new Arm();
   private final Turret turret = new Turret(limelight);
 
@@ -89,9 +90,6 @@ public class RobotContainer {
         new InstantCommand(intake::stop, intake),
         new InstantCommand(feeder::stop, feeder),
         new InstantCommand(() -> shooter.setRawSpeed(0), shooter)));
-
-    new JoystickButton(secondary_joy, CONTROLS.SECONDARY_JOY.BUTTON_IDS.LIMELIGHT_SEEK)
-      .whenPressed(new InstantCommand(turret::toggleSeeking));
   }
 
   public Command getAutonomousCommand() {

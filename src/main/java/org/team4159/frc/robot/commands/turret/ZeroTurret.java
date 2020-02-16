@@ -18,16 +18,20 @@ public class ZeroTurret extends CommandBase {
   @Override
   public void execute() {
     turret.setRawSpeed(TURRET_CONSTANTS.ZEROING_SPEED);
+
+    turret.setZeroed(false);
   }
 
   @Override
   public boolean isFinished() {
     // TODO: check direction
-    return turret.isForwardLimitSwitchClosed();
+    return turret.isReverseLimitSwitchClosed();
   }
 
   @Override
   public void end(boolean interrupted) {
+    turret.setZeroed(true);
+
     turret.stop();
   }
 }

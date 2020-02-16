@@ -62,8 +62,8 @@ public final class Constants {
     public static final int ARM_SPARK = 1;
     public static final int INTAKE_SPARK = 2; // unknown
     // TODO: Change!
-    public static final int LOWER_FEEDER_TALON = 9;
-    public static final int UPPER_FEEDER_SPARK = 3;
+    public static final int LOWER_FEEDER_TALON = 5;
+    public static final int UPPER_FEEDER_SPARK = 6;
     public static final int NECK_SPARK = 4;
 
     public static final int PIGEON = 0;
@@ -114,7 +114,7 @@ public final class Constants {
 
     // TODO: Find
     public static final int UP_POSITION = 0;
-    public static final int DOWN_POSITION = RANGE_IN_DEGREES * GEARING.COUNTS_PER_DEGREE;
+    public static final int DOWN_POSITION = (int) (RANGE_IN_DEGREES * GEARING.COUNTS_PER_DEGREE);
 
     public static final int LIMIT_SWITCH_PORT = 9;
 
@@ -131,19 +131,30 @@ public final class Constants {
   }
 
   public static final class TURRET_CONSTANTS {
-    public static final Gearing GEARING = new Gearing(1.0, ENCODERS.FALCON_CPR);
+    public static final Gearing GEARING = new Gearing(124.0 / 16.0, ENCODERS.FALCON_CPR);
     public static final int RANGE_IN_DEGREES = 240;
+    // 124 rotations of the falcon = 16 rotations of the sprocket
+    public static final int RANGE_IN_TICKS = 9678;
 
-    public static final int FORWARD_POSITION = RANGE_IN_DEGREES / 2 * GEARING.COUNTS_PER_DEGREE;
+    public static final int FORWARD_POSITION = (int) (RANGE_IN_DEGREES / 2  * GEARING.COUNTS_PER_DEGREE);
+
+    //public static final int FORWARD_POSITION = 9678 / 2;
+    public static final int REVERSE_POSITION = -1 * FORWARD_POSITION;
+
+    public static final int BUFFER = 300;
+
+    public static final int SAFE_FORWARD_POSITION = FORWARD_POSITION - BUFFER;
+    public static final int SAFE_REVERSE_POSITION = REVERSE_POSITION + BUFFER;
+
     public static final int CENTER_POSITION = 0;
-    public static final int REVERSE_POSITION = -1 * RANGE_IN_DEGREES / 2 * GEARING.COUNTS_PER_DEGREE;
-    public static final int STARTING_SEEKING_RANGE = 40 * GEARING.COUNTS_PER_DEGREE;
-    public static final int SEEKING_RANGE_INCREMENT = 20 * GEARING.COUNTS_PER_DEGREE;
+
+    public static final int STARTING_SEEKING_RANGE = (int) (40 * GEARING.COUNTS_PER_DEGREE);
+    public static final int SEEKING_RANGE_INCREMENT = (int) (20 * GEARING.COUNTS_PER_DEGREE);
 
     public static final double LIMELIGHT_TURN_kP = 1.0 / 100.0;
     public static final double LIMELIGHT_TURN_kD = 0.0;
 
-    public static final double ZEROING_SPEED = 0.05;
+    public static final double ZEROING_SPEED = 0.1;
     public static final double SEEKING_SPEED = 0.1;
   }
 

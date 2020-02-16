@@ -15,7 +15,7 @@ public class Intake extends SubsystemBase {
   }
 
   public void setRawSpeed(double speed) {
-    intake_spark.sets(speed);
+    intake_spark.set(speed);
   }
 
   public void intake() {

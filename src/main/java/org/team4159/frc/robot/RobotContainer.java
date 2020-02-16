@@ -22,8 +22,8 @@ public class RobotContainer {
   private final Intake intake = new Intake();
   private final Feeder feeder = new Feeder();
   private final Neck neck = new Neck();
-  private final Arm arm = new Arm();
-  private final Turret turret = new Turret(limelight);
+  public final Arm arm = new Arm();
+  public final Turret turret = new Turret(limelight);
 
   private final Joystick left_joy = new Joystick(CONTROLS.LEFT_JOY.USB_PORT);
   private final Joystick right_joy = new Joystick(CONTROLS.RIGHT_JOY.USB_PORT);
@@ -50,16 +50,13 @@ public class RobotContainer {
       drivetrain
     ));
 
-    turret.setDefaultCommand(
-      new RunCommand(
-        () -> turret.setRawSpeed(
-          secondary_joy.getY() / 3.0
-        ),
-        turret
-    ));
-
-    new ZeroArm(arm).schedule(false);
-    new ZeroTurret(turret).schedule(false);
+//    turret.setDefaultCommand(
+//      new RunCommand(
+//        () -> turret.setRawSpeed(
+//          secondary_joy.getY() / 2.0
+//        ),
+//        turret
+//    ));
   }
 
   private void configureButtonBindings() {

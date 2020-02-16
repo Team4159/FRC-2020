@@ -12,6 +12,11 @@ public class LimelightSeek extends CommandBase {
   private Turret turret;
   private Limelight limelight;
 
+  private boolean seeking = false;
+  private int seeking_range = TURRET_CONSTANTS.STARTING_SEEKING_RANGE;
+  private int seeking_direction;
+  private int starting_position;
+
   private PIDController pid_controller = new PIDController(
     TURRET_CONSTANTS.LIMELIGHT_TURN_kP,
     0,
@@ -33,7 +38,22 @@ public class LimelightSeek extends CommandBase {
 
   @Override
   public void execute() {
-    turret.setRawSpeed(pid_controller.calculate(limelight.getTargetHorizontalOffset()));
+    if (limelight.isTargetVisible()) {
+      seeking = false;
+      turret.setRawSpeed(pid_controller.calculate(limelight.getTargetHorizontalOffset()));
+    } else {
+      if (seeking) {
+        turret.setRawSpeed(TURRET_CONSTANTS.SEEKING_SPEED * seeking_direction);
+        if (Math.abs(turret.getPosition() - starting_position) > seeking_range) {
+          seeking_direction = -seeking_direction;
+          seeking_range += TURRET_CONSTANTS.SEEKING_RANGE_INCREMENT;
+        }
+      } else {
+        seeking = true;
+        starting_position = turret.getPosition();
+        seeking_direction = -1;
+      }
+    }
   }
 
   @Override

@@ -23,18 +23,16 @@ public class Arm extends PIDSubsystem {
       ARM_CONSTANTS.kD
     ));
 
+    arm_spark = new CardinalMAX(CAN_IDS.ARM_SPARK, CANSparkMax.IdleMode.kBrake);
+    arm_spark.setInverted(true);
+
+    arm_limit_switch = new DigitalInput(ARM_CONSTANTS.LIMIT_SWITCH_PORT);
     arm_encoder = new Encoder(
       ARM_CONSTANTS.ENCODER_CHANNEL_A_PORT,
       ARM_CONSTANTS.ENCODER_CHANNEL_B_PORT,
       ARM_CONSTANTS.IS_ENCODER_REVERSED,
       ARM_CONSTANTS.ENCODER_ENCODING_TYPE
     );
-
-    arm_spark = new CardinalMAX(CAN_IDS.ARM_SPARK, CANSparkMax.IdleMode.kBrake);
-
-    arm_spark.setInverted(true);
-
-    arm_limit_switch = new DigitalInput(ARM_CONSTANTS.LIMIT_SWITCH_PORT);
 
     raiseIntake();
   }

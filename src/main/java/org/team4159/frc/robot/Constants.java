@@ -136,11 +136,14 @@ public final class Constants {
     public static final int FORWARD_POSITION = RANGE_IN_DEGREES / 2 * GEARING.COUNTS_PER_DEGREE;
     public static final int CENTER_POSITION = 0;
     public static final int REVERSE_POSITION = -1 * RANGE_IN_DEGREES / 2 * GEARING.COUNTS_PER_DEGREE;
+    public static final int STARTING_SEEKING_RANGE = 40 * GEARING.COUNTS_PER_DEGREE;
+    public static final int SEEKING_RANGE_INCREMENT = 20 * GEARING.COUNTS_PER_DEGREE;
 
     public static final double LIMELIGHT_TURN_kP = 1.0 / 100.0;
     public static final double LIMELIGHT_TURN_kD = 0.0;
 
     public static final double ZEROING_SPEED = 0.05;
+    public static final double SEEKING_SPEED = 0.1;
   }
 
   public static final class LIMELIGHT_CONSTANTS {

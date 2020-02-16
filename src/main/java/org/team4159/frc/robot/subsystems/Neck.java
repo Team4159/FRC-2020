@@ -11,7 +11,7 @@ public class Neck extends SubsystemBase {
   private CANSparkMax intake_spark;
 
   public Neck() {
-    intake_spark = new CardinalMAX(CAN_IDS.INTAKE_SPARK, CANSparkMax.IdleMode.kCoast);
+    intake_spark = new CardinalMAX(CAN_IDS.NECK_SPARK, CANSparkMax.IdleMode.kCoast);
   }
 
   public void setRawSpeed(double speed) {

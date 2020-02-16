@@ -1,17 +1,17 @@
 package org.team4159.frc.robot.subsystems;
 
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
-import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.PIDSubsystem;
 
-import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
+
 import org.team4159.frc.robot.Robot;
 import org.team4159.lib.hardware.Limelight;
 import org.team4159.lib.hardware.controller.ctre.CardinalSPX;
@@ -27,7 +27,6 @@ public class Shooter extends PIDSubsystem {
   private Limelight limelight;
 
   private int last_position;
-
 
   public Shooter(Limelight limelight) {
     super(new PIDController(
@@ -46,11 +45,11 @@ public class Shooter extends PIDSubsystem {
     shooter_victor_two = new CardinalSPX(CAN_IDS.SHOOTER_VICTOR_TWO, NeutralMode.Coast);
 
     shooter_motors = new SpeedControllerGroup(
-      (WPI_TalonSRX)primary_shooter_talon,
-      (WPI_TalonSRX)shooter_talon_two,
-      (WPI_VictorSPX)shooter_victor_one,
-      (WPI_VictorSPX)shooter_victor_two
-      );
+      (WPI_TalonSRX) primary_shooter_talon,
+      (WPI_TalonSRX) shooter_talon_two,
+      (WPI_VictorSPX) shooter_victor_one,
+      (WPI_VictorSPX) shooter_victor_two
+    );
 
     shooter_encoder = new Encoder(
       SHOOTER_CONSTANTS.ENCODER_CHANNEL_A_PORT,
@@ -76,8 +75,8 @@ public class Shooter extends PIDSubsystem {
 
   }
 
-  public void setRawSpeed(double percent) {
-    primary_shooter_talon.set(ControlMode.PercentOutput, percent);
+  public void setRawSpeed(double speed) {
+    shooter_motors.set(speed);
   }
 
   public void setTargetSpeed(double speed) {
@@ -95,7 +94,6 @@ public class Shooter extends PIDSubsystem {
 
   public double getVelocity() {
     double delta = (getPosition() - last_position) / Robot.kDefaultPeriod;
-
     last_position = getPosition();
 
     return delta;
@@ -123,8 +121,7 @@ public class Shooter extends PIDSubsystem {
 
   @Override
   public void enable() {
-    last_position = getPosition();
-
     super.enable();
+    last_position = getPosition();
   }
 }

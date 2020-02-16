@@ -156,6 +156,10 @@ public final class Constants {
     public static final double VISION_TARGET_HEIGHT = 51.5 - MOUNT_HEIGHT;
   }
 
+  public static final class NECK_CONSTANTS {
+    public static final double TIME_TO_RELEASE_ONE_BALL = 0.5;
+  }
+
   public static final class FIELD_CONSTANTS {
     public static final Color CONTROL_SPINNER_BLUE = ColorMatch.makeColor(0.143, 0.427, 0.429);
     public static final Color CONTROL_SPINNER_GREEN = ColorMatch.makeColor(0.197, 0.561, 0.240);

@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryConfig;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj.trajectory.constraint.DifferentialDriveVoltageConstraint;
+import edu.wpi.first.wpilibj.util.Units;
 
 import static org.team4159.frc.robot.Constants.*;
 
@@ -42,4 +43,15 @@ public class Trajectories {
       ),
       config
     );
+
+  public static final Trajectory SCRIMMAGE_AUTO =
+    TrajectoryGenerator.generateTrajectory(
+      List.of(
+        new Pose2d(0, 0, Rotation2d.fromDegrees(0)),
+        new Pose2d(0, Units.inchesToMeters(36.0 + 122.63), Rotation2d.fromDegrees(0))
+      ),
+      config
+    );
 }
+
+

@@ -78,7 +78,7 @@ public final class Constants {
     public static final boolean IS_GYRO_INVERTED = false;
 
     // TODO: Find
-    public static final double MAX_TRAJECTORY_SPEED = 5.0;
+    public static final double MAX_TRAJECTORY_SPEED = 2.0;
     public static final double MAX_TRAJECTORY_ACCELERATION = 3.0;
     public static final double MAX_TRAJECTORY_VOLTAGE = 10.0;
 

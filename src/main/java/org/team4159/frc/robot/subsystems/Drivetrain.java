@@ -80,8 +80,6 @@ public class Drivetrain extends SubsystemBase {
     SmartDashboard.putNumber("Angle", getDirection());
     SmartDashboard.putNumber("Left Encoder", getLeftDistance());
     SmartDashboard.putNumber("Right Encoder", getRightDistance());
-
-    System.out.println(getDirection());
   }
 
   public void rawDrive(DriveSignal signal) {

@@ -9,14 +9,14 @@ import org.team4159.frc.robot.subsystems.Turret;
 import org.team4159.lib.hardware.Limelight;
 
 
-public class limelightRPM extends CommandBase {
+public class LimelightRPM extends CommandBase {
   private Limelight limelight;
   private Shooter shooter;
   private double distance;
   private double voltage_constant= 0;
   private double n = 1;
 
-  public limelightRPM(Shooter shooter) {
+  public LimelightRPM(Shooter shooter) {
     this.shooter = shooter;
     limelight = shooter.getLimelight();
     addRequirements(shooter);

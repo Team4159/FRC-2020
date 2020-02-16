@@ -49,18 +49,16 @@ public class RobotContainer {
       drivetrain
     ));
 
-    turret.setDefaultCommand(new ConditionalCommand(
-      new LimelightSeek(turret),
+    turret.setDefaultCommand(
       new RunCommand(
         () -> turret.setRawSpeed(
-          secondary_joy.getY()
-        )
-      ),
-      turret::isSeeking
+          secondary_joy.getY() / 3.0
+        ),
+        turret
     ));
 
     new ZeroArm(arm).schedule(false);
-    new ZeroTurret(turret).schedule(false);
+    //new ZeroTurret(turret).schedule(false);
   }
 
   private void configureButtonBindings() {

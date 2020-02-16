@@ -48,7 +48,7 @@ public final class Constants {
     public static final int LEFT_REAR_FALCON = 3;
     public static final int RIGHT_FRONT_FALCON = 0;
     public static final int RIGHT_REAR_FALCON = 1;
-    public static final int TURRET_FALCON = 50; // unknown
+    public static final int TURRET_FALCON = 8; // unknown
 
 
     public static final int FEEDER_TALON_ONE = 4;
@@ -132,7 +132,7 @@ public final class Constants {
     public static final double LIMELIGHT_TURN_kP = 1.0 / 100.0;
     public static final double LIMELIGHT_TURN_kD = 0.0;
 
-    public static final double ZEROING_SPEED = 0.1;
+    public static final double ZEROING_SPEED = 0.05;
   }
 
   public static final class LIMELIGHT_CONSTANTS {

@@ -33,9 +33,9 @@ public class Turret extends SubsystemBase {
   @Override
   public void periodic() {
     if (isForwardLimitSwitchClosed()) {
-      setEncoderPosition(TURRET_CONSTANTS.TICK_RANGE);
+      setEncoderPosition(TURRET_CONSTANTS.FORWARD_POSITION);
     } else if (isReverseLimitSwitchClosed()) {
-      zeroEncoder();
+      setEncoderPosition(TURRET_CONSTANTS.REVERSE_POSITION);
     }
   }
 

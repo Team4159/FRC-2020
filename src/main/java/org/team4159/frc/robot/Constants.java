@@ -6,11 +6,15 @@ import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj.util.Units;
 import edu.wpi.first.wpilibj.CounterBase.EncodingType;
 
+import org.team4159.lib.hardware.Gearing;
 import org.team4159.lib.hardware.joystick.T16000M;
 import org.team4159.lib.math.Baba;
 
 public final class Constants {
-  public static final int FALCON_CPR = 2048;
+  public static final class ENCODERS {
+    public static final int FALCON_CPR = 2048;
+    public static final int SRX_MAG_ENCODER_CPR = 4096;
+  }
 
   public static final class CONTROLS {
     public static final class LEFT_JOY {
@@ -50,7 +54,6 @@ public final class Constants {
     public static final int RIGHT_REAR_FALCON = 1;
     public static final int TURRET_FALCON = 8; // unknown
 
-
     public static final int FEEDER_TALON_ONE = 4;
     public static final int FEEDER_TALON_TWO = 5;
 
@@ -66,11 +69,11 @@ public final class Constants {
   }
 
   public static final class DRIVE_CONSTANTS {
-    public static final double GEAR_RATIO = 8.48;
+    public static final Gearing GEARING = new Gearing(8.48, ENCODERS.FALCON_CPR);
     public static final double WHEEL_RADIUS = Units.inchesToMeters(3.0);
     public static final double WHEEL_CIRCUMFERENCE = WHEEL_RADIUS * Baba.kTau;
 
-    public static final double METERS_PER_TICK = WHEEL_CIRCUMFERENCE / (FALCON_CPR * GEAR_RATIO);
+    public static final double METERS_PER_TICK = WHEEL_CIRCUMFERENCE / GEARING.COUNTS_PER_REV;
 
     public static final boolean IS_GYRO_INVERTED = false;
 
@@ -105,6 +108,13 @@ public final class Constants {
   }
 
   public static final class ARM_CONSTANTS {
+    public static final Gearing GEARING = new Gearing(1.0, ENCODERS.SRX_MAG_ENCODER_CPR);
+    public static final int RANGE_IN_DEGREES = 53;
+
+    // TODO: Find
+    public static final int UP_POSITION = 0;
+    public static final int DOWN_POSITION = RANGE_IN_DEGREES * GEARING.COUNTS_PER_DEGREE;
+
     public static final int LIMIT_SWITCH_PORT = 9;
 
     public static final int ENCODER_CHANNEL_A_PORT = 0;
@@ -116,18 +126,16 @@ public final class Constants {
     public static final double kI = 0.0;
     public static final double kD = 0.00;
 
-    // TODO: Find
-    public static final int UP_POSITION = 0;
-    public static final int DOWN_POSITION = 610;
-
     public static final double ZEROING_SPEED = -0.3;
-    public static final double MAX_VOLTAGE = 10;
   }
 
   public static final class TURRET_CONSTANTS {
-    // TODO: Find
-    public static final double ANGLE_RANGE = 120;
-    public static final double TICK_RANGE = FALCON_CPR * ANGLE_RANGE / 360;
+    public static final Gearing GEARING = new Gearing(1.0, ENCODERS.FALCON_CPR);
+    public static final int RANGE_IN_DEGREES = 240;
+
+    public static final int FORWARD_POSITION = RANGE_IN_DEGREES / 2 * GEARING.COUNTS_PER_DEGREE;
+    public static final int CENTER_POSITION = 0;
+    public static final int REVERSE_POSITION = -1 * RANGE_IN_DEGREES / 2 * GEARING.COUNTS_PER_DEGREE;
 
     public static final double LIMELIGHT_TURN_kP = 1.0 / 100.0;
     public static final double LIMELIGHT_TURN_kD = 0.0;

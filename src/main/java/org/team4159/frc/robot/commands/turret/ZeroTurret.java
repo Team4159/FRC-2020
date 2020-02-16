@@ -8,18 +8,16 @@ import static org.team4159.frc.robot.Constants.*;
 
 public class ZeroTurret extends CommandBase {
   private Turret turret;
-  private boolean reversed;
 
-  public ZeroTurret(Turret turret, boolean reversed) {
+  public ZeroTurret(Turret turret) {
     this.turret = turret;
-    this.reversed = reversed;
 
     addRequirements(turret);
   }
 
   @Override
   public void execute() {
-    turret.setRawSpeed((reversed ? -1 : 1) * TURRET_CONSTANTS.ZEROING_SPEED);
+    turret.setRawSpeed(TURRET_CONSTANTS.ZEROING_SPEED);
   }
 
   @Override
@@ -30,7 +28,6 @@ public class ZeroTurret extends CommandBase {
 
   @Override
   public void end(boolean interrupted) {
-    turret.setEncoderPosition(TURRET_CONSTANTS.TICK_RANGE);
     turret.stop();
   }
 }

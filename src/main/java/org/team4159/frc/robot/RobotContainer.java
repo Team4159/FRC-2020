@@ -58,7 +58,7 @@ public class RobotContainer {
     ));
 
     new ZeroArm(arm).schedule(false);
-    //new ZeroTurret(turret).schedule(false);
+    new ZeroTurret(turret).schedule(false);
   }
 
   private void configureButtonBindings() {

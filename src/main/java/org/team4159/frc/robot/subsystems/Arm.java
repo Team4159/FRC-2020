@@ -24,7 +24,7 @@ public class Arm extends SubsystemBase {
   private DigitalInput arm_limit_switch;
   private Encoder arm_encoder;
 
-  private PIDController pid;
+  private PIDController pid_controller;
 
   public Arm() {
     arm_spark = new CardinalMAX(CAN_IDS.ARM_SPARK, CANSparkMax.IdleMode.kBrake);
@@ -38,7 +38,7 @@ public class Arm extends SubsystemBase {
       ARM_CONSTANTS.ENCODER_ENCODING_TYPE
     );
 
-    pid = new PIDController(
+    pid_controller = new PIDController(
       ARM_CONSTANTS.kP,
       ARM_CONSTANTS.kI,
       ARM_CONSTANTS.kD
@@ -59,7 +59,7 @@ public class Arm extends SubsystemBase {
         }
         break;
       case CLOSED_LOOP:
-        double output = pid.calculate(arm_encoder.get());
+        double output = pid_controller.calculate(arm_encoder.get());
         setRawVoltage(output);
         break;
     }
@@ -77,16 +77,6 @@ public class Arm extends SubsystemBase {
     arm_spark.setVoltage(voltage);
   }
 
-  // control methods
-
-  public void raiseIntake() {
-    setSetpoint(ARM_CONSTANTS.UP_POSITION);
-  }
-
-  public void lowerIntake() {
-    setSetpoint(ARM_CONSTANTS.DOWN_POSITION);
-  }
-
   public void zeroEncoder() {
     arm_encoder.reset();
   }
@@ -95,7 +85,11 @@ public class Arm extends SubsystemBase {
     return !arm_limit_switch.get();
   }
 
-  public void setSetpoint(double setpoint) {
-    pid.setSetpoint(setpoint);
+  public int getSetpoint() {
+    return (int) pid_controller.getSetpoint();
+  }
+
+  public void setSetpoint(int setpoint) {
+    pid_controller.setSetpoint(setpoint);
   }
 }

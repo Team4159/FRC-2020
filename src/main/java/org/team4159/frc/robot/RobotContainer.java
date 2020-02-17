@@ -6,10 +6,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.*;
 
-import org.team4159.frc.robot.commands.arm.ToggleArm;
-import org.team4159.frc.robot.subsystems.*;
 import org.team4159.lib.control.signal.DriveSignal;
 import org.team4159.lib.hardware.Limelight;
+import org.team4159.frc.robot.subsystems.*;
 
 import static org.team4159.frc.robot.Constants.*;
 
@@ -50,9 +49,6 @@ public class RobotContainer {
       .whenPressed(new InstantCommand(intake::intake, intake))
       .whenReleased(new InstantCommand(intake::stop, intake));
 
-    new JoystickButton(secondary_joy, CONTROLS.SECONDARY_JOY.BUTTON_IDS.TOGGLE_ARM)
-      .whenPressed(new ToggleArm(arm));
-
     new JoystickButton(secondary_joy, CONTROLS.SECONDARY_JOY.BUTTON_IDS.RUN_FEEDER)
       .whenPressed(new InstantCommand(feeder::feed, feeder))
       .whenReleased(new InstantCommand(feeder::stop, feeder));
@@ -66,6 +62,12 @@ public class RobotContainer {
         new InstantCommand(intake::stop, intake),
         new InstantCommand(feeder::stop, feeder),
         new InstantCommand(() -> shooter.setRawSpeed(0), shooter)));
+  }
+
+  public void updateArmInputs() {
+    if (secondary_joy.getRawButtonPressed(CONTROLS.SECONDARY_JOY.BUTTON_IDS.TOGGLE_ARM)) {
+      arm.setSetpoint(Math.abs(arm.getSetpoint() - ARM_CONSTANTS.RANGE_IN_COUNTS));
+    }
   }
 
   public void updateDrivetrainInputs() {

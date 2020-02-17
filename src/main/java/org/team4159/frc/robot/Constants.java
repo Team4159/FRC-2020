@@ -74,7 +74,7 @@ public final class Constants {
     public static final double WHEEL_RADIUS = Units.inchesToMeters(3.0);
     public static final double WHEEL_CIRCUMFERENCE = WHEEL_RADIUS * Baba.kTau;
 
-    public static final double METERS_PER_TICK = WHEEL_CIRCUMFERENCE / GEARING.COUNTS_PER_REV;
+    public static final double METERS_PER_COUNT = WHEEL_CIRCUMFERENCE / GEARING.COUNTS_PER_REV;
 
     public static final boolean IS_GYRO_INVERTED = false;
 
@@ -113,8 +113,7 @@ public final class Constants {
     public static final int RANGE_IN_DEGREES = 53;
 
     // TODO: Find
-    public static final int UP_POSITION = 0;
-    public static final int DOWN_POSITION = (int) (RANGE_IN_DEGREES * GEARING.COUNTS_PER_DEGREE);
+    public static final int RANGE_IN_COUNTS = (int) (RANGE_IN_DEGREES * GEARING.COUNTS_PER_DEGREE);
 
     public static final int LIMIT_SWITCH_PORT = 9;
 

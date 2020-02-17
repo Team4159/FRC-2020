@@ -157,20 +157,20 @@ public class Drivetrain extends SubsystemBase {
 
   // distance in meters
   public double getLeftDistance() {
-    return -1 * left_front_falcon.getSelectedSensorPosition() * DRIVE_CONSTANTS.METERS_PER_TICK;
+    return -1 * left_front_falcon.getSelectedSensorPosition() * DRIVE_CONSTANTS.METERS_PER_COUNT;
   }
 
   // velocity in meters / sec
   public double getLeftVelocity() {
-    return -1 * left_front_falcon.getSelectedSensorVelocity() * DRIVE_CONSTANTS.METERS_PER_TICK;
+    return -1 * left_front_falcon.getSelectedSensorVelocity() * DRIVE_CONSTANTS.METERS_PER_COUNT;
   }
 
   public double getRightDistance() {
-    return right_front_falcon.getSelectedSensorPosition() * DRIVE_CONSTANTS.METERS_PER_TICK;
+    return right_front_falcon.getSelectedSensorPosition() * DRIVE_CONSTANTS.METERS_PER_COUNT;
   }
 
   public double getRightVelocity() {
-    return right_front_falcon.getSelectedSensorVelocity() * DRIVE_CONSTANTS.METERS_PER_TICK;
+    return right_front_falcon.getSelectedSensorVelocity() * DRIVE_CONSTANTS.METERS_PER_COUNT;
   }
 
   public Pose2d getPose() {

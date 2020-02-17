@@ -18,6 +18,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
+    robot_container.updateArmInputs();
     robot_container.updateDrivetrainInputs();
   }
 }

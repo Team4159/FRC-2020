@@ -20,6 +20,8 @@ public class CardinalFX extends WPI_TalonFX {
 
   @Override
   public void set(ControlMode control_mode, double setpoint) {
+    System.out.println("SET:" + setpoint);
+
     if (setpoint != last_setpoint || control_mode != last_control_mode) {
       super.set(control_mode, setpoint);
 

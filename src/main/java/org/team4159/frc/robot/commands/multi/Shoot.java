@@ -10,17 +10,31 @@ public class Shoot extends CommandBase {
   private Turret turret;
   private Shooter shooter;
   private Neck neck;
+  private double target_speed;
 
-  public Shoot(Turret turret, Shooter shooter, Neck neck) {
-    this.turret = turret;
+  private boolean shooting;
+
+  public Shoot(double target_speed, Shooter shooter, Neck neck, Turret turret) {
     this.shooter = shooter;
     this.neck = neck;
+    this.turret = turret;
 
-    addRequirements(turret, shooter, neck);
+    this.target_speed = target_speed;
+
+    addRequirements(shooter, neck);
   }
 
   @Override
   public void initialize() {
+    shooter.setTargetSpeed(target_speed);
+  }
 
+  @Override
+  public void execute() {
+    if (turret.isPointingAtTarget() && shooter.isAtTargetSpeed()) {
+      neck.neck();
+    } else {
+      neck.stop();
+    }
   }
 }

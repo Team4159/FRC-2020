@@ -15,9 +15,13 @@ public class Feeder extends SubsystemBase {
   private SpeedControllerGroup feeder_motors;
 
   public Feeder() {
+    CardinalMAX spark = new CardinalMAX(CAN_IDS.UPPER_FEEDER_SPARK, CANSparkMax.IdleMode.kCoast);
+
+    spark.setInverted(true);
+
     feeder_motors = new SpeedControllerGroup(
       new CardinalSRX(CAN_IDS.LOWER_FEEDER_TALON, NeutralMode.Brake),
-      new CardinalMAX(CAN_IDS.UPPER_FEEDER_SPARK, CANSparkMax.IdleMode.kCoast)
+      spark
     );
   }
 

@@ -68,7 +68,7 @@ public class Shooter extends PIDSubsystem {
 
   @Override
   public void periodic() {
-    SmartDashboard.putNumber("current_shooter_speed", getVelocity());
+    SmartDashboard.putNumber("current_shooter_speed", getSpeed());
     double distance = getDistanceToVisionTarget();
     SmartDashboard.putNumber("distance in inches", distance);
     SmartDashboard.putNumber("distance in feet", distance / 12);
@@ -92,11 +92,15 @@ public class Shooter extends PIDSubsystem {
     return shooter_encoder.get();
   }
 
-  public double getVelocity() {
+  public double getSpeed() {
     double delta = (getPosition() - last_position) / Robot.kDefaultPeriod;
     last_position = getPosition();
 
     return delta;
+  }
+
+  public boolean isAtTargetSpeed() {
+    return getController().atSetpoint();
   }
 
   public double getDistanceToVisionTarget() {
@@ -111,7 +115,7 @@ public class Shooter extends PIDSubsystem {
 
   @Override
   protected double getMeasurement() {
-    return getVelocity();
+    return getSpeed();
   }
 
   @Override

@@ -34,7 +34,7 @@ public class Robot extends TimedRobot {
     if (autonomous_command != null) autonomous_command.cancel();
 
 
-    new ZeroArm(robot_container.arm).schedule(false);
-    new ZeroTurret(robot_container.turret).andThen(new LimelightSeek(robot_container.turret)).schedule(false);
+    //new ZeroArm(robot_container.arm).schedule(false);
+    //new ZeroTurret(robot_container.turret).andThen(new LimelightSeek(robot_container.turret)).schedule(false);
   }
 }

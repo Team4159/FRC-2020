@@ -20,8 +20,8 @@ public class Feeder extends SubsystemBase {
     spark.setInverted(true);
 
     feeder_motors = new SpeedControllerGroup(
-      new CardinalSRX(CAN_IDS.LOWER_FEEDER_TALON, NeutralMode.Brake)
-      ,spark
+      new CardinalSRX(CAN_IDS.LOWER_FEEDER_TALON, NeutralMode.Brake),
+      spark
     );
   }
 
@@ -30,7 +30,7 @@ public class Feeder extends SubsystemBase {
   }
 
   public void feed() {
-    setRawSpeed(0.8);
+    setRawSpeed(1);
   }
 
   public void stop() {

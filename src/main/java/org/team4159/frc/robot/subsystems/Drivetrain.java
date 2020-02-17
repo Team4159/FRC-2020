@@ -11,7 +11,6 @@ import edu.wpi.first.wpilibj.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
-import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.sensors.PigeonIMU;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
@@ -30,7 +29,7 @@ public class Drivetrain extends SubsystemBase {
   }
   private State state = State.OPEN_LOOP;
 
-  private TalonFX left_front_falcon, left_rear_falcon, right_front_falcon, right_rear_falcon;
+  private CardinalFX left_front_falcon, left_rear_falcon, right_front_falcon, right_rear_falcon;
   private SpeedControllerGroup left_falcons;
   private SpeedControllerGroup right_falcons;
 
@@ -54,11 +53,13 @@ public class Drivetrain extends SubsystemBase {
     // setSensorPhase isn't working
 
     left_falcons = new SpeedControllerGroup(
-      (WPI_TalonFX) left_front_falcon,
-      (WPI_TalonFX) left_rear_falcon);
+      left_front_falcon,
+      left_rear_falcon
+    );
     right_falcons = new SpeedControllerGroup(
-      (WPI_TalonFX) right_front_falcon,
-      (WPI_TalonFX) right_rear_falcon);
+      right_front_falcon,
+      right_rear_falcon
+    );
 
     left_falcons.setInverted(true);
     right_falcons.setInverted(false);

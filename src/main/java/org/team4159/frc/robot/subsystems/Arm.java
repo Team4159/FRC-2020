@@ -21,6 +21,7 @@ public class Arm extends SubsystemBase {
   private State state = State.ZEROING;
 
   private CANSparkMax arm_spark;
+
   private DigitalInput arm_limit_switch;
   private Encoder arm_encoder;
 
@@ -43,7 +44,7 @@ public class Arm extends SubsystemBase {
       ARM_CONSTANTS.kI,
       ARM_CONSTANTS.kD
     );
-    pid_controller.setTolerance(ARM_CONSTANTS.TOLERANCE_IN_COUNTS);
+    pid_controller.setTolerance(ARM_CONSTANTS.ACCEPTABLE_ERROR_IN_COUNTS);
   }
 
   @Override
@@ -78,6 +79,10 @@ public class Arm extends SubsystemBase {
     arm_spark.setVoltage(voltage);
   }
 
+  public void setSetpoint(int setpoint) {
+    pid_controller.setSetpoint(setpoint);
+  }
+
   public void zeroEncoder() {
     arm_encoder.reset();
   }
@@ -92,9 +97,5 @@ public class Arm extends SubsystemBase {
 
   public int getSetpoint() {
     return (int) pid_controller.getSetpoint();
-  }
-
-  public void setSetpoint(int setpoint) {
-    pid_controller.setSetpoint(setpoint);
   }
 }

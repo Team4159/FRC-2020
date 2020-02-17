@@ -13,7 +13,8 @@ import org.team4159.lib.math.Baba;
 public final class Constants {
   public static final class ENCODERS {
     public static final int FALCON_CPR = 2048;
-    public static final int SRX_MAG_ENCODER_CPR = 4096;
+    public static final int MAG_ENCODER_CPR = 4096;
+    public static final int THROUGH_BORE_ENCODER_CPR = 4096;
   }
 
   public static final class CONTROLS {
@@ -42,7 +43,8 @@ public final class Constants {
         // Debug buttons
         public static final int
           RUN_INTAKE = T16000M.TOP_LEFT_BTN_ID,
-          RUN_FEEDER = T16000M.PRIMARY_TOP_OUTER_BTN_ID;
+          RUN_FEEDER = T16000M.PRIMARY_TOP_OUTER_BTN_ID,
+          RUN_NECK = T16000M.PRIMARY_TOP_MIDDLE_BTN_ID;
       }
     }
   }
@@ -98,6 +100,12 @@ public final class Constants {
   }
 
   public static final class SHOOTER_CONSTANTS {
+    public static final int COUNTS_PER_SECOND_TO_RPM = ENCODERS.THROUGH_BORE_ENCODER_CPR * 60;
+
+    @SuppressWarnings("PointlessArithmeticExpression")
+    // 1 RPM i think
+    public static final int ACCEPTABLE_SPEED_ERROR = 1 * ENCODERS.THROUGH_BORE_ENCODER_CPR / 60; // counts per second
+
     public static final int ENCODER_CHANNEL_A_PORT = 2;
     public static final int ENCODER_CHANNEL_B_PORT = 3;
     public static final boolean IS_ENCODER_REVERSED = true;
@@ -109,13 +117,13 @@ public final class Constants {
   }
 
   public static final class ARM_CONSTANTS {
-    public static final Gearing GEARING = new Gearing(1.0, ENCODERS.SRX_MAG_ENCODER_CPR);
+    public static final Gearing GEARING = new Gearing(1.0, ENCODERS.MAG_ENCODER_CPR);
     public static final int RANGE_IN_DEGREES = 53;
-    public static final int TOLERANCE_IN_DEGREES = 3;
+    public static final int ACCEPTABLE_ERROR_IN_DEGREES = 3;
 
     // TODO: Find
     public static final int RANGE_IN_COUNTS = (int) (RANGE_IN_DEGREES * GEARING.COUNTS_PER_DEGREE);
-    public static final int TOLERANCE_IN_COUNTS = (int) (TOLERANCE_IN_DEGREES * GEARING.COUNTS_PER_DEGREE);
+    public static final int ACCEPTABLE_ERROR_IN_COUNTS = (int) (ACCEPTABLE_ERROR_IN_DEGREES * GEARING.COUNTS_PER_DEGREE);
 
     public static final int UP_POSITION = 0;
     public static final int DOWN_POSITION = RANGE_IN_COUNTS;

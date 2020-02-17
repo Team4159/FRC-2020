@@ -23,7 +23,7 @@ public class RobotContainer {
   private final Arm arm = new Arm();
   private final Turret turret = new Turret(limelight);
 
-  private final IntakeController intake_controller = new IntakeController(arm, intake);
+  private final IntakeController intake_controller = new IntakeController(arm, intake, feeder);
 
   private final Joystick left_joy = new Joystick(CONTROLS.LEFT_JOY.USB_PORT);
   private final Joystick right_joy = new Joystick(CONTROLS.RIGHT_JOY.USB_PORT);
@@ -62,6 +62,8 @@ public class RobotContainer {
     // TODO: switch to IntakeController when done testing in isolation
     updateArmInputs();
     updateIntakeInputs();
+
+    updateNeckInputs();
   }
 
   public void updateControllerInputs() {
@@ -95,6 +97,14 @@ public class RobotContainer {
       intake.intake();
     } else {
       intake.stop();
+    }
+  }
+
+  public void updateNeckInputs() {
+    if (secondary_joy.getRawButton(CONTROLS.SECONDARY_JOY.BUTTON_IDS.RUN_NECK)) {
+      neck.neck();
+    } else {
+      neck.stop();
     }
   }
 

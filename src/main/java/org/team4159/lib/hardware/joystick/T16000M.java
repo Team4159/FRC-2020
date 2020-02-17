@@ -1,0 +1,22 @@
+package org.team4159.lib.hardware.joystick;
+
+// http://ts.thrustmaster.com/download/accessories/manuals/T16000M/T16000M-User_manual.pdf
+public class T16000M {
+  public static int
+    TRIGGER_ID = 1,
+    TOP_MIDDLE_BTN_ID = 2,
+    TOP_LEFT_BTN_ID = 3,
+    TOP_RIGHT_BTN_ID = 4,
+    PRIMARY_TOP_OUTER_BTN_ID = 5,
+    PRIMARY_TOP_MIDDLE_BTN_ID = 6,
+    PRIMARY_TOP_INNER_BTN_ID = 7,
+    PRIMARY_BOTTOM_INNER_BTN_ID = 8,
+    PRIMARY_BOTTOM_MIDDLE_BTN_ID = 9,
+    PRIMARY_BOTTOM_OUTER_BTN_ID = 10,
+    SECONDARY_TOP_OUTER_BTN_ID = 11,
+    SECONDARY_TOP_MIDDLE_BTN_ID = 12,
+    SECONDARY_TOP_INNER_BTN_ID = 13,
+    SECONDARY_BOTTOM_INNER_BTN_ID = 14,
+    SECONDARY_BOTTOM_MIDDLE_BTN_ID = 15,
+    SECONDARY_BOTTOM_OUTER_BTN_ID = 16;
+}

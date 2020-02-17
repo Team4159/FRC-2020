@@ -29,17 +29,17 @@ public class Robot extends TimedRobot {
   @Override
   public void robotPeriodic() {
     CommandScheduler.getInstance().run();
+    // TODO: see how long this takes
     double current_time = Timer.getFPGATimestamp();
     double time_delta = last_log_time - current_time;
     if (isEnabled() || isDisabled() && time_delta >= 0.25) {
       last_log_time = current_time;
-      // TODO: check if we have to do this in a separate thread
       log.log();
     }
   }
 
-  @Override
-  public void teleopInit() {
-    CommandScheduler.getInstance().cancelAll();
+  public void teleopPeriodic() {
+    robot_container.updateSubsystemInputs();
+    // robot_container.updateControllerInputs();
   }
 }

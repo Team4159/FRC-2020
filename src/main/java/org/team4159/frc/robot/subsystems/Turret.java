@@ -13,6 +13,15 @@ import org.team4159.lib.hardware.controller.ctre.CardinalFX;
 import static org.team4159.frc.robot.Constants.*;
 
 public class Turret extends SubsystemBase {
+  private enum State {
+    SEEKING_LIMIT,
+    SEEKING_TARGET,
+    RECOVERING,
+    OPEN_LOOP,
+    ESTOP
+  }
+  private State state = State.SEEKING_LIMIT;
+
   private TalonFX turret_falcon;
 
   private Limelight limelight;
@@ -23,10 +32,6 @@ public class Turret extends SubsystemBase {
 
     turret_falcon.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
     turret_falcon.setSensorPhase(false);
-
-    // CHECK AND FIX THIS!?!?!??!?!?!
-    // POSITIVE INPUT = ROTATE CLOCKWISE
-    // ENCODER POSITIVE = ROTATE COUNTERCLOCKWISE
   }
 
   @Override
@@ -36,7 +41,18 @@ public class Turret extends SubsystemBase {
     } else if (isReverseLimitSwitchClosed()) {
       setEncoderPosition(TURRET_CONSTANTS.REVERSE_POSITION);
     }
+
+    switch (state) {
+      case SEEKING_LIMIT:
+        break;
+      case SEEKING_TARGET:
+        break;
+      case OPEN_LOOP:
+        break;
+    }
   }
+
+  // motor setters
 
   public void setRawSpeed(double speed) {
     turret_falcon.set(ControlMode.PercentOutput, speed);
@@ -45,6 +61,8 @@ public class Turret extends SubsystemBase {
   public void stop() {
     setRawSpeed(0);
   }
+
+  // control methods
 
   public void setEncoderPosition(double position) {
     turret_falcon.setSelectedSensorPosition(0);

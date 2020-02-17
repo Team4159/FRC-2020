@@ -19,7 +19,7 @@ public class Intake extends SubsystemBase {
   }
 
   public void intake() {
-    setRawSpeed(1);
+    setRawSpeed(INTAKE_CONSTANTS.INTAKE_SPEED);
   }
 
   public void stop() {

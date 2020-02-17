@@ -1,6 +1,7 @@
 package org.team4159.frc.robot.controllers;
 
 import org.team4159.frc.robot.subsystems.Arm;
+import org.team4159.frc.robot.subsystems.Feeder;
 import org.team4159.frc.robot.subsystems.Intake;
 
 import static org.team4159.frc.robot.Constants.*;
@@ -15,15 +16,18 @@ public class IntakeController {
 
   private Arm arm;
   private Intake intake;
+  private Feeder feeder;
 
-  public IntakeController(Arm arm, Intake intake) {
+  public IntakeController(Arm arm, Intake intake, Feeder feeder) {
     this.arm = arm;
     this.intake = intake;
+    this.feeder = feeder;
   }
 
   public void update() {
     int arm_setpoint = ARM_CONSTANTS.UP_POSITION;
-    double intake_speed = 0;
+    double intake_speed = 0,
+           feeder_speed = 0;
 
     switch (state) {
       case STOWED:
@@ -37,11 +41,13 @@ public class IntakeController {
       case INTAKING:
         arm_setpoint = ARM_CONSTANTS.DOWN_POSITION;
         intake_speed = INTAKE_CONSTANTS.INTAKE_SPEED;
+        feeder_speed = FEEDER_CONSTANTS.FEEDING_SPEED;
         break;
     }
 
     arm.setSetpoint(arm_setpoint);
     intake.setRawSpeed(intake_speed);
+    feeder.setRawSpeed(feeder_speed);
   }
 
   public void intake() {

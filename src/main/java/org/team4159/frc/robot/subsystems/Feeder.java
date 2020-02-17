@@ -29,7 +29,7 @@ public class Feeder extends SubsystemBase {
   }
 
   public void feed() {
-    setRawSpeed(1);
+    setRawSpeed(FEEDER_CONSTANTS.FEEDING_SPEED);
   }
 
   public void stop() {

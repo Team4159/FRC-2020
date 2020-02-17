@@ -175,6 +175,10 @@ public final class Constants {
     public static final double INTAKE_SPEED = 1;
   }
 
+  public static final class FEEDER_CONSTANTS {
+    public static final double FEEDING_SPEED = 1;
+  }
+
   public static final class FIELD_CONSTANTS {
     public static final Color CONTROL_SPINNER_BLUE = ColorMatch.makeColor(0.143, 0.427, 0.429);
     public static final Color CONTROL_SPINNER_GREEN = ColorMatch.makeColor(0.197, 0.561, 0.240);

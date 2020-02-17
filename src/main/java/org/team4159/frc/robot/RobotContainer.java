@@ -7,10 +7,8 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.*;
 
 import org.team4159.frc.robot.commands.arm.ToggleArm;
-import org.team4159.frc.robot.commands.arm.ZeroArm;
-import org.team4159.frc.robot.commands.turret.LimelightSeek;
-import org.team4159.frc.robot.commands.turret.ZeroTurret;
 import org.team4159.frc.robot.subsystems.*;
+import org.team4159.lib.control.signal.DriveSignal;
 import org.team4159.lib.hardware.Limelight;
 
 import static org.team4159.frc.robot.Constants.*;
@@ -33,30 +31,11 @@ public class RobotContainer {
 
   public RobotContainer() {
     configureCamera();
-    configureCommands();
     configureButtonBindings();
   }
 
   private void configureCamera() {
     CameraServer.getInstance().startAutomaticCapture();
-  }
-
-  private void configureCommands() {
-    drivetrain.setDefaultCommand(new RunCommand(
-      () -> drivetrain.tankDrive(
-        left_joy.getY(),
-        right_joy.getY()
-      ),
-      drivetrain
-    ));
-
-//    turret.setDefaultCommand(
-//      new RunCommand(
-//        () -> turret.setRawSpeed(
-//          secondary_joy.getY() / 2.0
-//        ),
-//        turret
-//    ));
   }
 
   private void configureButtonBindings() {
@@ -89,7 +68,7 @@ public class RobotContainer {
         new InstantCommand(() -> shooter.setRawSpeed(0), shooter)));
   }
 
-  public Command getAutonomousCommand() {
-    return auto_selector.getSelected();
+  public void updateDrivetrainInputs() {
+    drivetrain.drive(new DriveSignal(left_joy.getY(), right_joy.getY()));
   }
 }

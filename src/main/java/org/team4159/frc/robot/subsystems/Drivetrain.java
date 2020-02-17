@@ -1,14 +1,8 @@
 package org.team4159.frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
+import edu.wpi.first.wpilibj.trajectory.Trajectory;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-
-import com.ctre.phoenix.motorcontrol.FeedbackDevice;
-import com.ctre.phoenix.motorcontrol.can.TalonFX;
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
-import com.ctre.phoenix.sensors.PigeonIMU;
-import com.ctre.phoenix.motorcontrol.NeutralMode;
-
 import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.geometry.Translation2d;
@@ -16,6 +10,13 @@ import edu.wpi.first.wpilibj.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
+import com.ctre.phoenix.motorcontrol.FeedbackDevice;
+import com.ctre.phoenix.motorcontrol.can.TalonFX;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
+import com.ctre.phoenix.sensors.PigeonIMU;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
+
+import org.team4159.frc.robot.controllers.TrajectoryController;
 import org.team4159.lib.control.signal.DriveSignal;
 import org.team4159.lib.control.signal.filters.LowPassFilterSource;
 import org.team4159.lib.hardware.controller.ctre.CardinalFX;
@@ -23,6 +24,12 @@ import org.team4159.lib.hardware.controller.ctre.CardinalFX;
 import static org.team4159.frc.robot.Constants.*;
 
 public class Drivetrain extends SubsystemBase {
+  private enum State {
+    PATH_FOLLOWING,
+    OPEN_LOOP
+  }
+  private State state = State.OPEN_LOOP;
+
   private TalonFX left_front_falcon, left_rear_falcon, right_front_falcon, right_rear_falcon;
   private SpeedControllerGroup left_falcons;
   private SpeedControllerGroup right_falcons;
@@ -31,6 +38,8 @@ public class Drivetrain extends SubsystemBase {
   private PigeonIMU pigeon;
   private LowPassFilterSource filtered_heading;
 
+  private TrajectoryController trajectory_controller;
+  private DriveSignal drive_signal;
   private boolean is_oriented_forward = true;
 
   public Drivetrain() {
@@ -59,6 +68,8 @@ public class Drivetrain extends SubsystemBase {
     odometry = new DifferentialDriveOdometry(new Rotation2d(0));
     filtered_heading = new LowPassFilterSource(pigeon::getFusedHeading, 10);
 
+    trajectory_controller  = new TrajectoryController(this);
+
     zeroSensors();
   }
 
@@ -80,31 +91,32 @@ public class Drivetrain extends SubsystemBase {
     SmartDashboard.putNumber("Angle", getDirection());
     SmartDashboard.putNumber("Left Encoder", getLeftDistance());
     SmartDashboard.putNumber("Right Encoder", getRightDistance());
-  }
 
-  public void rawDrive(DriveSignal signal) {
-    if (is_oriented_forward) {
-      signal.invert();
+    switch (state) {
+      case PATH_FOLLOWING:
+        drive_signal = trajectory_controller.update();
+        if (trajectory_controller.isIdle()) {
+          state = State.OPEN_LOOP;
+        }
+      case OPEN_LOOP:
+        DriveSignal filtered_signal = drive_signal;
+        if (is_oriented_forward) {
+          filtered_signal = drive_signal.invert();
+        }
+        left_falcons.set(filtered_signal.left);
+        right_falcons.set(filtered_signal.right);
+        break;
     }
-
-    left_falcons.set(signal.left);
-    right_falcons.set(signal.right);
   }
 
-  public void tankDrive(double left, double right) {
-    rawDrive(new DriveSignal(left, right, true));
+  public void drive(DriveSignal drive_signal) {
+    state = State.OPEN_LOOP;
+    this.drive_signal = drive_signal;
   }
 
-  public void arcadeDrive(double speed, double turn) {
-    rawDrive(DriveSignal.fromArcade(speed, turn, true));
-  }
-
-  public void voltsDrive(double left_volts, double right_volts) {
-    rawDrive(DriveSignal.fromVolts(left_volts, right_volts));
-  }
-
-  public void stop() {
-    rawDrive(DriveSignal.NEUTRAL);
+  public void followTrajectory(Trajectory trajectory) {
+    state = State.PATH_FOLLOWING;
+    trajectory_controller.setTrajectory(trajectory);
   }
 
   public void resetEncoders() {

@@ -111,9 +111,14 @@ public final class Constants {
   public static final class ARM_CONSTANTS {
     public static final Gearing GEARING = new Gearing(1.0, ENCODERS.SRX_MAG_ENCODER_CPR);
     public static final int RANGE_IN_DEGREES = 53;
+    public static final int TOLERANCE_IN_DEGREES = 3;
 
     // TODO: Find
     public static final int RANGE_IN_COUNTS = (int) (RANGE_IN_DEGREES * GEARING.COUNTS_PER_DEGREE);
+    public static final int TOLERANCE_IN_COUNTS = (int) (TOLERANCE_IN_DEGREES * GEARING.COUNTS_PER_DEGREE);
+
+    public static final int UP_POSITION = 0;
+    public static final int DOWN_POSITION = RANGE_IN_COUNTS;
 
     public static final int LIMIT_SWITCH_PORT = 9;
 
@@ -166,8 +171,8 @@ public final class Constants {
     public static final double VISION_TARGET_HEIGHT = 51.5 - MOUNT_HEIGHT;
   }
 
-  public static final class NECK_CONSTANTS {
-    public static final double TIME_TO_RELEASE_ONE_BALL = 0.5;
+  public static final class INTAKE_CONSTANTS {
+    public static final double INTAKE_SPEED = 1;
   }
 
   public static final class FIELD_CONSTANTS {

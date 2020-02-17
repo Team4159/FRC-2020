@@ -43,6 +43,7 @@ public class Arm extends SubsystemBase {
       ARM_CONSTANTS.kI,
       ARM_CONSTANTS.kD
     );
+    pid_controller.setTolerance(ARM_CONSTANTS.TOLERANCE_IN_COUNTS);
   }
 
   @Override
@@ -83,6 +84,10 @@ public class Arm extends SubsystemBase {
 
   public boolean isLimitSwitchClosed() {
     return !arm_limit_switch.get();
+  }
+
+  public boolean isAtSetpoint() {
+    return pid_controller.atSetpoint();
   }
 
   public int getSetpoint() {

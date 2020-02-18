@@ -40,10 +40,6 @@ public class RobotContainer {
   }
 
   private void configureButtonBindings() {
-    new JoystickButton(secondary_joy, CONTROLS.SECONDARY_JOY.BUTTON_IDS.ENABLE_SHOOTER)
-      .whenPressed(() -> shooter.setTargetSpeed(SmartDashboard.getNumber("target_shooter_speed", 0)))
-      .whenReleased(new InstantCommand(shooter::stop, shooter));
-
     new JoystickButton(secondary_joy, CONTROLS.SECONDARY_JOY.BUTTON_IDS.RUN_ALL_INTAKE_SUBSYSTEMS)
       .whenPressed(new ParallelCommandGroup(
         new InstantCommand(intake::intake, intake),

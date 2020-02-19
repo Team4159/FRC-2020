@@ -13,7 +13,7 @@ import org.team4159.lib.logging.CSVWriter;
 import org.team4159.lib.math.Cardinal;
 import org.team4159.lib.math.Epsilon;
 
-public class TestLowPassFilter {
+public class LowPassFilterTest {
   @Test
   public void TestDoesNothingWhenSmoothingIs1() {
     LowPassFilter filter = new LowPassFilter(0, 1, 1);

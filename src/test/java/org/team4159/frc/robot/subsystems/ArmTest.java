@@ -33,7 +33,7 @@ public class ArmTest {
     }
 
     void simulate(double dt) {
-       double torque = motor.get_torque_for_speed(angular_velocity, applied_voltage);
+       double torque = motor.getTorqueForVoltage(angular_velocity, applied_voltage);
        double angular_acceleration = torque / inertia;
        angular_velocity += angular_acceleration * LOSS_COEFFICIENT * dt;
        encoder.move(ARM_CONSTANTS.GEARING.COUNTS_PER_RADIAN * angular_velocity * dt);
@@ -92,7 +92,8 @@ public class ArmTest {
 
   private void simulateTime(double time) {
     while (time > 0) {
-      if (Epsilon.epsilonEquals(time % TimedRobot.kDefaultPeriod, 0)) {
+      if (Epsilon.epsilonEquals(time % TimedRobot.kDefaultPeriod, 0, 1E-3)) {
+        // System.out.println(arm.getRealPosition() + ", " + arm.getAppliedVoltage() + ", " + arm.getPosition());
         arm_controller.update();
       }
       arm.simulate(SIMULATION_TIMESTEP);
@@ -103,7 +104,7 @@ public class ArmTest {
   @Test
   public void Zeroes() {
     arm.setRealStartingPosition(100);
-    simulateTime(1);
-    Assert.assertEquals(0, arm.getRealPosition(), Epsilon.kEpsilon);
+    simulateTime(5);
+    Assert.assertEquals(0, arm.getRealPosition(), ARM_CONSTANTS.ACCEPTABLE_ERROR_IN_COUNTS);
   }
 }

@@ -1,6 +1,12 @@
 package org.team4159.lib.math.physics;
 
 // model of a DC motor
+/*
+ * Adapted from: Team 254
+ * https://github.com/Team254/FRC-2018-Public/blob/master/src/main/java/com/team254/lib/physics/DCMotorTransmission.java
+ */
+
+import org.team4159.lib.math.Epsilon;
 
 public class DCMotorModel {
   public final String name;
@@ -23,29 +29,32 @@ public class DCMotorModel {
     this.test_voltage = test_voltage;
   }
 
-  // derived constants
+  // https://en.wikipedia.org/wiki/Motor_constants
 
   public double resistance() {
     return test_voltage / stall_current; // V = IR -> R = V/I
   }
 
-  public double voltage_constant() {
+  // "velocity constant"
+  public double volt_per_speed() {
     return free_speed / (test_voltage - free_current * resistance()); // voltage dropped at free speed = free_current * resistance
   }
 
-  public double back_emf_constant() {
-    return 1 / voltage_constant();
+  // "back-EMF constant"
+  public double speed_per_volt() {
+    return 1 / volt_per_speed();
   }
 
-  public double torque_constant() {
+  // "torque constant"
+  public double torque_per_amp() {
     return stall_torque / stall_current;
   }
 
-  public double get_current_for_speed(final double rpm, final double voltage) {
-    return (voltage - rpm * back_emf_constant()) / resistance();
+  public double torque_per_volt() {
+    return torque_per_amp() / resistance();
   }
 
-  public double get_torque_for_speed(final double rpm, final double voltage) {
-    return torque_constant() * get_current_for_speed(rpm, voltage);
+  public double getTorqueForVoltage(final double output_speed, final double voltage) {
+    return torque_per_volt() * (voltage - output_speed / speed_per_volt());
   }
 }

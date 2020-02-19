@@ -1,6 +1,6 @@
 package org.team4159.lib.hardware;
 
-import org.team4159.lib.math.Util;
+import org.team4159.lib.math.MathUtil;
 
 public class Gearing {
   public int COUNTS_PER_REV;
@@ -9,6 +9,6 @@ public class Gearing {
   public Gearing(double gear_ratio, int encoder_cpr) {
     COUNTS_PER_REV = (int) (gear_ratio * encoder_cpr);
     COUNTS_PER_DEGREE = COUNTS_PER_REV / 360.0;
-    COUNTS_PER_RADIAN = COUNTS_PER_REV / Util.kTau;
+    COUNTS_PER_RADIAN = COUNTS_PER_REV / MathUtil.kTau;
   }
 }

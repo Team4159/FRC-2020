@@ -8,7 +8,7 @@ import edu.wpi.first.wpilibj.CounterBase.EncodingType;
 
 import org.team4159.lib.hardware.Gearing;
 import org.team4159.lib.hardware.joystick.T16000M;
-import org.team4159.lib.math.Util;
+import org.team4159.lib.math.MathUtil;
 
 public final class Constants {
   // not sure where to put these
@@ -75,7 +75,7 @@ public final class Constants {
   public static final class DRIVE_CONSTANTS {
     public static final Gearing GEARING = new Gearing(8.48, ENCODERS.FALCON_CPR);
     public static final double WHEEL_RADIUS = Units.inchesToMeters(3.0);
-    public static final double WHEEL_CIRCUMFERENCE = WHEEL_RADIUS * Util.kTau;
+    public static final double WHEEL_CIRCUMFERENCE = WHEEL_RADIUS * MathUtil.kTau;
 
     public static final double METERS_PER_COUNT = WHEEL_CIRCUMFERENCE / GEARING.COUNTS_PER_REV;
 

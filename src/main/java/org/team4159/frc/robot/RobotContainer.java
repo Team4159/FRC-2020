@@ -22,7 +22,7 @@ public class RobotContainer {
   private final Arm arm = new Arm();
   private final Turret turret = new Turret(limelight);
 
-  private final IntakeManager intake_controller = new IntakeManager(arm, intake, feeder);
+  private final IntakeManager intake_controller = new IntakeManager(arm.getController(), intake, feeder);
 
   private final Joystick left_joy = new Joystick(CONTROLS.LEFT_JOY.USB_PORT);
   private final Joystick right_joy = new Joystick(CONTROLS.RIGHT_JOY.USB_PORT);

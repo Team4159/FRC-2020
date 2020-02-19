@@ -1,6 +1,5 @@
 package org.team4159.frc.robot.controllers;
 
-import org.team4159.frc.robot.subsystems.Arm;
 import org.team4159.frc.robot.subsystems.Feeder;
 import org.team4159.frc.robot.subsystems.Intake;
 
@@ -14,12 +13,12 @@ public class IntakeManager {
   }
   private State state;
 
-  private Arm arm;
+  private ArmController arm_controller;
   private Intake intake;
   private Feeder feeder;
 
-  public IntakeManager(Arm arm, Intake intake, Feeder feeder) {
-    this.arm = arm;
+  public IntakeManager(ArmController arm, Intake intake, Feeder feeder) {
+    this.arm_controller = arm_controller;
     this.intake = intake;
     this.feeder = feeder;
   }
@@ -34,7 +33,7 @@ public class IntakeManager {
         break;
       case DEPLOYING:
         arm_setpoint = ARM_CONSTANTS.DOWN_POSITION;
-        if (arm.isAtSetpoint()) {
+        if (arm_controller.isAtSetpoint()) {
           state = State.INTAKING;
         }
         break;
@@ -45,7 +44,7 @@ public class IntakeManager {
         break;
     }
 
-    arm.setSetpoint(arm_setpoint);
+    arm_controller.setSetpoint(arm_setpoint);
     intake.setRawSpeed(intake_speed);
     feeder.setRawSpeed(feeder_speed);
   }

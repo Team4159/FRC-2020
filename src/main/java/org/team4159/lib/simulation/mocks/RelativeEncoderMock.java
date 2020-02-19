@@ -1,4 +1,4 @@
-package org.team4159.lib.simulation;
+package org.team4159.lib.simulation.mocks;
 
 // model of a relative encoder and the transmission's real position
 // uses doubles over ints to allow for simulation over small timesteps but it's kind of iffy

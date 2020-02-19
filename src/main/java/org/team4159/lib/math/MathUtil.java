@@ -1,6 +1,6 @@
 package org.team4159.lib.math;
 
-public class Util {
+public class MathUtil {
   public static double kTau = Math.PI * 2;
 
   public static double clamp(double low, double high, double a) {

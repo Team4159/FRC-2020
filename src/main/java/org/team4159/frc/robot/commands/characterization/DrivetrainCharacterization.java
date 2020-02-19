@@ -52,7 +52,7 @@ public class DrivetrainCharacterization extends CommandBase {
     double autospeed = auto_speed_entry.getDouble(0);
 
     // command motors to do things
-    drivetrain.rawDrive(new DriveSignal((rotate_entry.getBoolean(false) ? 1 : -1) * autospeed, autospeed));
+    //drivetrain.rawDrive(new DriveSignal((rotate_entry.getBoolean(false) ? 1 : -1) * autospeed, autospeed));
 
     // send telemetry data array back to NT
     telemetry_entry.setNumberArray(new Number[]{

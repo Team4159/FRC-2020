@@ -29,7 +29,7 @@ public class TurnDegrees extends CommandBase {
   public void execute() {
     double output = controller.calculate(drivetrain.getDirection() - initial_degrees);
 
-    drivetrain.voltsDrive(output, -output);
+    //drivetrain.voltsDrive(output, -output);
   }
 
   @Override

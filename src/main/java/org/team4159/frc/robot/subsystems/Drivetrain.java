@@ -94,7 +94,7 @@ public class Drivetrain extends SubsystemBase {
 
     switch (state) {
       case PATH_FOLLOWING:
-        drive_signal = trajectory_controller.update();
+        trajectory_controller.update();
         if (trajectory_controller.isIdle()) {
           state = State.OPEN_LOOP;
         }
@@ -110,7 +110,6 @@ public class Drivetrain extends SubsystemBase {
   }
 
   public void drive(DriveSignal drive_signal) {
-    state = State.OPEN_LOOP;
     this.drive_signal = drive_signal;
   }
 

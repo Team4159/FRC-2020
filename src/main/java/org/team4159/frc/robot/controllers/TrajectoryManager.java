@@ -41,7 +41,7 @@ public class TrajectoryManager {
     this.drivetrain = drivetrain;
   }
 
-  public DriveSignal update() {
+  public void update() {
     DriveSignal signal = DriveSignal.NEUTRAL;
 
     switch (state) {
@@ -82,7 +82,7 @@ public class TrajectoryManager {
         break;
     }
 
-    return signal;
+    drivetrain.drive(signal);
   }
 
   public boolean isIdle() {

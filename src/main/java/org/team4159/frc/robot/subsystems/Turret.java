@@ -1,5 +1,6 @@
 package org.team4159.frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
@@ -13,14 +14,6 @@ import org.team4159.lib.hardware.controller.ctre.CardinalFX;
 import static org.team4159.frc.robot.Constants.*;
 
 public class Turret extends SubsystemBase {
-  private enum State {
-    SEEKING_LIMIT,
-    SEEKING_TARGET,
-    RECOVERING,
-    OPEN_LOOP,
-    ESTOP
-  }
-  private State state = State.SEEKING_LIMIT;
 
   private TalonFX turret_falcon;
 
@@ -46,14 +39,6 @@ public class Turret extends SubsystemBase {
       setEncoderPosition(TURRET_CONSTANTS.REVERSE_POSITION);
     }
 
-    switch (state) {
-      case SEEKING_LIMIT:
-        break;
-      case SEEKING_TARGET:
-        break;
-      case OPEN_LOOP:
-        break;
-    }
 
     if (getPosition() > TURRET_CONSTANTS.SAFE_FORWARD_POSITION || getPosition() < TURRET_CONSTANTS.SAFE_REVERSE_POSITION) {
       if (zeroed) recovering = true;
@@ -106,6 +91,10 @@ public class Turret extends SubsystemBase {
 
   public boolean isPointingAtTarget() {
     return Math.abs(limelight.getTargetHorizontalOffset()) < 1;
+  }
+
+  public boolean isOutOfSafeRange() {
+    return Math.abs(getPosition()) < TURRET_CONSTANTS.SAFE_FORWARD_POSITION;
   }
 
   // not really sure where to put these limelight methods

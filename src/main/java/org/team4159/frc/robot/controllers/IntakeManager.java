@@ -6,7 +6,7 @@ import org.team4159.frc.robot.subsystems.Intake;
 
 import static org.team4159.frc.robot.Constants.*;
 
-public class IntakeController {
+public class IntakeManager {
   private enum State {
     STOWED, // arm / intake is stowing / stowed
     DEPLOYING, // arm is deploying, intake is not being run
@@ -18,7 +18,7 @@ public class IntakeController {
   private Intake intake;
   private Feeder feeder;
 
-  public IntakeController(Arm arm, Intake intake, Feeder feeder) {
+  public IntakeManager(Arm arm, Intake intake, Feeder feeder) {
     this.arm = arm;
     this.intake = intake;
     this.feeder = feeder;

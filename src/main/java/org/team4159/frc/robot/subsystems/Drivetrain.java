@@ -11,11 +11,10 @@ import edu.wpi.first.wpilibj.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.sensors.PigeonIMU;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 
-import org.team4159.frc.robot.controllers.TrajectoryController;
+import org.team4159.frc.robot.controllers.TrajectoryManager;
 import org.team4159.lib.control.signal.DriveSignal;
 import org.team4159.lib.control.signal.filters.LowPassFilterSource;
 import org.team4159.lib.hardware.controller.ctre.CardinalFX;
@@ -37,7 +36,7 @@ public class Drivetrain extends SubsystemBase {
   private PigeonIMU pigeon;
   private LowPassFilterSource filtered_heading;
 
-  private TrajectoryController trajectory_controller;
+  private TrajectoryManager trajectory_controller;
   private DriveSignal drive_signal;
   private boolean is_oriented_forward = true;
 
@@ -69,7 +68,7 @@ public class Drivetrain extends SubsystemBase {
     odometry = new DifferentialDriveOdometry(new Rotation2d(0));
     filtered_heading = new LowPassFilterSource(pigeon::getFusedHeading, 10);
 
-    trajectory_controller  = new TrajectoryController(this);
+    trajectory_controller  = new TrajectoryManager(this);
 
     zeroSensors();
   }

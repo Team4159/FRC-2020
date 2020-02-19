@@ -1,4 +1,4 @@
-package org.team4159.lib.physics;
+package org.team4159.lib.math.physics;
 
 // model of a DC motor
 
@@ -42,7 +42,7 @@ public class DCMotorModel {
   }
 
   public double get_current_for_speed(final double rpm, final double voltage) {
-    return (voltage - rpm / voltage_constant()) / resistance();
+    return (voltage - rpm * back_emf_constant()) / resistance();
   }
 
   public double get_torque_for_speed(final double rpm, final double voltage) {

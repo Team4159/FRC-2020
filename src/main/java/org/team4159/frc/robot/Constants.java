@@ -11,6 +11,7 @@ import org.team4159.lib.hardware.joystick.T16000M;
 import org.team4159.lib.math.Cardinal;
 
 public final class Constants {
+  // not sure where to put these
   public static final class ENCODERS {
     public static final int FALCON_CPR = 2048;
     public static final int MAG_ENCODER_CPR = 4096;

@@ -11,6 +11,7 @@ import org.junit.Test;
 import org.team4159.lib.control.signal.filters.LowPassFilter;
 import org.team4159.lib.logging.CSVWriter;
 import org.team4159.lib.math.Cardinal;
+import org.team4159.lib.math.Epsilon;
 
 public class TestLowPassFilter {
   @Test
@@ -18,7 +19,7 @@ public class TestLowPassFilter {
     LowPassFilter filter = new LowPassFilter(0, 1, 1);
 
     for (int i = 0; i < 10; i++) {
-      Assert.assertEquals(i, filter.calculate(i), Cardinal.kEpsilon);
+      Assert.assertEquals(i, filter.calculate(i), Epsilon.kEpsilon);
     }
   }
 

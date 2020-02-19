@@ -2,11 +2,10 @@ package org.team4159.frc.robot;
 
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.*;
 
-import org.team4159.frc.robot.controllers.IntakeController;
+import org.team4159.frc.robot.controllers.complex.IntakeController;
 import org.team4159.lib.control.signal.DriveSignal;
 import org.team4159.lib.hardware.Limelight;
 import org.team4159.frc.robot.subsystems.*;
@@ -23,13 +22,13 @@ public class RobotContainer {
   private final Arm arm = new Arm();
   private final Turret turret = new Turret(limelight);
 
-  private final IntakeController intake_controller = new IntakeController(arm, intake, feeder);
+  private final IntakeController intake_controller = new IntakeController(arm.getController(), intake, feeder);
 
   private final Joystick left_joy = new Joystick(CONTROLS.LEFT_JOY.USB_PORT);
   private final Joystick right_joy = new Joystick(CONTROLS.RIGHT_JOY.USB_PORT);
   private final Joystick secondary_joy = new Joystick(CONTROLS.SECONDARY_JOY.USB_PORT);
 
- private final AutoSelector auto_selector = new AutoSelector(drivetrain);
+ private final AutoSelector auto_selector = new AutoSelector();
 
   public RobotContainer() {
     configureCamera();
@@ -68,7 +67,7 @@ public class RobotContainer {
 
   public void updateArmInputs() {
     if (secondary_joy.getRawButtonPressed(CONTROLS.SECONDARY_JOY.BUTTON_IDS.TOGGLE_ARM)) {
-      arm.setSetpoint(Math.abs(arm.getSetpoint() - ARM_CONSTANTS.RANGE_IN_COUNTS));
+      arm.getController().setSetpoint(Math.abs(arm.getController().getSetpoint() - ARM_CONSTANTS.RANGE_IN_COUNTS));
     }
   }
 

@@ -34,7 +34,7 @@ public class TrajectoryController {
   private PIDController pid_right = new PIDController(Constants.DRIVE_CONSTANTS.kP, 0, Constants.DRIVE_CONSTANTS.kD);
 
   private Timer timer = new Timer();
-  double prev_time = 0;
+  private double prev_time = 0;
 
   public TrajectoryController(Drivetrain drivetrain) {
     this.drivetrain = drivetrain;
@@ -45,6 +45,11 @@ public class TrajectoryController {
 
     switch (state) {
       case FOLLOWING:
+        if (timer.get() > trajectory_to_follow.getTotalTimeSeconds()) {
+          state = State.IDLE;
+          break;
+        }
+
         double cur_time = timer.get();
         double dt = cur_time - prev_time;
 

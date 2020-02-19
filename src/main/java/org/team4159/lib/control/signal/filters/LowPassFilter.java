@@ -1,6 +1,6 @@
 package org.team4159.lib.control.signal.filters;
 
-  import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.TimedRobot;
 
 public class LowPassFilter {
   private double smoothed, smoothing, period;

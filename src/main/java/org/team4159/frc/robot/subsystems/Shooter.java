@@ -109,6 +109,10 @@ public class Shooter extends SubsystemBase {
     return LIMELIGHT_CONSTANTS.VISION_TARGET_HEIGHT / Math.tan(total_angle_to_target);
   }
 
+  public Limelight getLimelight() {
+    return limelight;
+  }
+
   public boolean isAtTargetSpeed() {
     return pid_controller.atSetpoint();
   }

@@ -23,6 +23,8 @@ public class DCMotorModel {
     this.test_voltage = test_voltage;
   }
 
+  // derived constants
+
   public double resistance() {
     return test_voltage / stall_current; // V = IR -> R = V/I
   }
@@ -37,5 +39,13 @@ public class DCMotorModel {
 
   public double torque_constant() {
     return stall_torque / stall_current;
+  }
+
+  public double get_current_for_speed(final double rpm, final double voltage) {
+    return (voltage - rpm / voltage_constant()) / resistance();
+  }
+
+  public double get_torque_for_speed(final double rpm, final double voltage) {
+    return torque_constant() * get_current_for_speed(rpm, voltage);
   }
 }

@@ -6,8 +6,6 @@ package org.team4159.lib.math.physics;
  * https://github.com/Team254/FRC-2018-Public/blob/master/src/main/java/com/team254/lib/physics/DCMotorTransmission.java
  */
 
-import org.team4159.lib.math.Epsilon;
-
 public class DCMotorModel {
   public final String name;
   public final double

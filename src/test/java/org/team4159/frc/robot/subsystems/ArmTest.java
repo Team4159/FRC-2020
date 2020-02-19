@@ -8,7 +8,7 @@ import org.junit.Test;
 import edu.wpi.first.wpilibj.util.Units;
 
 import org.team4159.lib.math.Conversions;
-import org.team4159.lib.math.Epsilon;
+import org.team4159.lib.math.Util;
 import org.team4159.lib.simulation.RelativeEncoderMock;
 import org.team4159.lib.simulation.MotorModels;
 import org.team4159.lib.math.physics.DCMotorModel;
@@ -92,7 +92,7 @@ public class ArmTest {
 
   private void simulateTime(double time) {
     while (time > 0) {
-      if (Epsilon.epsilonEquals(time % TimedRobot.kDefaultPeriod, 0, 1E-3)) {
+      if (Util.epsilonEquals(time % TimedRobot.kDefaultPeriod, 0, 1E-3)) {
         // System.out.println(arm.getRealPosition() + ", " + arm.getAppliedVoltage() + ", " + arm.getPosition());
         arm_controller.update();
       }

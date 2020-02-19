@@ -8,13 +8,12 @@ import org.team4159.lib.hardware.Limelight;
 import static org.team4159.frc.robot.Constants.*;
 
 public class TurretController implements ControlLoop {
-  private enum State {
+  public enum State {
     ZEROING,
     SEEKING_TARGET,
     FOUND_TARGET,
     RECOVERING,
-    OPEN_LOOP,
-    ESTOP
+    OPEN_LOOP
   }
 
   private Turret turret;
@@ -22,7 +21,9 @@ public class TurretController implements ControlLoop {
 
   private int seeking_direction, seeking_range, seeking_starting_position;
 
+  private State last_state;
   private State state = State.ZEROING;
+
   private PIDController pid_controller = new PIDController(
     TURRET_CONSTANTS.LIMELIGHT_TURN_kP,
     TURRET_CONSTANTS.LIMELIGHT_TURN_kI,
@@ -39,19 +40,25 @@ public class TurretController implements ControlLoop {
 
   @Override
   public void update() {
+    if (turret.isForwardLimitSwitchClosed()) {
+      turret.setEncoderPosition(TURRET_CONSTANTS.FORWARD_POSITION);
+    } else if (turret.isReverseLimitSwitchClosed()) {
+      turret.setEncoderPosition(TURRET_CONSTANTS.REVERSE_POSITION);
+    }
+
     switch (state) {
       case ZEROING:
         if (turret.isReverseLimitSwitchClosed()) {
-          startSeeking();
+          setState(State.OPEN_LOOP);
         } else {
           turret.setRawSpeed(TURRET_CONSTANTS.ZEROING_SPEED);
         }
         break;
       case SEEKING_TARGET:
-        if (turret.isOutOfSafeRange()) {
-          state = State.RECOVERING;
+        if (isTurretOutOfSafeRange()) {
+          setState(State.RECOVERING);
         } else if (limelight.isTargetVisible()){
-          state = State.FOUND_TARGET;
+          setState(State.FOUND_TARGET);
         } else {
           turret.setRawSpeed(seeking_direction * TURRET_CONSTANTS.SEEKING_SPEED);
 
@@ -68,10 +75,10 @@ public class TurretController implements ControlLoop {
         }
         break;
       case FOUND_TARGET:
-        if (turret.isOutOfSafeRange()) {
-          state = State.RECOVERING;
+        if (isTurretOutOfSafeRange()) {
+          setState(State.RECOVERING);
         } else if (!limelight.isTargetVisible()) {
-          startSeeking();
+          setState(State.SEEKING_TARGET);
         } else {
           turret.setRawSpeed(pid_controller.calculate(limelight.getTargetHorizontalOffset()));
         }
@@ -82,15 +89,23 @@ public class TurretController implements ControlLoop {
         } else if (turret.getPosition() < TURRET_CONSTANTS.SAFE_REVERSE_POSITION) {
           turret.setRawSpeed(-1.0 * TURRET_CONSTANTS.ZEROING_SPEED);
         } else {
-          startSeeking();
+          setState(last_state);
         }
         break;
       case OPEN_LOOP:
-        if (turret.isOutOfSafeRange()) {
-          state = State.RECOVERING;
+        if (isTurretOutOfSafeRange()) {
+          setState(State.SEEKING_TARGET);
         }
         break;
     }
+  }
+
+  public boolean isTurretPointingAtTarget() {
+    return Math.abs(limelight.getTargetHorizontalOffset()) < 1;
+  }
+
+  public boolean isTurretOutOfSafeRange() {
+    return Math.abs(turret.getPosition()) < TURRET_CONSTANTS.SAFE_FORWARD_POSITION;
   }
 
   public void startSeeking() {
@@ -99,5 +114,25 @@ public class TurretController implements ControlLoop {
     seeking_starting_position = turret.getPosition();
 
     state = State.SEEKING_TARGET;
+  }
+
+  public void startRecovering() {
+    last_state = state;
+
+    state = State.RECOVERING;
+  }
+
+  public void setState(State state) {
+    if (state == State.SEEKING_TARGET) {
+      startSeeking();
+    } else if (state == State.RECOVERING) {
+      startRecovering();
+    } else {
+      this.state = state;
+    }
+  }
+
+  public State getState() {
+    return state;
   }
 }

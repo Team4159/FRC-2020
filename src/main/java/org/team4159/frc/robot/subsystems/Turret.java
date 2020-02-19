@@ -14,11 +14,7 @@ import org.team4159.lib.hardware.controller.ctre.CardinalFX;
 import static org.team4159.frc.robot.Constants.*;
 
 public class Turret extends SubsystemBase {
-
   private TalonFX turret_falcon;
-
-  private boolean recovering = false;
-  private boolean zeroed = false;
 
   private Limelight limelight;
 
@@ -28,43 +24,11 @@ public class Turret extends SubsystemBase {
 
     turret_falcon.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
     turret_falcon.setInverted(false);
-    // POSITIVE = COUNTER CLOCKWISE
+    // FIGURE OUT DIRECTION LATER
   }
-
-  @Override
-  public void periodic() {
-    if (isForwardLimitSwitchClosed()) {
-      setEncoderPosition(TURRET_CONSTANTS.FORWARD_POSITION);
-    } else if (isReverseLimitSwitchClosed()) {
-      setEncoderPosition(TURRET_CONSTANTS.REVERSE_POSITION);
-    }
-
-
-    if (getPosition() > TURRET_CONSTANTS.SAFE_FORWARD_POSITION || getPosition() < TURRET_CONSTANTS.SAFE_REVERSE_POSITION) {
-      if (zeroed) recovering = true;
-    } else {
-      recovering = false;
-
-      setRawSpeed(0);
-    }
-
-    if (recovering) {
-      if (getPosition() < TURRET_CONSTANTS.SAFE_FORWARD_POSITION) {
-        turret_falcon.set(ControlMode.PercentOutput, TURRET_CONSTANTS.ZEROING_SPEED);
-      } else {
-        turret_falcon.set(ControlMode.PercentOutput, -1.0 * TURRET_CONSTANTS.ZEROING_SPEED);
-      }
-    }
-
-    System.out.println(getPosition() + ", am i recovering: " + recovering);
-  }
-
-  // motor setters
 
   public void setRawSpeed(double speed) {
-    if (!recovering) {
-      turret_falcon.set(ControlMode.PercentOutput, -1.0 * speed);
-    }
+    turret_falcon.set(ControlMode.PercentOutput, speed);
   }
 
   public void stop() {
@@ -89,20 +53,7 @@ public class Turret extends SubsystemBase {
     return turret_falcon.isRevLimitSwitchClosed() == 1;
   }
 
-  public boolean isPointingAtTarget() {
-    return Math.abs(limelight.getTargetHorizontalOffset()) < 1;
-  }
-
-  public boolean isOutOfSafeRange() {
-    return Math.abs(getPosition()) < TURRET_CONSTANTS.SAFE_FORWARD_POSITION;
-  }
-
-  // not really sure where to put these limelight methods
   public Limelight getLimelight() {
     return limelight;
-  }
-
-  public void setZeroed(boolean zeroed) {
-    this.zeroed = zeroed;
   }
 }

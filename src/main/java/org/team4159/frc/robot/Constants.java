@@ -165,6 +165,7 @@ public final class Constants {
     public static final int SEEKING_RANGE_INCREMENT = (int) (20 * GEARING.COUNTS_PER_DEGREE);
 
     public static final double LIMELIGHT_TURN_kP = 1.0 / 100.0;
+    public static final double LIMELIGHT_TURN_kI = 0.0;
     public static final double LIMELIGHT_TURN_kD = 0.0;
 
     public static final double ZEROING_SPEED = 0.1;

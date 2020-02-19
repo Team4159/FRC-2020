@@ -1,12 +1,12 @@
-package org.team4159.frc.robot.controllers.complex;
+package org.team4159.frc.robot.controllers;
 
-import org.team4159.frc.robot.controllers.ArmController;
+import org.team4159.frc.robot.subsystems.Arm;
 import org.team4159.frc.robot.subsystems.Feeder;
 import org.team4159.frc.robot.subsystems.Intake;
 
 import static org.team4159.frc.robot.Constants.*;
 
-public class IntakeController {
+public class IntakeManager {
   private enum State {
     STOWED, // arm / intake is stowing / stowed
     DEPLOYING, // arm is deploying, intake is not being run
@@ -14,12 +14,12 @@ public class IntakeController {
   }
   private State state;
 
-  private ArmController arm_controller;
+  private Arm arm;
   private Intake intake;
   private Feeder feeder;
 
-  public IntakeController(ArmController arm_controller, Intake intake, Feeder feeder) {
-    this.arm_controller = arm_controller;
+  public IntakeManager(Arm arm, Intake intake, Feeder feeder) {
+    this.arm = arm;
     this.intake = intake;
     this.feeder = feeder;
   }
@@ -34,7 +34,7 @@ public class IntakeController {
         break;
       case DEPLOYING:
         arm_setpoint = ARM_CONSTANTS.DOWN_POSITION;
-        if (arm_controller.isAtSetpoint()) {
+        if (arm.isAtSetpoint()) {
           state = State.INTAKING;
         }
         break;
@@ -45,7 +45,7 @@ public class IntakeController {
         break;
     }
 
-    arm_controller.setSetpoint(arm_setpoint);
+    arm.setSetpoint(arm_setpoint);
     intake.setRawSpeed(intake_speed);
     feeder.setRawSpeed(feeder_speed);
   }

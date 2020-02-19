@@ -29,8 +29,6 @@ public class Shooter extends SubsystemBase {
   private EnhancedEncoder shooter_encoder;
   private Limelight limelight;
 
-  private PIDController pid_controller;
-
   public Shooter(Limelight limelight) {
     this.limelight = limelight;
 
@@ -52,43 +50,6 @@ public class Shooter extends SubsystemBase {
       SHOOTER_CONSTANTS.IS_ENCODER_REVERSED,
       SHOOTER_CONSTANTS.ENCODER_ENCODING_TYPE
     ));
-
-    pid_controller = new PIDController(
-      SHOOTER_CONSTANTS.kP,
-      SHOOTER_CONSTANTS.kI,
-      SHOOTER_CONSTANTS.kD
-    );
-    pid_controller.setTolerance(SHOOTER_CONSTANTS.ACCEPTABLE_SPEED_ERROR);
-
-    SmartDashboard.putNumber("target_shooter_speed", 0);
-    SmartDashboard.putNumber("shooter_kp", SHOOTER_CONSTANTS.kP);
-    SmartDashboard.putNumber("shooter_ki", SHOOTER_CONSTANTS.kI);
-    SmartDashboard.putNumber("shooter_kd", SHOOTER_CONSTANTS.kD);
-  }
-
-  @Override
-  public void periodic() {
-    SmartDashboard.putNumber(
-      "current_shooter_speed_rpm",
-      shooter_encoder.getVelocity() * SHOOTER_CONSTANTS.COUNTS_PER_SECOND_TO_RPM
-    );
-    double distance = getDistanceToVisionTarget();
-    SmartDashboard.putNumber("distance in inches", distance);
-    SmartDashboard.putNumber("distance in feet", distance / 12);
-
-    double output_voltage = 0;
-
-    switch (state) {
-      case CLOSED_LOOP:
-        output_voltage = pid_controller.calculate(
-          shooter_encoder.getVelocity() * SHOOTER_CONSTANTS.COUNTS_PER_SECOND_TO_RPM
-        );
-        break;
-      case IDLE:
-        break;
-    }
-
-    setRawVoltage(output_voltage);
   }
 
   public void setRawSpeed(double speed) {
@@ -99,21 +60,11 @@ public class Shooter extends SubsystemBase {
     shooter_motors.setVoltage(voltage);
   }
 
-  public void setTargetSpeed(double speed) {
-    pid_controller.setSetpoint(speed);
+  public double getSpeed() {
+    return shooter_encoder.getVelocity();
   }
 
-  public double getDistanceToVisionTarget() {
-    double vertical_offset = limelight.getTargetVerticalOffset();
-    double total_angle_to_target = LIMELIGHT_CONSTANTS.MOUNT_ANGLE + vertical_offset;
-    return LIMELIGHT_CONSTANTS.VISION_TARGET_HEIGHT / Math.tan(total_angle_to_target);
-  }
-
-  public boolean isAtTargetSpeed() {
-    return pid_controller.atSetpoint();
-  }
-
-  public int getSetpoint() {
-    return (int) pid_controller.getSetpoint();
+  public Limelight getLimelight() {
+    return limelight;
   }
 }

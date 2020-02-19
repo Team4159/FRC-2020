@@ -12,7 +12,6 @@ import org.team4159.lib.math.Util;
 import org.team4159.lib.simulation.RelativeEncoderMock;
 import org.team4159.lib.simulation.MotorModels;
 import org.team4159.lib.math.physics.DCMotorModel;
-
 import org.team4159.frc.robot.controllers.ArmController;
 
 import static org.team4159.lib.simulation.SimulationConfiguration.*;

@@ -11,7 +11,6 @@ import edu.wpi.first.wpilibj.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.sensors.PigeonIMU;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 
@@ -95,7 +94,7 @@ public class Drivetrain extends SubsystemBase {
 
     switch (state) {
       case PATH_FOLLOWING:
-        drive_signal = trajectory_controller.update();
+        trajectory_controller.update();
         if (trajectory_controller.isIdle()) {
           state = State.OPEN_LOOP;
         }
@@ -111,7 +110,6 @@ public class Drivetrain extends SubsystemBase {
   }
 
   public void drive(DriveSignal drive_signal) {
-    state = State.OPEN_LOOP;
     this.drive_signal = drive_signal;
   }
 

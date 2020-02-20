@@ -1,22 +1,22 @@
 package org.team4159.frc.robot.controllers;
 
-import org.team4159.frc.robot.subsystems.INeck;
-import org.team4159.lib.control.IControlLoop;
+import org.team4159.frc.robot.subsystems.Neck;
+import org.team4159.lib.control.ControlLoop;
 
-public class ShootingManager implements IControlLoop {
+public class ShootingManager implements ControlLoop {
   private enum State {
     IDLE,
     WAITING,
     SHOOTING
   }
 
-  private INeck neck;
+  private Neck neck;
   private TurretController turret_controller;
   private ShooterController shooter_controller;
 
   private State state = State.IDLE;
 
-  public ShootingManager(INeck neck, TurretController turret_controller, ShooterController shooter_controller) {
+  public ShootingManager(Neck neck, TurretController turret_controller, ShooterController shooter_controller) {
     this.neck = neck;
     this.turret_controller = turret_controller;
     this.shooter_controller = shooter_controller;

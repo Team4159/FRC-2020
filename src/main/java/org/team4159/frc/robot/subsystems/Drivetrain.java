@@ -1,25 +1,33 @@
 package org.team4159.frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
+import edu.wpi.first.wpilibj.trajectory.Trajectory;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.geometry.Translation2d;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveWheelSpeeds;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.sensors.PigeonIMU;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 
-import org.team4159.frc.robot.controllers.DrivetrainController;
+import org.team4159.frc.robot.controllers.TrajectoryManager;
 import org.team4159.lib.control.signal.DriveSignal;
 import org.team4159.lib.control.signal.filters.LowPassFilterSource;
 import org.team4159.lib.hardware.controller.ctre.CardinalFX;
 
 import static org.team4159.frc.robot.Constants.*;
 
-public class Drivetrain extends SubsystemBase implements IDrivetrain {
+public class Drivetrain extends SubsystemBase {
+  private enum State {
+    PATH_FOLLOWING,
+    OPEN_LOOP
+  }
+  private State state = State.OPEN_LOOP;
+
   private CardinalFX left_front_falcon, left_rear_falcon, right_front_falcon, right_rear_falcon;
   private SpeedControllerGroup left_falcons;
   private SpeedControllerGroup right_falcons;
@@ -28,7 +36,9 @@ public class Drivetrain extends SubsystemBase implements IDrivetrain {
   private PigeonIMU pigeon;
   private LowPassFilterSource filtered_heading;
 
-  private DrivetrainController drivetrain_controller;
+  private TrajectoryManager trajectory_controller;
+  private DriveSignal drive_signal;
+  private boolean is_oriented_forward = true;
 
   public Drivetrain() {
     left_front_falcon = new CardinalFX(CAN_IDS.LEFT_FRONT_FALCON, NeutralMode.Coast);
@@ -58,9 +68,13 @@ public class Drivetrain extends SubsystemBase implements IDrivetrain {
     odometry = new DifferentialDriveOdometry(new Rotation2d(0));
     filtered_heading = new LowPassFilterSource(pigeon::getFusedHeading, 10);
 
-    drivetrain_controller  = new DrivetrainController(this);
+    trajectory_controller  = new TrajectoryManager(this);
 
     zeroSensors();
+  }
+
+  public void flipOrientation() {
+    is_oriented_forward = !is_oriented_forward;
   }
 
   @Override
@@ -71,11 +85,37 @@ public class Drivetrain extends SubsystemBase implements IDrivetrain {
       getRightDistance()
     );
     filtered_heading.get();
+
+    SmartDashboard.putNumber("X", getPose().getTranslation().getX());
+    SmartDashboard.putNumber("Y", getPose().getTranslation().getY());
+    SmartDashboard.putNumber("Angle", getDirection());
+    SmartDashboard.putNumber("Left Encoder", getLeftDistance());
+    SmartDashboard.putNumber("Right Encoder", getRightDistance());
+
+    switch (state) {
+      case PATH_FOLLOWING:
+        trajectory_controller.update();
+        if (trajectory_controller.isIdle()) {
+          state = State.OPEN_LOOP;
+        }
+      case OPEN_LOOP:
+        DriveSignal filtered_signal = drive_signal;
+        if (is_oriented_forward) {
+          filtered_signal = drive_signal.invert();
+        }
+        left_falcons.set(filtered_signal.left);
+        right_falcons.set(filtered_signal.right);
+        break;
+    }
   }
 
   public void drive(DriveSignal drive_signal) {
-    left_falcons.set(drive_signal.left);
-    right_falcons.set(drive_signal.right);
+    this.drive_signal = drive_signal;
+  }
+
+  public void followTrajectory(Trajectory trajectory) {
+    state = State.PATH_FOLLOWING;
+    trajectory_controller.setTrajectory(trajectory);
   }
 
   public void resetEncoders() {
@@ -94,6 +134,8 @@ public class Drivetrain extends SubsystemBase implements IDrivetrain {
       new Pose2d(new Translation2d(0, 0), Rotation2d.fromDegrees(0)),
       Rotation2d.fromDegrees(0)
     );
+
+    System.out.println(getDirection());
   }
 
   public DifferentialDriveWheelSpeeds getWheelSpeeds() {
@@ -132,9 +174,5 @@ public class Drivetrain extends SubsystemBase implements IDrivetrain {
 
   public Pose2d getPose() {
     return odometry.getPoseMeters();
-  }
-
-  public DrivetrainController getController() {
-    return drivetrain_controller;
   }
 }

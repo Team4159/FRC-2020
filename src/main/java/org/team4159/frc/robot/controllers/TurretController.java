@@ -1,13 +1,13 @@
 package org.team4159.frc.robot.controllers;
 
 import edu.wpi.first.wpilibj.controller.PIDController;
-import org.team4159.frc.robot.subsystems.ITurret;
-import org.team4159.lib.control.IControlLoop;
+import org.team4159.frc.robot.subsystems.Turret;
+import org.team4159.lib.control.ControlLoop;
 import org.team4159.lib.hardware.Limelight;
 
 import static org.team4159.frc.robot.Constants.*;
 
-public class TurretController implements IControlLoop {
+public class TurretController implements ControlLoop {
   public enum State {
     ZEROING,
     SEEKING_TARGET,
@@ -16,7 +16,7 @@ public class TurretController implements IControlLoop {
     OPEN_LOOP
   }
 
-  private ITurret turret;
+  private Turret turret;
   private Limelight limelight;
 
   private int seeking_direction, seeking_range, seeking_starting_position;
@@ -30,7 +30,7 @@ public class TurretController implements IControlLoop {
     TURRET_CONSTANTS.LIMELIGHT_TURN_kD
   );
 
-  public TurretController(ITurret turret) {
+  public TurretController(Turret turret) {
     this.turret = turret;
     this.limelight = turret.getLimelight();
 

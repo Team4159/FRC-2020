@@ -9,7 +9,7 @@ import edu.wpi.first.wpilibj.util.Units;
 import org.team4159.lib.math.Conversions;
 import org.team4159.lib.simulation.SimulationRunner;
 import org.team4159.lib.simulation.mocks.RelativeEncoderMock;
-import org.team4159.lib.simulation.mocks.ISubsystemMock;
+import org.team4159.lib.simulation.mocks.SubsystemMock;
 import org.team4159.lib.simulation.MotorModels;
 import org.team4159.lib.math.physics.DCMotorModel;
 import org.team4159.frc.robot.controllers.ArmController;
@@ -18,7 +18,7 @@ import static org.team4159.lib.simulation.SimulationConfiguration.*;
 import static org.team4159.frc.robot.Constants.*;
 
 public class ArmTest {
-  public class MockArm implements IArm, ISubsystemMock {
+  public class MockArm extends Arm implements SubsystemMock {
     // arm model is really slow, i think the inertia / gearing are off
     private double inertia = Conversions.poundsToKilograms(3) * Math.pow(Units.inchesToMeters(8), 2); // kg m^2
     private DCMotorModel motor;
@@ -55,22 +55,27 @@ public class ArmTest {
       return angular_velocity;
     }
 
+    @Override
     public void setRawSpeed(double speed) {
       setRawVoltage(speed * 12);
     }
 
+    @Override
     public void setRawVoltage(double voltage) {
       applied_voltage = voltage;
     }
 
+    @Override
     public void zeroEncoder() {
       encoder.setEncoderPosition(0);
     }
 
+    @Override
     public int getPosition() {
       return (int) encoder.getEncoderPosition();
     }
 
+    @Override
     public boolean isLimitSwitchClosed() {
       return encoder.getRealPosition() <= 0;
     }

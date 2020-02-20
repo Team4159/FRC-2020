@@ -11,40 +11,38 @@ import edu.wpi.first.wpilibj.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.wpilibj.trajectory.Trajectory;
 
-import org.team4159.frc.robot.subsystems.IDrivetrain;
+import org.team4159.frc.robot.Constants;
+import org.team4159.frc.robot.subsystems.Drivetrain;
+import org.team4159.lib.control.ControlLoop;
 import org.team4159.lib.control.signal.DriveSignal;
 
-import static org.team4159.frc.robot.Constants.*;
-
-public class DrivetrainController {
+public class TrajectoryManager {
   private enum State {
     FOLLOWING,
     IDLE
   }
   private State state = State.IDLE;
 
-  private IDrivetrain drivetrain;
+  private Drivetrain drivetrain;
 
   private Trajectory trajectory_to_follow;
-  private DriveSignal demanded_signal;
-  private boolean is_oriented_forwards = true;
 
   private DifferentialDriveWheelSpeeds prev_speeds = new DifferentialDriveWheelSpeeds(0,0);
-  private DifferentialDriveKinematics kinematics = new DifferentialDriveKinematics(DRIVE_CONSTANTS.TRACK_WIDTH);
-  private SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(DRIVE_CONSTANTS.kS, DRIVE_CONSTANTS.kV, DRIVE_CONSTANTS.kA);
-  private RamseteController controller = new RamseteController(DRIVE_CONSTANTS.kB, DRIVE_CONSTANTS.kZeta);
-  private PIDController pid_left = new PIDController(DRIVE_CONSTANTS.kP, 0, DRIVE_CONSTANTS.kD);
-  private PIDController pid_right = new PIDController(DRIVE_CONSTANTS.kP, 0, DRIVE_CONSTANTS.kD);
+  private DifferentialDriveKinematics kinematics = new DifferentialDriveKinematics(Constants.DRIVE_CONSTANTS.TRACK_WIDTH);
+  private SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(Constants.DRIVE_CONSTANTS.kS, Constants.DRIVE_CONSTANTS.kV, Constants.DRIVE_CONSTANTS.kA);
+  private RamseteController controller = new RamseteController(Constants.DRIVE_CONSTANTS.kB, Constants.DRIVE_CONSTANTS.kZeta);
+  private PIDController pid_left = new PIDController(Constants.DRIVE_CONSTANTS.kP, 0, Constants.DRIVE_CONSTANTS.kD);
+  private PIDController pid_right = new PIDController(Constants.DRIVE_CONSTANTS.kP, 0, Constants.DRIVE_CONSTANTS.kD);
 
   private Timer timer = new Timer();
   private double prev_time = 0;
 
-  public DrivetrainController(IDrivetrain drivetrain) {
+  public TrajectoryManager(Drivetrain drivetrain) {
     this.drivetrain = drivetrain;
   }
 
   public void update() {
-    DriveSignal filtered_signal = DriveSignal.NEUTRAL;
+    DriveSignal signal = DriveSignal.NEUTRAL;
 
     switch (state) {
       case FOLLOWING:
@@ -82,30 +80,18 @@ public class DrivetrainController {
         prev_time = cur_time;
         prev_speeds = target_wheel_speeds;
 
-        filtered_signal = DriveSignal.fromVolts(left_output, right_output);
+        signal = DriveSignal.fromVolts(left_output, right_output);
         break;
       case IDLE:
-        filtered_signal = demanded_signal;
+        // shouldn't be getting called
         break;
     }
 
-    if (!is_oriented_forwards) {
-      filtered_signal = filtered_signal.invert();
-    }
-
-    drivetrain.drive(filtered_signal);
+    drivetrain.drive(signal);
   }
 
   public boolean isIdle() {
     return state == State.IDLE;
-  }
-
-  public void setDriveSignal(DriveSignal signal) {
-    this.demanded_signal = signal;
-  }
-
-  public void flipDriveOrientation() {
-    is_oriented_forwards = !is_oriented_forwards;
   }
 
   public void setTrajectory(Trajectory trajectory) {

@@ -1,5 +1,5 @@
 package org.team4159.lib.simulation.mocks;
 
-public interface ISubsystemMock {
+public interface SubsystemMock {
   void simulate(double dt);
 }

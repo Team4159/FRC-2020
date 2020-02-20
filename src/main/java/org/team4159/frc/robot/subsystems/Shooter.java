@@ -2,6 +2,8 @@ package org.team4159.frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
+import edu.wpi.first.wpilibj.controller.PIDController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
@@ -13,7 +15,13 @@ import org.team4159.lib.hardware.controller.ctre.CardinalSRX;
 
 import static org.team4159.frc.robot.Constants.*;
 
-public class Shooter extends SubsystemBase implements IShooter {
+public class Shooter extends SubsystemBase {
+  private enum State {
+    CLOSED_LOOP,
+    IDLE
+  }
+  private State state = State.IDLE;
+
   private CardinalSRX primary_shooter_talon, shooter_talon_two;
   private CardinalSPX shooter_victor_one, shooter_victor_two;
   private SpeedControllerGroup shooter_motors;

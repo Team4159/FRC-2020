@@ -73,10 +73,10 @@ public class RobotContainer {
 
   public void updateDrivetrainInputs() {
     if (secondary_joy.getRawButtonPressed(CONTROLS.SECONDARY_JOY.BUTTON_IDS.FLIP_ROBOT_ORIENTATION)) {
-      drivetrain.flipOrientation();
+      drivetrain.getController().flipDriveOrientation();
     }
 
-    drivetrain.drive(new DriveSignal(left_joy.getY(), right_joy.getY()));
+    drivetrain.getController().setDriveSignal(new DriveSignal(left_joy.getY(), right_joy.getY()));
   }
 
   public void updateFeederInputs() {

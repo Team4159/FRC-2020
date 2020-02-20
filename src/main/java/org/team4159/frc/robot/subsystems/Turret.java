@@ -1,6 +1,5 @@
 package org.team4159.frc.robot.subsystems;
 
-import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
@@ -13,7 +12,7 @@ import org.team4159.lib.hardware.controller.ctre.CardinalFX;
 
 import static org.team4159.frc.robot.Constants.*;
 
-public class Turret extends SubsystemBase {
+public class Turret extends SubsystemBase implements ITurret {
   private TalonFX turret_falcon;
 
   private Limelight limelight;

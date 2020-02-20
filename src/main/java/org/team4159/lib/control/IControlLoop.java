@@ -1,5 +1,5 @@
 package org.team4159.lib.control;
 
-public interface ControlLoop {
+public interface IControlLoop {
   void update();
 }

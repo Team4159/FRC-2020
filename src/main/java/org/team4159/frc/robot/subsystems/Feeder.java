@@ -11,7 +11,7 @@ import org.team4159.lib.hardware.controller.rev.CardinalMAX;
 
 import static org.team4159.frc.robot.Constants.*;
 
-public class Feeder extends SubsystemBase {
+public class Feeder extends SubsystemBase implements IFeeder {
   private SpeedControllerGroup feeder_motors;
 
   public Feeder() {

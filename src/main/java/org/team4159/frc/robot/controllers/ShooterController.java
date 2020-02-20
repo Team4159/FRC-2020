@@ -3,17 +3,17 @@ package org.team4159.frc.robot.controllers;
 import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.team4159.frc.robot.Constants;
-import org.team4159.frc.robot.subsystems.Shooter;
-import org.team4159.lib.control.ControlLoop;
+import org.team4159.frc.robot.subsystems.IShooter;
+import org.team4159.lib.control.IControlLoop;
 import org.team4159.lib.hardware.Limelight;
 
-public class ShooterController implements ControlLoop {
+public class ShooterController implements IControlLoop {
   public enum State {
     IDLE,
     CLOSED_LOOP
   }
 
-  private Shooter shooter;
+  private IShooter shooter;
   private Limelight limelight;
 
   private State state = State.IDLE;
@@ -23,7 +23,7 @@ public class ShooterController implements ControlLoop {
     Constants.SHOOTER_CONSTANTS.kD
   );
 
-  public ShooterController(Shooter shooter) {
+  public ShooterController(IShooter shooter) {
     this.shooter = shooter;
     this.limelight = shooter.getLimelight();
 

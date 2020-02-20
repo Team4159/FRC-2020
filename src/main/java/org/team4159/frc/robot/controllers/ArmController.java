@@ -2,12 +2,12 @@ package org.team4159.frc.robot.controllers;
 
 import edu.wpi.first.wpilibj.controller.PIDController;
 
-import org.team4159.frc.robot.subsystems.Arm;
-import org.team4159.lib.control.ControlLoop;
+import org.team4159.frc.robot.subsystems.IArm;
+import org.team4159.lib.control.IControlLoop;
 
 import static org.team4159.frc.robot.Constants.*;
 
-public class ArmController implements ControlLoop {
+public class ArmController implements IControlLoop {
   private enum State {
     ZEROING,
     CLOSED_LOOP,
@@ -15,11 +15,11 @@ public class ArmController implements ControlLoop {
   }
   private State state = State.ZEROING;
 
-  private Arm arm;
+  private IArm arm;
 
   private PIDController pid_controller;
 
-  public ArmController(Arm arm) {
+  public ArmController(IArm arm) {
     this.arm = arm;
 
     pid_controller = new PIDController(

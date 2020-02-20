@@ -19,6 +19,7 @@ import static org.team4159.frc.robot.Constants.*;
 
 public class ArmTest {
   public class MockArm extends Arm implements SubsystemMock {
+    // arm model is really slow, i think the inertia / gearing are off
     private double inertia = Conversions.poundsToKilograms(3) * Math.pow(Units.inchesToMeters(8), 2); // kg m^2
     private DCMotorModel motor;
 
@@ -94,5 +95,12 @@ public class ArmTest {
     arm.setRealStartingPosition(100);
     SimulationRunner.simulate(arm, arm_controller, 5);
     Assert.assertEquals(0, arm.getRealPosition(), ARM_CONSTANTS.ACCEPTABLE_ERROR_IN_COUNTS);
+  }
+
+  @Test
+  public void GoesToPosition() {
+    arm_controller.setSetpoint(ARM_CONSTANTS.DOWN_POSITION);
+    SimulationRunner.simulate(arm, arm_controller, 10);
+    Assert.assertTrue(arm_controller.isAtSetpoint());
   }
 }

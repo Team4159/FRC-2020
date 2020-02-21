@@ -13,7 +13,6 @@ import edu.wpi.first.wpilibj.trajectory.Trajectory;
 
 import org.team4159.frc.robot.Constants;
 import org.team4159.frc.robot.subsystems.Drivetrain;
-import org.team4159.lib.control.ControlLoop;
 import org.team4159.lib.control.signal.DriveSignal;
 
 public class TrajectoryManager {

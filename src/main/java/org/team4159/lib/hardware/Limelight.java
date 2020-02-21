@@ -44,18 +44,18 @@ public class Limelight {
 
   private static Limelight instance = null;
 
-  public static Limelight getInstance() {
+  public static Limelight getDefault() {
     if (instance == null) {
       instance = new Limelight();
     }
     return instance;
   }
 
-  private Limelight(NetworkTableInstance nt) {
+  public Limelight(NetworkTableInstance nt) {
     limelight_table = nt.getTable("limelight");
   }
 
-  private Limelight() {
+  public Limelight() {
     this(NetworkTableInstance.getDefault());
   }
 

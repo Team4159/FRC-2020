@@ -32,6 +32,7 @@ public class ArmTest {
       motor = MotorModels.NEO_550;
     }
 
+    @Override
     public void simulate(double dt) {
        double torque = motor.getTorqueForVoltage(angular_velocity, applied_voltage);
        double angular_acceleration = torque / inertia;

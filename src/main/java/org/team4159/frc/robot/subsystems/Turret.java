@@ -8,7 +8,6 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 
-import org.team4159.lib.hardware.Limelight;
 import org.team4159.lib.hardware.controller.ctre.CardinalFX;
 
 import static org.team4159.frc.robot.Constants.*;

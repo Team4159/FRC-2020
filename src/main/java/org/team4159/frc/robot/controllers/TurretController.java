@@ -32,7 +32,7 @@ public class TurretController implements ControlLoop {
 
   public TurretController(Turret turret) {
     this.turret = turret;
-    this.limelight = Limelight.getInstance();
+    this.limelight = Limelight.getDefault();
 
     limelight.setLEDMode(Limelight.LEDMode.ForceOn);
     pid_controller.reset();

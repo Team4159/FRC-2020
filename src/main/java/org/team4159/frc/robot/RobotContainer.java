@@ -14,13 +14,12 @@ import static org.team4159.frc.robot.Constants.*;
 
 public class RobotContainer {
   private final Drivetrain drivetrain = new Drivetrain();
-  private final Limelight limelight = new Limelight();
-  private final Shooter shooter = new Shooter(limelight);
+  private final Shooter shooter = new Shooter();
   private final Intake intake = new Intake();
   private final Feeder feeder = new Feeder();
   private final Neck neck = new Neck();
   private final Arm arm = new Arm();
-  private final Turret turret = new Turret(limelight);
+  private final Turret turret = new Turret();
 
   private final IntakeManager intake_controller = new IntakeManager(arm.getController(), intake, feeder);
 

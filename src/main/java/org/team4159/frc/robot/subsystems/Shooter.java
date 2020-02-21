@@ -20,6 +20,7 @@ public class Shooter extends SubsystemBase {
     CLOSED_LOOP,
     IDLE
   }
+
   private State state = State.IDLE;
 
   private CardinalSRX primary_shooter_talon, shooter_talon_two;
@@ -27,11 +28,8 @@ public class Shooter extends SubsystemBase {
   private SpeedControllerGroup shooter_motors;
 
   private EnhancedEncoder shooter_encoder;
-  private Limelight limelight;
 
-  public Shooter(Limelight limelight) {
-    this.limelight = limelight;
-
+  public Shooter() {
     primary_shooter_talon = new CardinalSRX(CAN_IDS.PRIMARY_SHOOTER_TALON, NeutralMode.Coast);
     shooter_talon_two = new CardinalSRX(CAN_IDS.SHOOTER_TALON_TWO, NeutralMode.Coast);
     shooter_victor_one = new CardinalSPX(CAN_IDS.SHOOTER_VICTOR_ONE, NeutralMode.Coast);
@@ -62,9 +60,5 @@ public class Shooter extends SubsystemBase {
 
   public double getSpeed() {
     return shooter_encoder.getVelocity();
-  }
-
-  public Limelight getLimelight() {
-    return limelight;
   }
 }

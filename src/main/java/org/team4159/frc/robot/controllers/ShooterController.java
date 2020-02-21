@@ -25,7 +25,7 @@ public class ShooterController implements ControlLoop {
 
   public ShooterController(Shooter shooter) {
     this.shooter = shooter;
-    this.limelight = shooter.getLimelight();
+    this.limelight = Limelight.getInstance();
 
     pid_controller.setTolerance(Constants.SHOOTER_CONSTANTS.ACCEPTABLE_SPEED_ERROR);
   }

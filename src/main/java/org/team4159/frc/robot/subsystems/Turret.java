@@ -16,10 +16,7 @@ import static org.team4159.frc.robot.Constants.*;
 public class Turret extends SubsystemBase {
   private TalonFX turret_falcon;
 
-  private Limelight limelight;
-
-  public Turret(Limelight limelight) {
-    this.limelight = limelight;
+  public Turret() {
     turret_falcon = new CardinalFX(CAN_IDS.TURRET_FALCON, NeutralMode.Brake);
 
     turret_falcon.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
@@ -51,9 +48,5 @@ public class Turret extends SubsystemBase {
 
   public boolean isReverseLimitSwitchClosed() {
     return turret_falcon.isRevLimitSwitchClosed() == 1;
-  }
-
-  public Limelight getLimelight() {
-    return limelight;
   }
 }

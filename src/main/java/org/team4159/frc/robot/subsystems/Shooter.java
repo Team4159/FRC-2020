@@ -20,6 +20,7 @@ public class Shooter extends SubsystemBase {
     CLOSED_LOOP,
     IDLE
   }
+
   private State state = State.IDLE;
 
   private CardinalSRX primary_shooter_talon, shooter_talon_two;

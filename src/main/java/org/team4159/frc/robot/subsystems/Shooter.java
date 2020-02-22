@@ -8,6 +8,7 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 
 import org.team4159.frc.robot.controllers.ShooterController;
 import org.team4159.lib.hardware.EnhancedEncoder;
+import org.team4159.lib.hardware.Limelight;
 import org.team4159.lib.hardware.controller.ctre.CardinalSPX;
 import org.team4159.lib.hardware.controller.ctre.CardinalSRX;
 
@@ -42,7 +43,7 @@ public class Shooter extends SubsystemBase {
       SHOOTER_CONSTANTS.ENCODER_ENCODING_TYPE
     ));
 
-    shooter_controller = new ShooterController(this);
+    shooter_controller = new ShooterController(this, Limelight.getDefault());
   }
 
   @Override

@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 
+import org.team4159.frc.robot.controllers.ShooterController;
 import org.team4159.lib.hardware.EnhancedEncoder;
 import org.team4159.lib.hardware.controller.ctre.CardinalSPX;
 import org.team4159.lib.hardware.controller.ctre.CardinalSRX;
@@ -18,6 +19,8 @@ public class Shooter extends SubsystemBase {
   private SpeedControllerGroup shooter_motors;
 
   private EnhancedEncoder shooter_encoder;
+
+  private ShooterController shooter_controller;
 
   public Shooter() {
     primary_shooter_talon = new CardinalSRX(CAN_IDS.PRIMARY_SHOOTER_TALON, NeutralMode.Coast);
@@ -38,6 +41,13 @@ public class Shooter extends SubsystemBase {
       SHOOTER_CONSTANTS.IS_ENCODER_REVERSED,
       SHOOTER_CONSTANTS.ENCODER_ENCODING_TYPE
     ));
+
+    shooter_controller = new ShooterController(this);
+  }
+
+  @Override
+  public void periodic() {
+    shooter_controller.update();
   }
 
   public void setRawSpeed(double speed) {
@@ -50,5 +60,9 @@ public class Shooter extends SubsystemBase {
 
   public double getSpeed() {
     return shooter_encoder.getVelocity();
+  }
+
+  public ShooterController getController() {
+    return shooter_controller;
   }
 }

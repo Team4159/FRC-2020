@@ -6,7 +6,6 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.*;
 
 import org.team4159.lib.control.signal.DriveSignal;
-import org.team4159.lib.hardware.Limelight;
 import org.team4159.frc.robot.controllers.complex.IntakeController;
 import org.team4159.frc.robot.subsystems.*;
 
@@ -72,10 +71,10 @@ public class RobotContainer {
 
   public void updateDrivetrainInputs() {
     if (secondary_joy.getRawButtonPressed(CONTROLS.SECONDARY_JOY.BUTTON_IDS.FLIP_ROBOT_ORIENTATION)) {
-      drivetrain.flipOrientation();
+      drivetrain.getController().flipDriveOrientation();
     }
 
-    drivetrain.drive(new DriveSignal(left_joy.getY(), right_joy.getY()));
+    drivetrain.getController().demandSignal(new DriveSignal(left_joy.getY(), right_joy.getY()));
   }
 
   public void updateFeederInputs() {

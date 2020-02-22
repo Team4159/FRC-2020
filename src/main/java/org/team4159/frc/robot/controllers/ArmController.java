@@ -30,6 +30,7 @@ public class ArmController implements ControlLoop {
     pid_controller.setTolerance(ARM_CONSTANTS.ACCEPTABLE_ERROR_IN_COUNTS);
   }
 
+  @Override
   public void update() {
     switch (state) {
       case ZEROING:

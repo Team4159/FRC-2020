@@ -14,12 +14,10 @@ public class ShooterController implements ControlLoop {
     IDLE,
     CLOSED_LOOP
   }
-
+  private State state = State.IDLE;
 
   private Shooter shooter;
   private Limelight limelight;
-
-  private State state = State.IDLE;
 
   private PIDController pid_controller = new PIDController(
     SHOOTER_CONSTANTS.kP,
@@ -27,9 +25,9 @@ public class ShooterController implements ControlLoop {
     SHOOTER_CONSTANTS.kD
   );
 
-  public ShooterController(Shooter shooter) {
+  public ShooterController(Shooter shooter, Limelight limelight) {
     this.shooter = shooter;
-    this.limelight = Limelight.getDefault();
+    this.limelight = limelight;
 
     pid_controller.setTolerance(SHOOTER_CONSTANTS.ACCEPTABLE_SPEED_ERROR);
   }

@@ -3,27 +3,29 @@ package org.team4159.frc.robot.controllers.complex;
 import org.team4159.frc.robot.controllers.ArmController;
 import org.team4159.frc.robot.subsystems.Feeder;
 import org.team4159.frc.robot.subsystems.Intake;
+import org.team4159.lib.control.ControlLoop;
 
 import static org.team4159.frc.robot.Constants.*;
 
-public class IntakeController {
+public class IntakeController implements ControlLoop {
   private enum State {
     STOWED, // arm / intake is stowing / stowed
     DEPLOYING, // arm is deploying, intake is not being run
     INTAKING // arm is deployed, intake is being run
   }
-  private State state;
+  private State state = State.STOWED;
 
   private ArmController arm_controller;
   private Intake intake;
   private Feeder feeder;
 
-  public IntakeController(ArmController arm, Intake intake, Feeder feeder) {
+  public IntakeController(ArmController arm_controller, Intake intake, Feeder feeder) {
     this.arm_controller = arm_controller;
     this.intake = intake;
     this.feeder = feeder;
   }
 
+  @Override
   public void update() {
     int arm_setpoint = ARM_CONSTANTS.UP_POSITION;
     double intake_speed = 0,

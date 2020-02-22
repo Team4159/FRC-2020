@@ -13,15 +13,10 @@ import edu.wpi.first.wpilibj.trajectory.Trajectory;
 
 import org.team4159.frc.robot.Constants;
 import org.team4159.frc.robot.subsystems.Drivetrain;
+import org.team4159.lib.control.ControlLoop;
 import org.team4159.lib.control.signal.DriveSignal;
 
-public class TrajectoryController {
-  private enum State {
-    FOLLOWING,
-    IDLE
-  }
-  private State state = State.IDLE;
-
+public class TrajectoryController implements ControlLoop {
   private Drivetrain drivetrain;
 
   private Trajectory trajectory_to_follow;
@@ -40,62 +35,46 @@ public class TrajectoryController {
     this.drivetrain = drivetrain;
   }
 
+  @Override
   public void update() {
-    DriveSignal signal = DriveSignal.NEUTRAL;
+    double cur_time = timer.get();
+    double dt = cur_time - prev_time;
 
-    switch (state) {
-      case FOLLOWING:
-        if (timer.hasPeriodPassed(trajectory_to_follow.getTotalTimeSeconds())) {
-          state = State.IDLE;
-          break;
-        }
+    Pose2d drivetrain_pose = drivetrain.getPose();
+    Trajectory.State trajectory_sample = trajectory_to_follow.sample(cur_time);
 
-        double cur_time = timer.get();
-        double dt = cur_time - prev_time;
+    var target_wheel_speeds = kinematics.toWheelSpeeds(
+      controller.calculate(drivetrain_pose, trajectory_sample));
 
-        Pose2d drivetrain_pose = drivetrain.getPose();
-        Trajectory.State trajectory_sample = trajectory_to_follow.sample(cur_time);
+    double left_speed_setpoint = target_wheel_speeds.leftMetersPerSecond;
+    double right_speed_setpoint = target_wheel_speeds.rightMetersPerSecond;
 
-        var target_wheel_speeds = kinematics.toWheelSpeeds(
-          controller.calculate(drivetrain_pose, trajectory_sample));
+    double left_feed_forward =
+      feedforward.calculate(left_speed_setpoint,
+        (left_speed_setpoint - prev_speeds.leftMetersPerSecond) / dt);
+    double right_feed_forward =
+      feedforward.calculate(right_speed_setpoint,
+        (right_speed_setpoint - prev_speeds.rightMetersPerSecond) / dt);
 
-        double left_speed_setpoint = target_wheel_speeds.leftMetersPerSecond;
-        double right_speed_setpoint = target_wheel_speeds.rightMetersPerSecond;
+    double left_PID = pid_left.calculate(drivetrain.getWheelSpeeds().leftMetersPerSecond, left_speed_setpoint);
+    double right_PID = pid_right.calculate(drivetrain.getWheelSpeeds().rightMetersPerSecond, right_speed_setpoint);
 
-        double left_feed_forward =
-          feedforward.calculate(left_speed_setpoint,
-            (left_speed_setpoint - prev_speeds.leftMetersPerSecond) / dt);
-        double right_feed_forward =
-          feedforward.calculate(right_speed_setpoint,
-            (right_speed_setpoint - prev_speeds.rightMetersPerSecond) / dt);
+    double left_output = left_feed_forward + left_PID;
 
-        double left_PID = pid_left.calculate(drivetrain.getWheelSpeeds().leftMetersPerSecond, left_speed_setpoint);
-        double right_PID = pid_right.calculate(drivetrain.getWheelSpeeds().rightMetersPerSecond, right_speed_setpoint);
+    double right_output = right_feed_forward + right_PID;
 
-        double left_output = left_feed_forward + left_PID;
+    prev_time = cur_time;
+    prev_speeds = target_wheel_speeds;
 
-        double right_output = right_feed_forward + right_PID;
-
-        prev_time = cur_time;
-        prev_speeds = target_wheel_speeds;
-
-        signal = DriveSignal.fromVolts(left_output, right_output);
-        break;
-      case IDLE:
-        // shouldn't be getting called
-        break;
-    }
-
+    DriveSignal signal = DriveSignal.fromVolts(left_output, right_output);
     drivetrain.drive(signal);
   }
 
-  public boolean isIdle() {
-    return state == State.IDLE;
+  public boolean isComplete() {
+    return timer.hasPeriodPassed(trajectory_to_follow.getTotalTimeSeconds());
   }
 
   public void setTrajectory(Trajectory trajectory) {
-    state = State.FOLLOWING;
-
     Transform2d transform = drivetrain.getPose().minus(trajectory.getInitialPose());
     trajectory = trajectory.transformBy(transform);
     trajectory_to_follow = trajectory;

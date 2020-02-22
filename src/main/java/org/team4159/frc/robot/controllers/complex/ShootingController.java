@@ -1,11 +1,13 @@
-package org.team4159.frc.robot.controllers;
+package org.team4159.frc.robot.controllers.complex;
 
 import edu.wpi.first.wpilibj.Timer;
 
+import org.team4159.frc.robot.controllers.ShooterController;
+import org.team4159.frc.robot.controllers.TurretController;
 import org.team4159.frc.robot.subsystems.Neck;
 import org.team4159.lib.control.ControlLoop;
 
-public class ShootingManager implements ControlLoop {
+public class ShootingController implements ControlLoop {
   private enum State {
     IDLE,
     WAITING,
@@ -21,7 +23,7 @@ public class ShootingManager implements ControlLoop {
   private State state = State.IDLE;
   private Timer timer = new Timer();
 
-  public ShootingManager(Neck neck, TurretController turret_controller, ShooterController shooter_controller) {
+  public ShootingController(Neck neck, TurretController turret_controller, ShooterController shooter_controller) {
     this.neck = neck;
     this.turret_controller = turret_controller;
     this.shooter_controller = shooter_controller;
@@ -42,7 +44,7 @@ public class ShootingManager implements ControlLoop {
         }
         break;
       case SHOOTING:
-        if (isShooterReadyToShoot()) {
+        if (!isShooterReadyToShoot()) {
           state = State.WAITING;
         } else {
           neck.neck();
@@ -63,14 +65,14 @@ public class ShootingManager implements ControlLoop {
   }
 
   public void beginShooting() {
-    turret_controller.setState(TurretController.State.SEEKING_TARGET);
+    turret_controller.startSeeking();
     shooter_controller.setState(ShooterController.State.CLOSED_LOOP);
 
     state = State.WAITING;
   }
 
   public void stopShooting() {
-    turret_controller.setState(TurretController.State.OPEN_LOOP);
+    turret_controller.idle();
     shooter_controller.setState(ShooterController.State.IDLE);
 
     state = State.IDLE;

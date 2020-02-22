@@ -7,7 +7,7 @@ import edu.wpi.first.wpilibj2.command.*;
 
 import org.team4159.lib.control.signal.DriveSignal;
 import org.team4159.lib.hardware.Limelight;
-import org.team4159.frc.robot.controllers.IntakeManager;
+import org.team4159.frc.robot.controllers.complex.IntakeController;
 import org.team4159.frc.robot.subsystems.*;
 
 import static org.team4159.frc.robot.Constants.*;
@@ -21,7 +21,7 @@ public class RobotContainer {
   private final Arm arm = new Arm();
   private final Turret turret = new Turret();
 
-  private final IntakeManager intake_controller = new IntakeManager(arm.getController(), intake, feeder);
+  private final IntakeController intake_controller = new IntakeController(arm.getController(), intake, feeder);
 
   private final Joystick left_joy = new Joystick(CONTROLS.LEFT_JOY.USB_PORT);
   private final Joystick right_joy = new Joystick(CONTROLS.RIGHT_JOY.USB_PORT);

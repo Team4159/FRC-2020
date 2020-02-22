@@ -1,6 +1,7 @@
 package org.team4159.frc.robot.controllers;
 
 import edu.wpi.first.wpilibj.controller.PIDController;
+
 import org.team4159.frc.robot.subsystems.Turret;
 import org.team4159.lib.control.ControlLoop;
 import org.team4159.lib.hardware.Limelight;
@@ -8,21 +9,20 @@ import org.team4159.lib.hardware.Limelight;
 import static org.team4159.frc.robot.Constants.*;
 
 public class TurretController implements ControlLoop {
-  public enum State {
+  private enum State {
     ZEROING,
     SEEKING_TARGET,
     FOUND_TARGET,
     RECOVERING,
     OPEN_LOOP
   }
+  private State last_state;
+  private State state = State.ZEROING;
 
   private Turret turret;
   private Limelight limelight;
 
   private int seeking_direction, seeking_range, seeking_starting_position;
-
-  private State last_state;
-  private State state = State.ZEROING;
 
   private PIDController pid_controller = new PIDController(
     TURRET_CONSTANTS.LIMELIGHT_TURN_kP,
@@ -94,7 +94,7 @@ public class TurretController implements ControlLoop {
         break;
       case OPEN_LOOP:
         if (isTurretOutOfSafeRange()) {
-          setState(State.SEEKING_TARGET);
+          setState(State.RECOVERING);
         }
         break;
     }
@@ -122,7 +122,11 @@ public class TurretController implements ControlLoop {
     state = State.RECOVERING;
   }
 
-  public void setState(State state) {
+  public void idle() {
+    setState(State.OPEN_LOOP);
+  }
+
+  private void setState(State state) {
     if (state == State.SEEKING_TARGET) {
       startSeeking();
     } else if (state == State.RECOVERING) {
@@ -130,9 +134,5 @@ public class TurretController implements ControlLoop {
     } else {
       this.state = state;
     }
-  }
-
-  public State getState() {
-    return state;
   }
 }

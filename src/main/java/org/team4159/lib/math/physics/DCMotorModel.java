@@ -34,13 +34,13 @@ public class DCMotorModel {
   }
 
   // "velocity constant"
-  public double volt_per_speed() {
+  public double volts_per_speed() {
     return free_speed / (test_voltage - free_current * resistance()); // voltage dropped at free speed = free_current * resistance
   }
 
   // "back-EMF constant"
   public double speed_per_volt() {
-    return 1 / volt_per_speed();
+    return 1 / volts_per_speed();
   }
 
   // "torque constant"
@@ -53,6 +53,6 @@ public class DCMotorModel {
   }
 
   public double getTorqueForVoltage(final double output_speed, final double voltage) {
-    return torque_per_volt() * (voltage - output_speed / speed_per_volt());
+    return torque_per_volt() * (voltage - output_speed * volts_per_speed());
   }
 }

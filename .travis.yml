@@ -1,7 +1,20 @@
 language: java
+rust: stable
 
-script:
-  - ./gradlew test
+jobs:
+  include:
+    - stage: "Tests"
+      name: "Unit Tests"
+      script: ./gradlew test
+    - stage: "Report"
+      name: "Install Deepsource"
+      script:
+        - curl https://deepsource.io/cli | sh
+    - name: "Generate Report"
+      script:
+        - git clone https://github.com/dominikWin/badlogvis.git
+        - cd badlogvis
+        - cargo install
 
 os:
   - osx

@@ -15,7 +15,7 @@ import org.team4159.frc.robot.Constants;
 import org.team4159.frc.robot.subsystems.Drivetrain;
 import org.team4159.lib.control.signal.DriveSignal;
 
-public class TrajectoryManager {
+public class TrajectoryController {
   private enum State {
     FOLLOWING,
     IDLE
@@ -36,7 +36,7 @@ public class TrajectoryManager {
   private Timer timer = new Timer();
   private double prev_time = 0;
 
-  public TrajectoryManager(Drivetrain drivetrain) {
+  public TrajectoryController(Drivetrain drivetrain) {
     this.drivetrain = drivetrain;
   }
 
@@ -45,7 +45,7 @@ public class TrajectoryManager {
 
     switch (state) {
       case FOLLOWING:
-        if (timer.get() > trajectory_to_follow.getTotalTimeSeconds()) {
+        if (timer.hasPeriodPassed(trajectory_to_follow.getTotalTimeSeconds())) {
           state = State.IDLE;
           break;
         }

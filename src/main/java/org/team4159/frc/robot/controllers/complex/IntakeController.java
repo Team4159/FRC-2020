@@ -43,13 +43,13 @@ public class IntakeController implements ControlLoop {
       case INTAKING:
         arm_setpoint = ARM_CONSTANTS.DOWN_POSITION;
         intake_speed = INTAKE_CONSTANTS.INTAKE_SPEED;
-        feeder_speed = FEEDER_CONSTANTS.FEEDING_SPEED;
+        feeder_speed = FEEDER_CONSTANTS.TOWER_FEEDING_SPEED;
         break;
     }
 
     arm_controller.setSetpoint(arm_setpoint);
     intake.setRawSpeed(intake_speed);
-    feeder.setRawSpeed(feeder_speed);
+    feeder.setRawTowerSpeed(feeder_speed);
   }
 
   public void intake() {

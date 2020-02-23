@@ -9,11 +9,12 @@ import static org.team4159.frc.robot.Constants.*;
 
 public class ArmController implements ControlLoop {
   private enum State {
+    IDLE,
     ZEROING,
     CLOSED_LOOP,
     ESTOP
   }
-  private State state = State.ZEROING;
+  private State state = State.IDLE;
 
   private Arm arm;
 
@@ -33,6 +34,8 @@ public class ArmController implements ControlLoop {
   @Override
   public void update() {
     switch (state) {
+      case IDLE:
+        break;
       case ZEROING:
         arm.setRawSpeed(ARM_CONSTANTS.ZEROING_SPEED);
         if (arm.isLimitSwitchClosed()) {
@@ -49,6 +52,10 @@ public class ArmController implements ControlLoop {
 
   public boolean isAtSetpoint() {
     return pid_controller.atSetpoint();
+  }
+
+  public void startZeroing() {
+    state = State.ZEROING;
   }
 
   public void setSetpoint(int setpoint) {

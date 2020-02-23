@@ -13,7 +13,6 @@ import com.ctre.phoenix.sensors.PigeonIMU;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 
 import org.team4159.frc.robot.controllers.DrivetrainController;
-import org.team4159.frc.robot.controllers.TrajectoryController;
 import org.team4159.lib.control.signal.DriveSignal;
 import org.team4159.lib.control.signal.filters.LowPassFilterSource;
 import org.team4159.lib.hardware.controller.ctre.CardinalFX;
@@ -51,8 +50,8 @@ public class Drivetrain extends SubsystemBase {
       right_rear_falcon
     );
 
-    left_falcons.setInverted(true);
-    right_falcons.setInverted(false);
+    left_falcons.setInverted(false);
+    right_falcons.setInverted(true);
 
     pigeon = new PigeonIMU(CAN_IDS.PIGEON);
 

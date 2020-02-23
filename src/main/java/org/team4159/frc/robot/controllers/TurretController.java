@@ -17,7 +17,7 @@ public class TurretController implements ControlLoop {
     IDLE
   }
   private State last_state;
-  private State state = State.ZEROING;
+  private State state = State.IDLE;
 
   private Turret turret;
   private Limelight limelight;
@@ -30,9 +30,9 @@ public class TurretController implements ControlLoop {
     TURRET_CONSTANTS.LIMELIGHT_TURN_kD
   );
 
-  public TurretController(Turret turret) {
+  public TurretController(Turret turret, Limelight limelight) {
     this.turret = turret;
-    this.limelight = Limelight.getDefault();
+    this.limelight = limelight;
 
     limelight.setLEDMode(Limelight.LEDMode.ForceOn);
     pid_controller.reset();
@@ -103,6 +103,10 @@ public class TurretController implements ControlLoop {
 
   public boolean isTurretOutOfSafeRange() {
     return Math.abs(turret.getPosition()) < TURRET_CONSTANTS.SAFE_FORWARD_POSITION;
+  }
+
+  public void startZeroing() {
+    state = State.ZEROING;
   }
 
   public void startSeeking() {

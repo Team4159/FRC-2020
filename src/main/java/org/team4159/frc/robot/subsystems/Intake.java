@@ -12,6 +12,7 @@ public class Intake extends SubsystemBase {
 
   public Intake() {
     intake_spark = new CardinalMAX(CAN_IDS.INTAKE_SPARK, CANSparkMax.IdleMode.kCoast);
+    intake_spark.setInverted(true);
   }
 
   public void setRawSpeed(double speed) {

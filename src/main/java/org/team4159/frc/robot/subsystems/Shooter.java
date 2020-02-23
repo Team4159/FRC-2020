@@ -17,7 +17,6 @@ import static org.team4159.frc.robot.Constants.*;
 public class Shooter extends SubsystemBase {
   private CardinalSRX primary_shooter_talon, shooter_talon_two;
   private CardinalSPX shooter_victor_one, shooter_victor_two;
-  private SpeedControllerGroup shooter_motors;
 
   private EnhancedEncoder shooter_encoder;
 
@@ -26,15 +25,14 @@ public class Shooter extends SubsystemBase {
   public Shooter() {
     primary_shooter_talon = new CardinalSRX(CAN_IDS.PRIMARY_SHOOTER_TALON, NeutralMode.Coast);
     shooter_talon_two = new CardinalSRX(CAN_IDS.SHOOTER_TALON_TWO, NeutralMode.Coast);
-    shooter_victor_one = new CardinalSPX(CAN_IDS.SHOOTER_VICTOR_ONE, NeutralMode.Coast);
-    shooter_victor_two = new CardinalSPX(CAN_IDS.SHOOTER_VICTOR_TWO, NeutralMode.Coast);
+    //shooter_victor_one = new CardinalSPX(CAN_IDS.SHOOTER_VICTOR_ONE, NeutralMode.Coast);
+    //shooter_victor_two = new CardinalSPX(CAN_IDS.SHOOTER_VICTOR_TWO, NeutralMode.Coast);
 
-    shooter_motors = new SpeedControllerGroup(
-      primary_shooter_talon,
-      shooter_talon_two,
-      shooter_victor_one,
-      shooter_victor_two
-    );
+    //primary_shooter_talon.configOpenloopRamp(1);
+
+    shooter_talon_two.follow(primary_shooter_talon);
+    //shooter_victor_one.follow(primary_shooter_talon);
+    //shooter_victor_two.follow(primary_shooter_talon);
 
     shooter_encoder = new EnhancedEncoder(new Encoder(
       SHOOTER_CONSTANTS.ENCODER_CHANNEL_A_PORT,
@@ -48,15 +46,19 @@ public class Shooter extends SubsystemBase {
 
   @Override
   public void periodic() {
-    shooter_controller.update();
+    // shooter_controller.update();
   }
 
   public void setRawSpeed(double speed) {
-    shooter_motors.set(speed);
+    primary_shooter_talon.set(speed);
   }
 
   public void setRawVoltage(double voltage) {
-    shooter_motors.setVoltage(voltage);
+    primary_shooter_talon.setVoltage(voltage);
+  }
+
+  public void stop() {
+    setRawSpeed(0);
   }
 
   public double getSpeed() {

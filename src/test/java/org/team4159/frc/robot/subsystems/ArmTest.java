@@ -94,12 +94,14 @@ public class ArmTest {
   @Test
   public void Zeroes() {
     arm.setRealStartingPosition(100);
+    arm_controller.startZeroing();
     SimulationRunner.simulate(arm, arm_controller, 5);
     Assert.assertEquals(0, arm.getRealPosition(), ARM_CONSTANTS.ACCEPTABLE_ERROR_IN_COUNTS);
   }
 
   @Test
   public void GoesToPosition() {
+    Zeroes();
     arm_controller.setSetpoint(ARM_CONSTANTS.DOWN_POSITION);
     SimulationRunner.simulate(arm, arm_controller, 10);
     Assert.assertTrue(arm_controller.isAtSetpoint());

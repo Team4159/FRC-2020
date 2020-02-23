@@ -74,7 +74,7 @@ public class RobotContainer {
   }
 
   public void updateFeederInputs() {
-    if (secondary_joy.getRawButton(CONTROLS.SECONDARY_JOY.BUTTON_IDS.RUN_SHOOTER)) {
+    if (secondary_joy.getRawButton(CONTROLS.SECONDARY_JOY.BUTTON_IDS.RUN_FEEDER)) {
       feeder.feed();
     } else {
       feeder.stop();
@@ -90,7 +90,7 @@ public class RobotContainer {
   }
 
   public void updateNeckInputs() {
-    if (secondary_joy.getRawButton(CONTROLS.SECONDARY_JOY.BUTTON_IDS.RUN_SHOOTER)) {
+    if (secondary_joy.getRawButton(CONTROLS.SECONDARY_JOY.BUTTON_IDS.RUN_NECK)) {
       neck.neck();
     } else {
       neck.stop();

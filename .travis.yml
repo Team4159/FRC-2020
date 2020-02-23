@@ -1,7 +1,11 @@
 language: java
+rust: stable
 
-script:
-  - ./gradlew test
+jobs:
+  include:
+    - stage: "Tests"
+      name: "Unit Tests"
+      script: ./gradlew test
 
 os:
   - osx

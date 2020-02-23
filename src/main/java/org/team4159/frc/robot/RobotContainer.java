@@ -2,14 +2,11 @@ package org.team4159.frc.robot;
 
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import edu.wpi.first.wpilibj2.command.*;
 
-import org.team4159.frc.robot.controllers.IntakeManager;
 import org.team4159.lib.control.signal.DriveSignal;
-import org.team4159.lib.hardware.Limelight;
+import org.team4159.frc.robot.controllers.complex.IntakeController;
 import org.team4159.frc.robot.subsystems.*;
+import org.team4159.lib.hardware.Limelight;
 
 import static org.team4159.frc.robot.Constants.*;
 
@@ -22,47 +19,40 @@ public class RobotContainer {
   private final Arm arm = new Arm();
   private final Turret turret = new Turret();
 
-  private final IntakeManager intake_controller = new IntakeManager(arm, intake, feeder);
+  private final Limelight limelight = Limelight.getDefault();
+
+  private final IntakeController intake_controller = new IntakeController(arm.getController(), intake, feeder);
 
   private final Joystick left_joy = new Joystick(CONTROLS.LEFT_JOY.USB_PORT);
   private final Joystick right_joy = new Joystick(CONTROLS.RIGHT_JOY.USB_PORT);
   private final Joystick secondary_joy = new Joystick(CONTROLS.SECONDARY_JOY.USB_PORT);
 
- private final AutoSelector auto_selector = new AutoSelector(drivetrain);
+  private final AutoSelector auto_selector = new AutoSelector();
 
   public RobotContainer() {
-    configureCamera();
+    configureCameras();
   }
 
-  private void configureCamera() {
-    CameraServer.getInstance().startAutomaticCapture();
+  private void configureCameras() {
+    //CameraServer.getInstance().startAutomaticCapture();
+    limelight.setLEDMode(Limelight.LEDMode.ForceOff);
   }
 
-  private void configureButtonBindings() {
-//    new JoystickButton(secondary_joy, CONTROLS.SECONDARY_JOY.BUTTON_IDS.ENABLE_SHOOTER)
-//      .whenPressed(() -> shooter.setTargetSpeed(SmartDashboard.getNumber("target_shooter_speed", 0)))
-//      .whenReleased(new InstantCommand(shooter::stop, shooter));
-
-    new JoystickButton(secondary_joy, CONTROLS.SECONDARY_JOY.BUTTON_IDS.RUN_ALL_INTAKE_SUBSYSTEMS)
-      .whenPressed(new ParallelCommandGroup(
-        new InstantCommand(intake::intake, intake),
-        new InstantCommand(feeder::feed, feeder),
-        new InstantCommand(() -> shooter.setRawSpeed(1), shooter)))
-      .whenReleased(new ParallelCommandGroup(
-        new InstantCommand(intake::stop, intake),
-        new InstantCommand(feeder::stop, feeder),
-        new InstantCommand(() -> shooter.setRawSpeed(0), shooter)));
+  public void zeroSubsystems() {
+    //arm.getController().startZeroing();
+    //turret.getController().startZeroing();
   }
 
   public void updateSubsystemInputs() {
     updateDrivetrainInputs();
-    updateFeederInputs();
 
     // TODO: switch to IntakeController when done testing in isolation
-    updateArmInputs();
+    // updateArmInputs();
     updateIntakeInputs();
+    updateFeederInputs();
 
     updateNeckInputs();
+    updateShooterInputs();
   }
 
   public void updateControllerInputs() {
@@ -71,16 +61,16 @@ public class RobotContainer {
 
   public void updateArmInputs() {
     if (secondary_joy.getRawButtonPressed(CONTROLS.SECONDARY_JOY.BUTTON_IDS.TOGGLE_ARM)) {
-      arm.setSetpoint(Math.abs(arm.getSetpoint() - ARM_CONSTANTS.RANGE_IN_COUNTS));
+      arm.getController().setSetpoint(Math.abs(arm.getController().getSetpoint() - ARM_CONSTANTS.RANGE_IN_COUNTS));
     }
   }
 
   public void updateDrivetrainInputs() {
     if (secondary_joy.getRawButtonPressed(CONTROLS.SECONDARY_JOY.BUTTON_IDS.FLIP_ROBOT_ORIENTATION)) {
-      drivetrain.flipOrientation();
+      drivetrain.getController().flipDriveOrientation();
     }
 
-    drivetrain.drive(new DriveSignal(left_joy.getY(), right_joy.getY()));
+    drivetrain.getController().demandSignal(new DriveSignal(left_joy.getY(), right_joy.getY()));
   }
 
   public void updateFeederInputs() {
@@ -104,6 +94,15 @@ public class RobotContainer {
       neck.neck();
     } else {
       neck.stop();
+    }
+  }
+
+  public void updateShooterInputs() {
+    if (secondary_joy.getRawButton(CONTROLS.SECONDARY_JOY.BUTTON_IDS.RUN_SHOOTER)) {
+      shooter.setRawSpeed(1);
+      shooter.getController().writeToSmartDashboard();
+    } else {
+      shooter.stop();
     }
   }
 

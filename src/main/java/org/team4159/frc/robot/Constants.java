@@ -8,9 +8,10 @@ import edu.wpi.first.wpilibj.CounterBase.EncodingType;
 
 import org.team4159.lib.hardware.Gearing;
 import org.team4159.lib.hardware.joystick.T16000M;
-import org.team4159.lib.math.Baba;
+import org.team4159.lib.math.MathUtil;
 
 public final class Constants {
+  // not sure where to put these
   public static final class ENCODERS {
     public static final int FALCON_CPR = 2048;
     public static final int MAG_ENCODER_CPR = 4096;
@@ -37,14 +38,14 @@ public final class Constants {
         public static final int ENABLE_SHOOTER = T16000M.TRIGGER_ID;
         public static final int FLIP_ROBOT_ORIENTATION = T16000M.TOP_MIDDLE_BTN_ID;
         public static final int TOGGLE_ARM = T16000M.TOP_RIGHT_BTN_ID;
-        public static final int RUN_ALL_INTAKE_SUBSYSTEMS = T16000M.PRIMARY_BOTTOM_MIDDLE_BTN_ID;
         public static final int LIMELIGHT_SEEK = T16000M.PRIMARY_TOP_INNER_BTN_ID;
 
         // Debug buttons
         public static final int
           RUN_INTAKE = T16000M.TOP_LEFT_BTN_ID,
           RUN_FEEDER = T16000M.PRIMARY_TOP_OUTER_BTN_ID,
-          RUN_NECK = T16000M.PRIMARY_TOP_MIDDLE_BTN_ID;
+          RUN_NECK = T16000M.PRIMARY_TOP_MIDDLE_BTN_ID,
+          RUN_SHOOTER = T16000M.PRIMARY_BOTTOM_MIDDLE_BTN_ID;
       }
     }
   }
@@ -65,8 +66,8 @@ public final class Constants {
     public static final int INTAKE_SPARK = 2; // unknown
     // TODO: Change!
     public static final int LOWER_FEEDER_TALON = 5;
-    public static final int UPPER_FEEDER_SPARK = 6;
-    public static final int NECK_SPARK = 4;
+    public static final int UPPER_FEEDER_SPARK = 4;
+    public static final int NECK_SPARK = 3;
 
     public static final int PIGEON = 0;
   }
@@ -74,7 +75,7 @@ public final class Constants {
   public static final class DRIVE_CONSTANTS {
     public static final Gearing GEARING = new Gearing(8.48, ENCODERS.FALCON_CPR);
     public static final double WHEEL_RADIUS = Units.inchesToMeters(3.0);
-    public static final double WHEEL_CIRCUMFERENCE = WHEEL_RADIUS * Baba.kTau;
+    public static final double WHEEL_CIRCUMFERENCE = WHEEL_RADIUS * MathUtil.kTau;
 
     public static final double METERS_PER_COUNT = WHEEL_CIRCUMFERENCE / GEARING.COUNTS_PER_REV;
 
@@ -100,14 +101,14 @@ public final class Constants {
   }
 
   public static final class SHOOTER_CONSTANTS {
-    public static final int COUNTS_PER_SECOND_TO_RPM = ENCODERS.THROUGH_BORE_ENCODER_CPR * 60;
+    public static final double  COUNTS_PER_SECOND_TO_RPM = (1.0 / ENCODERS.THROUGH_BORE_ENCODER_CPR) * 60;
 
     @SuppressWarnings("PointlessArithmeticExpression")
     // 1 RPM i think
     public static final int ACCEPTABLE_SPEED_ERROR = 1 * ENCODERS.THROUGH_BORE_ENCODER_CPR / 60; // counts per second
 
-    public static final int ENCODER_CHANNEL_A_PORT = 2;
-    public static final int ENCODER_CHANNEL_B_PORT = 3;
+    public static final int ENCODER_CHANNEL_A_PORT = 4;
+    public static final int ENCODER_CHANNEL_B_PORT = 5;
     public static final boolean IS_ENCODER_REVERSED = true;
     public static final EncodingType ENCODER_ENCODING_TYPE = EncodingType.k4X;
 
@@ -185,7 +186,8 @@ public final class Constants {
   }
 
   public static final class FEEDER_CONSTANTS {
-    public static final double FEEDING_SPEED = 1;
+    public static final double FLOOR_FEEDING_SPEED = 1;
+    public static final double TOWER_FEEDING_SPEED = 0.3;
   }
 
   public static final class FIELD_CONSTANTS {

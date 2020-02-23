@@ -3,8 +3,9 @@ package org.team4159.frc.robot.subsystems;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-import com.revrobotics.CANSparkMax;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.revrobotics.CANSparkMaxLowLevel;
+import com.revrobotics.CANSparkMax;
 
 import org.team4159.lib.hardware.controller.ctre.CardinalSRX;
 import org.team4159.lib.hardware.controller.rev.CardinalMAX;
@@ -12,27 +13,31 @@ import org.team4159.lib.hardware.controller.rev.CardinalMAX;
 import static org.team4159.frc.robot.Constants.*;
 
 public class Feeder extends SubsystemBase {
-  private SpeedControllerGroup feeder_motors;
+  private CardinalMAX tower_spark;
+  private CardinalSRX floor_talon;
 
   public Feeder() {
-    CardinalMAX upper_feeder_spark = new CardinalMAX(CAN_IDS.UPPER_FEEDER_SPARK, CANSparkMax.IdleMode.kCoast);
-    upper_feeder_spark.setInverted(true);
+    tower_spark = new CardinalMAX(CAN_IDS.UPPER_FEEDER_SPARK, CANSparkMax.IdleMode.kCoast, 40, CANSparkMaxLowLevel.MotorType.kBrushed);
+    floor_talon = new CardinalSRX(CAN_IDS.LOWER_FEEDER_TALON, NeutralMode.Brake);
 
-    feeder_motors = new SpeedControllerGroup(
-      new CardinalSRX(CAN_IDS.LOWER_FEEDER_TALON, NeutralMode.Brake),
-      upper_feeder_spark
-    );
+    tower_spark.setInverted(true);
   }
 
-  public void setRawSpeed(double speed) {
-    feeder_motors.set(speed);
+  public void setRawTowerSpeed(double speed) {
+    tower_spark.set(speed);
+  }
+
+  public void setRawFloorSpeed(double speed) {
+    floor_talon.set(speed);
   }
 
   public void feed() {
-    setRawSpeed(FEEDER_CONSTANTS.FEEDING_SPEED);
+    setRawTowerSpeed(FEEDER_CONSTANTS.TOWER_FEEDING_SPEED);
+    setRawFloorSpeed(FEEDER_CONSTANTS.FLOOR_FEEDING_SPEED);
   }
 
   public void stop() {
-    setRawSpeed(0);
+    setRawTowerSpeed(0);
+    setRawFloorSpeed(0);
   }
 }

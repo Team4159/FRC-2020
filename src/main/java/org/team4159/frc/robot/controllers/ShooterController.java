@@ -14,12 +14,10 @@ public class ShooterController implements ControlLoop {
     IDLE,
     CLOSED_LOOP
   }
-
+  private State state = State.IDLE;
 
   private Shooter shooter;
   private Limelight limelight;
-
-  private State state = State.IDLE;
 
   private PIDController pid_controller = new PIDController(
     SHOOTER_CONSTANTS.kP,
@@ -27,9 +25,9 @@ public class ShooterController implements ControlLoop {
     SHOOTER_CONSTANTS.kD
   );
 
-  public ShooterController(Shooter shooter) {
+  public ShooterController(Shooter shooter, Limelight limelight) {
     this.shooter = shooter;
-    this.limelight = Limelight.getInstance();
+    this.limelight = limelight;
 
     pid_controller.setTolerance(SHOOTER_CONSTANTS.ACCEPTABLE_SPEED_ERROR);
   }
@@ -41,6 +39,7 @@ public class ShooterController implements ControlLoop {
         shooter.setRawVoltage(0);
         break;
       case CLOSED_LOOP:
+        /*
         if (limelight.isTargetVisible()) {
           // In theory, the velocity of the ball should scale linearly with RPM, which in turn scales linearly with horizontal distance (I think)
           // I'll update this math later
@@ -52,6 +51,7 @@ public class ShooterController implements ControlLoop {
 
           pid_controller.setSetpoint(target_rpm);
         }
+        */
 
         shooter.setRawVoltage(pid_controller.calculate(shooter.getSpeed()));
         break;
@@ -62,6 +62,10 @@ public class ShooterController implements ControlLoop {
     double vertical_offset = limelight.getTargetVerticalOffset();
     double total_angle_to_target = LIMELIGHT_CONSTANTS.MOUNT_ANGLE + vertical_offset;
     return LIMELIGHT_CONSTANTS.VISION_TARGET_HEIGHT / Math.tan(total_angle_to_target);
+  }
+
+  public void setTargetSpeed(double speed) {
+    pid_controller.setSetpoint(speed);
   }
 
   public boolean isAtTargetSpeed() {
@@ -78,8 +82,9 @@ public class ShooterController implements ControlLoop {
 
     SmartDashboard.putNumber(
       "current_shooter_speed_rpm",
-      shooter.getSpeed() * SHOOTER_CONSTANTS.COUNTS_PER_SECOND_TO_RPM
+      shooter.getSpeed()
     );
+    System.out.println("current_shooter_speed_rpm: " + shooter.getSpeed() * SHOOTER_CONSTANTS.COUNTS_PER_SECOND_TO_RPM);
 
     double distance = getDistanceToVisionTarget();
 

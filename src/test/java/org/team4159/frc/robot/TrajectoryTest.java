@@ -9,7 +9,7 @@ import org.junit.Test;
 import edu.wpi.first.wpilibj.trajectory.Trajectory;
 import org.team4159.lib.logging.CSVWriter;
 
-public class TestTrajectories {
+public class TrajectoryTest {
   @Test
   public void TestTrajectoryGeneration() {
     Field[] fields = Trajectories.class.getFields();

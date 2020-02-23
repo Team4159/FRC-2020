@@ -16,13 +16,7 @@ import org.team4159.frc.robot.subsystems.Drivetrain;
 import org.team4159.lib.control.ControlLoop;
 import org.team4159.lib.control.signal.DriveSignal;
 
-public class TrajectoryManager {
-  private enum State {
-    FOLLOWING,
-    IDLE
-  }
-  private State state = State.IDLE;
-
+public class TrajectoryController implements ControlLoop {
   private Drivetrain drivetrain;
 
   private Trajectory trajectory_to_follow;
@@ -35,63 +29,52 @@ public class TrajectoryManager {
   private PIDController pid_right = new PIDController(Constants.DRIVE_CONSTANTS.kP, 0, Constants.DRIVE_CONSTANTS.kD);
 
   private Timer timer = new Timer();
-  double prev_time = 0;
+  private double prev_time = 0;
 
-  public TrajectoryManager(Drivetrain drivetrain) {
+  public TrajectoryController(Drivetrain drivetrain) {
     this.drivetrain = drivetrain;
   }
 
+  @Override
   public void update() {
-    DriveSignal signal = DriveSignal.NEUTRAL;
+    double cur_time = timer.get();
+    double dt = cur_time - prev_time;
 
-    switch (state) {
-      case FOLLOWING:
-        double cur_time = timer.get();
-        double dt = cur_time - prev_time;
+    Pose2d drivetrain_pose = drivetrain.getPose();
+    Trajectory.State trajectory_sample = trajectory_to_follow.sample(cur_time);
 
-        Pose2d drivetrain_pose = drivetrain.getPose();
-        Trajectory.State trajectory_sample = trajectory_to_follow.sample(cur_time);
+    var target_wheel_speeds = kinematics.toWheelSpeeds(
+      controller.calculate(drivetrain_pose, trajectory_sample));
 
-        var target_wheel_speeds = kinematics.toWheelSpeeds(
-          controller.calculate(drivetrain_pose, trajectory_sample));
+    double left_speed_setpoint = target_wheel_speeds.leftMetersPerSecond;
+    double right_speed_setpoint = target_wheel_speeds.rightMetersPerSecond;
 
-        double left_speed_setpoint = target_wheel_speeds.leftMetersPerSecond;
-        double right_speed_setpoint = target_wheel_speeds.rightMetersPerSecond;
+    double left_feed_forward =
+      feedforward.calculate(left_speed_setpoint,
+        (left_speed_setpoint - prev_speeds.leftMetersPerSecond) / dt);
+    double right_feed_forward =
+      feedforward.calculate(right_speed_setpoint,
+        (right_speed_setpoint - prev_speeds.rightMetersPerSecond) / dt);
 
-        double left_feed_forward =
-          feedforward.calculate(left_speed_setpoint,
-            (left_speed_setpoint - prev_speeds.leftMetersPerSecond) / dt);
-        double right_feed_forward =
-          feedforward.calculate(right_speed_setpoint,
-            (right_speed_setpoint - prev_speeds.rightMetersPerSecond) / dt);
+    double left_PID = pid_left.calculate(drivetrain.getWheelSpeeds().leftMetersPerSecond, left_speed_setpoint);
+    double right_PID = pid_right.calculate(drivetrain.getWheelSpeeds().rightMetersPerSecond, right_speed_setpoint);
 
-        double left_PID = pid_left.calculate(drivetrain.getWheelSpeeds().leftMetersPerSecond, left_speed_setpoint);
-        double right_PID = pid_right.calculate(drivetrain.getWheelSpeeds().rightMetersPerSecond, right_speed_setpoint);
+    double left_output = left_feed_forward + left_PID;
 
-        double left_output = left_feed_forward + left_PID;
+    double right_output = right_feed_forward + right_PID;
 
-        double right_output = right_feed_forward + right_PID;
+    prev_time = cur_time;
+    prev_speeds = target_wheel_speeds;
 
-        prev_time = cur_time;
-        prev_speeds = target_wheel_speeds;
-
-        signal = DriveSignal.fromVolts(left_output, right_output);
-        break;
-      case IDLE:
-        // shouldn't be getting called
-        break;
-    }
-
+    DriveSignal signal = DriveSignal.fromVolts(left_output, right_output);
     drivetrain.drive(signal);
   }
 
-  public boolean isIdle() {
-    return state == State.IDLE;
+  public boolean isComplete() {
+    return timer.hasPeriodPassed(trajectory_to_follow.getTotalTimeSeconds());
   }
 
   public void setTrajectory(Trajectory trajectory) {
-    state = State.FOLLOWING;
-
     Transform2d transform = drivetrain.getPose().minus(trajectory.getInitialPose());
     trajectory = trajectory.transformBy(transform);
     trajectory_to_follow = trajectory;

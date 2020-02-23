@@ -17,6 +17,16 @@ public class Robot extends TimedRobot {
   }
 
   @Override
+  public void autonomousInit() {
+    robot_container.zeroSubsystems();
+  }
+
+  @Override
+  public void teleopInit() {
+    robot_container.zeroSubsystems();
+  }
+
+  @Override
   public void teleopPeriodic() {
     robot_container.updateSubsystemInputs();
     // robot_container.updateControllerInputs();

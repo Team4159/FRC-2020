@@ -10,10 +10,10 @@ import static org.team4159.frc.robot.Constants.*;
 
 public class TurretController implements ControlLoop {
   private enum State {
-    ZEROING,
-    SEEKING_TARGET,
+    //ZEROING,
+    //SEEKING_TARGET,
     FOUND_TARGET,
-    RECOVERING,
+    //RECOVERING,
     IDLE
   }
   private State last_state;
@@ -34,7 +34,6 @@ public class TurretController implements ControlLoop {
     this.turret = turret;
     this.limelight = limelight;
 
-    limelight.setLEDMode(Limelight.LEDMode.ForceOn);
     pid_controller.reset();
   }
 
@@ -46,12 +45,14 @@ public class TurretController implements ControlLoop {
       turret.setEncoderPosition(TURRET_CONSTANTS.REVERSE_POSITION);
     }
 
+    /*
     if (isTurretOutOfSafeRange() && state != State.ZEROING) {
       setState(State.RECOVERING);
     }
+     */
 
     switch (state) {
-      case ZEROING:
+      /* case ZEROING:
         if (turret.isForwardLimitSwitchClosed()) {
           setState(State.IDLE);
         } else {
@@ -76,13 +77,14 @@ public class TurretController implements ControlLoop {
           }
         }
         break;
+
+       */
       case FOUND_TARGET:
-        if (!limelight.isTargetVisible()) {
-          setState(State.SEEKING_TARGET);
-        } else {
+        if (limelight.isTargetVisible()) {
           turret.setRawSpeed(pid_controller.calculate(limelight.getTargetHorizontalOffset()));
         }
         break;
+      /*
       case RECOVERING:
         if (turret.getPosition() > TURRET_CONSTANTS.SAFE_FORWARD_POSITION) {
           turret.setRawSpeed(TURRET_CONSTANTS.ZEROING_SPEED);
@@ -92,15 +94,17 @@ public class TurretController implements ControlLoop {
           setState(last_state);
         }
         break;
+      */
       case IDLE:
         break;
     }
   }
 
   public boolean isTurretPointingAtTarget() {
-    return Math.abs(limelight.getTargetHorizontalOffset()) < 1;
+    return pid_controller.atSetpoint();
   }
 
+  /*
   public boolean isTurretOutOfSafeRange() {
     return Math.abs(turret.getPosition()) < TURRET_CONSTANTS.SAFE_FORWARD_POSITION;
   }
@@ -120,18 +124,14 @@ public class TurretController implements ControlLoop {
     last_state = state;
     state = State.RECOVERING;
   }
+  */
 
   public void idle() {
-    setState(State.IDLE);
+    state = State.IDLE;
   }
 
-  private void setState(State state) {
-    if (state == State.SEEKING_TARGET) {
-      startSeeking();
-    } else if (state == State.RECOVERING) {
-      startRecovering();
-    } else {
-      this.state = state;
-    }
+  public void findTarget() {
+    limelight.setLEDMode(Limelight.LEDMode.ForceOn);
+    state = State.FOUND_TARGET;
   }
 }

@@ -4,35 +4,29 @@ import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.revrobotics.CANSparkMax;
 
 import org.team4159.frc.robot.controllers.ShooterController;
 import org.team4159.lib.hardware.EnhancedEncoder;
 import org.team4159.lib.hardware.Limelight;
-import org.team4159.lib.hardware.controller.ctre.CardinalSPX;
-import org.team4159.lib.hardware.controller.ctre.CardinalSRX;
+import org.team4159.lib.hardware.controller.rev.CardinalMAX;
 
 import static org.team4159.frc.robot.Constants.*;
 
 public class Shooter extends SubsystemBase {
-  private CardinalSRX primary_shooter_talon, shooter_talon_two;
-  private CardinalSPX shooter_victor_one, shooter_victor_two;
+  private CardinalMAX shooter_spark_one, shooter_spark_two;
+  private SpeedControllerGroup shooter_motors;
 
   private EnhancedEncoder shooter_encoder;
 
   private ShooterController shooter_controller;
 
   public Shooter() {
-    primary_shooter_talon = new CardinalSRX(CAN_IDS.PRIMARY_SHOOTER_TALON, NeutralMode.Coast);
-    shooter_talon_two = new CardinalSRX(CAN_IDS.SHOOTER_TALON_TWO, NeutralMode.Coast);
-    //shooter_victor_one = new CardinalSPX(CAN_IDS.SHOOTER_VICTOR_ONE, NeutralMode.Coast);
-    //shooter_victor_two = new CardinalSPX(CAN_IDS.SHOOTER_VICTOR_TWO, NeutralMode.Coast);
+    shooter_spark_one = new CardinalMAX(CAN_IDS.SHOOTER_SPARK_ONE, CANSparkMax.IdleMode.kCoast);
+    shooter_spark_two = new CardinalMAX(CAN_IDS.SHOOTER_SPARK_TWO, CANSparkMax.IdleMode.kCoast);
+    shooter_spark_two.setInverted(true);
 
-    //primary_shooter_talon.configOpenloopRamp(1);
-
-    shooter_talon_two.follow(primary_shooter_talon);
-    //shooter_victor_one.follow(primary_shooter_talon);
-    //shooter_victor_two.follow(primary_shooter_talon);
+    shooter_motors = new SpeedControllerGroup(shooter_spark_one, shooter_spark_two);
 
     shooter_encoder = new EnhancedEncoder(new Encoder(
       SHOOTER_CONSTANTS.ENCODER_CHANNEL_A_PORT,
@@ -46,15 +40,15 @@ public class Shooter extends SubsystemBase {
 
   @Override
   public void periodic() {
-    // shooter_controller.update();
+    shooter_controller.update();
   }
 
   public void setRawSpeed(double speed) {
-    primary_shooter_talon.set(speed);
+    shooter_motors.set(speed);
   }
 
   public void setRawVoltage(double voltage) {
-    primary_shooter_talon.setVoltage(voltage);
+    shooter_motors.setVoltage(voltage);
   }
 
   public void stop() {

@@ -12,7 +12,8 @@ public class Neck extends SubsystemBase {
   private CANSparkMax neck_spark;
 
   public Neck() {
-    neck_spark = new CardinalMAX(CAN_IDS.NECK_SPARK, CANSparkMax.IdleMode.kCoast, 40, CANSparkMaxLowLevel.MotorType.kBrushed);
+    neck_spark = new CardinalMAX(CAN_IDS.NECK_SPARK, CANSparkMax.IdleMode.kCoast);
+    neck_spark.setInverted(true);
   }
 
   public void setRawSpeed(double speed) {

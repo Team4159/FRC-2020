@@ -65,7 +65,7 @@ public class ShootingController implements ControlLoop {
   }
 
   public void beginShooting() {
-    turret_controller.startSeeking();
+    // turret_controller.startSeeking();
     shooter_controller.setState(ShooterController.State.CLOSED_LOOP);
 
     state = State.WAITING;

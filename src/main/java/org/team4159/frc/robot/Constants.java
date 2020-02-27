@@ -15,7 +15,7 @@ public final class Constants {
   public static final class ENCODERS {
     public static final int FALCON_CPR = 2048;
     public static final int MAG_ENCODER_CPR = 4096;
-    public static final int THROUGH_BORE_ENCODER_CPR = 4096;
+    public static final int THROUGH_BORE_ENCODER_CPR = 2048;
   }
 
   public static final class CONTROLS {
@@ -35,7 +35,6 @@ public final class Constants {
       public static final int USB_PORT = 2;
 
       public static final class BUTTON_IDS {
-        public static final int ENABLE_SHOOTER = T16000M.TRIGGER_ID;
         public static final int FLIP_ROBOT_ORIENTATION = T16000M.TOP_MIDDLE_BTN_ID;
         public static final int TOGGLE_ARM = T16000M.TOP_RIGHT_BTN_ID;
         public static final int LIMELIGHT_SEEK = T16000M.PRIMARY_TOP_INNER_BTN_ID;
@@ -45,7 +44,8 @@ public final class Constants {
           RUN_INTAKE = T16000M.TOP_LEFT_BTN_ID,
           RUN_FEEDER = T16000M.PRIMARY_TOP_OUTER_BTN_ID,
           RUN_NECK = T16000M.PRIMARY_TOP_MIDDLE_BTN_ID,
-          RUN_SHOOTER = T16000M.PRIMARY_BOTTOM_MIDDLE_BTN_ID;
+          RUN_SHOOTER = T16000M.PRIMARY_BOTTOM_MIDDLE_BTN_ID,
+          LIMELIGHT_LOOK = T16000M.TRIGGER_ID;
       }
     }
   }
@@ -57,17 +57,15 @@ public final class Constants {
     public static final int RIGHT_REAR_FALCON = 1;
     public static final int TURRET_FALCON = 8; // unknown
 
-    public static final int PRIMARY_SHOOTER_TALON = 6;
-    public static final int SHOOTER_TALON_TWO = 7;
-    public static final int SHOOTER_VICTOR_ONE = 0;
-    public static final int SHOOTER_VICTOR_TWO = 1;
+    public static final int SHOOTER_SPARK_ONE = 4;
+    public static final int SHOOTER_SPARK_TWO = 5;
 
     public static final int ARM_SPARK = 1;
     public static final int INTAKE_SPARK = 2; // unknown
     // TODO: Change!
     public static final int LOWER_FEEDER_TALON = 5;
-    public static final int UPPER_FEEDER_SPARK = 4;
-    public static final int NECK_SPARK = 3;
+    public static final int UPPER_FEEDER_SPARK = 3;
+    public static final int NECK_SPARK = 6;
 
     public static final int PIGEON = 0;
   }
@@ -164,9 +162,11 @@ public final class Constants {
     public static final int STARTING_SEEKING_RANGE = (int) (40 * GEARING.COUNTS_PER_DEGREE);
     public static final int SEEKING_RANGE_INCREMENT = (int) (20 * GEARING.COUNTS_PER_DEGREE);
 
-    public static final double LIMELIGHT_TURN_kP = 1.0 / 100.0;
-    public static final double LIMELIGHT_TURN_kI = 0.0;
-    public static final double LIMELIGHT_TURN_kD = 0.0;
+    public static final double LIMELIGHT_TURN_kP = 0.01;
+    public static final double LIMELIGHT_TURN_kI = 0;
+    public static final double LIMELIGHT_TURN_kD = 0;
+
+    public static final double LIMELIGHT_TURN_TOLERANCE = 1;
 
     public static final double ZEROING_SPEED = 0.1;
     public static final double SEEKING_SPEED = 0.1;

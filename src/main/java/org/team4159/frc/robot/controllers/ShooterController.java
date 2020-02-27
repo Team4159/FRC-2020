@@ -64,6 +64,14 @@ public class ShooterController implements ControlLoop {
     return LIMELIGHT_CONSTANTS.VISION_TARGET_HEIGHT / Math.tan(total_angle_to_target);
   }
 
+  public void spinUp() {
+    state = State.CLOSED_LOOP;
+  }
+
+  public void spinDown() {
+    state = State.IDLE;
+  }
+
   public void setTargetSpeed(double speed) {
     pid_controller.setSetpoint(speed);
   }
@@ -74,17 +82,10 @@ public class ShooterController implements ControlLoop {
 
   // Temporary for development?
   public void writeToSmartDashboard() {
-    SmartDashboard.putNumber("target_shooter_speed", 0);
-    SmartDashboard.putNumber("shooter_kp", SHOOTER_CONSTANTS.kP);
-    SmartDashboard.putNumber("shooter_ki", SHOOTER_CONSTANTS.kI);
-    SmartDashboard.putNumber("shooter_kd", SHOOTER_CONSTANTS.kD);
-
-
     SmartDashboard.putNumber(
       "current_shooter_speed_rpm",
       shooter.getSpeed()
     );
-    System.out.println("current_shooter_speed_rpm: " + shooter.getSpeed() * SHOOTER_CONSTANTS.COUNTS_PER_SECOND_TO_RPM);
 
     double distance = getDistanceToVisionTarget();
 
@@ -94,9 +95,5 @@ public class ShooterController implements ControlLoop {
 
   public void setState(State state) {
     this.state = state;
-  }
-
-  public State getState() {
-    return state;
   }
 }

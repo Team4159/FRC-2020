@@ -48,11 +48,12 @@ public class RobotContainer {
 
     // TODO: switch to IntakeController when done testing in isolation
     // updateArmInputs();
-    updateIntakeInputs();
-    updateFeederInputs();
+    // updateIntakeInputs();
+    // updateFeederInputs();
 
     updateNeckInputs();
     updateShooterInputs();
+    // updateTurretInputs();
   }
 
   public void updateControllerInputs() {
@@ -99,10 +100,18 @@ public class RobotContainer {
 
   public void updateShooterInputs() {
     if (secondary_joy.getRawButton(CONTROLS.SECONDARY_JOY.BUTTON_IDS.RUN_SHOOTER)) {
-      shooter.setRawSpeed(1);
-      shooter.getController().writeToSmartDashboard();
+      shooter.getController().setTargetSpeed(8000 / SHOOTER_CONSTANTS.COUNTS_PER_SECOND_TO_RPM);
+      shooter.getController().spinUp();
     } else {
-      shooter.stop();
+      shooter.getController().spinDown();
+    }
+  }
+
+  public void updateTurretInputs() {
+    if (secondary_joy.getRawButton(CONTROLS.SECONDARY_JOY.BUTTON_IDS.LIMELIGHT_LOOK)) {
+      turret.getController().findTarget();
+    } else {
+      turret.getController().idle();
     }
   }
 

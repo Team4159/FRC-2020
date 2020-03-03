@@ -39,35 +39,38 @@ public class RobotContainer {
   }
 
   public void zeroSubsystems() {
-    //arm.getController().startZeroing();
-    //turret.getController().startZeroing();
+    arm.getController().startZeroing();
+    turret.getController().startZeroing();
   }
 
   public void updateSubsystemInputs() {
-    updateDrivetrainInputs();
-
-    // TODO: switch to IntakeController when done testing in isolation
-    // updateArmInputs();
-    // updateIntakeInputs();
-    // updateFeederInputs();
+    updateArmInputs();
+    updateIntakeInputs();
+    updateFeederInputs();
 
     updateNeckInputs();
     updateShooterInputs();
-    // updateTurretInputs();
+    updateTurretInputs();
   }
 
   public void updateControllerInputs() {
-    updateIntakeControllerInputs();
+    updateDrivetrainControllerInputs();
+    // updateIntakeControllerInputs();
   }
 
   public void updateArmInputs() {
     if (secondary_joy.getRawButtonPressed(CONTROLS.SECONDARY_JOY.BUTTON_IDS.TOGGLE_ARM)) {
-      arm.getController().setSetpoint(Math.abs(arm.getController().getSetpoint() - ARM_CONSTANTS.RANGE_IN_COUNTS));
+      if (arm.getController().getSetpoint() == ARM_CONSTANTS.UP_POSITION) {
+        arm.getController().setSetpoint(ARM_CONSTANTS.DOWN_POSITION);
+      } else {
+        arm.getController().setSetpoint(ARM_CONSTANTS.UP_POSITION);
+      }
     }
   }
 
-  public void updateDrivetrainInputs() {
-    if (secondary_joy.getRawButtonPressed(CONTROLS.SECONDARY_JOY.BUTTON_IDS.FLIP_ROBOT_ORIENTATION)) {
+  public void updateDrivetrainControllerInputs() {
+    if (left_joy.getRawButtonPressed(CONTROLS.LEFT_JOY.BUTTON_IDS.FLIP_ROBOT_ORIENTATION) ||
+        right_joy.getRawButtonPressed(CONTROLS.RIGHT_JOY.BUTTON_IDS.FLIP_ROBOT_ORIENTATION)) {
       drivetrain.getController().flipDriveOrientation();
     }
 
@@ -75,7 +78,7 @@ public class RobotContainer {
   }
 
   public void updateFeederInputs() {
-    if (secondary_joy.getRawButton(CONTROLS.SECONDARY_JOY.BUTTON_IDS.RUN_SHOOTER)) {
+    if (secondary_joy.getRawButton(CONTROLS.SECONDARY_JOY.BUTTON_IDS.RUN_FEEDER)) {
       feeder.feed();
     } else {
       feeder.stop();
@@ -91,7 +94,7 @@ public class RobotContainer {
   }
 
   public void updateNeckInputs() {
-    if (secondary_joy.getRawButton(CONTROLS.SECONDARY_JOY.BUTTON_IDS.RUN_SHOOTER)) {
+    if (secondary_joy.getRawButton(CONTROLS.SECONDARY_JOY.BUTTON_IDS.RUN_NECK)) {
       neck.neck();
     } else {
       neck.stop();
@@ -100,7 +103,7 @@ public class RobotContainer {
 
   public void updateShooterInputs() {
     if (secondary_joy.getRawButton(CONTROLS.SECONDARY_JOY.BUTTON_IDS.RUN_SHOOTER)) {
-      shooter.getController().setTargetSpeed(8000 / SHOOTER_CONSTANTS.COUNTS_PER_SECOND_TO_RPM);
+      shooter.getController().setTargetSpeed(SHOOTER_CONSTANTS.MAX_SPEED);
       shooter.getController().spinUp();
     } else {
       shooter.getController().spinDown();
@@ -108,15 +111,15 @@ public class RobotContainer {
   }
 
   public void updateTurretInputs() {
-    if (secondary_joy.getRawButton(CONTROLS.SECONDARY_JOY.BUTTON_IDS.LIMELIGHT_LOOK)) {
-      turret.getController().findTarget();
+    if (secondary_joy.getRawButton(CONTROLS.SECONDARY_JOY.BUTTON_IDS.LIMELIGHT_SEEK)) {
+      turret.getController().startSeeking();
     } else {
       turret.getController().idle();
     }
   }
 
   public void updateIntakeControllerInputs() {
-    if (secondary_joy.getRawButton(CONTROLS.SECONDARY_JOY.BUTTON_IDS.RUN_INTAKE)) {
+    if (secondary_joy.getRawButton(CONTROLS.SECONDARY_JOY.BUTTON_IDS.INTAKE)) {
       intake_controller.intake();
     } else {
       intake_controller.stopIntaking();

@@ -2,9 +2,11 @@ package org.team4159.frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
 
+import com.revrobotics.CANSparkMaxLowLevel;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.RobotBase;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import org.team4159.frc.robot.controllers.ArmController;
@@ -25,8 +27,11 @@ public class Arm extends SubsystemBase {
       return;
     }
 
-    arm_spark = new CardinalMAX(CAN_IDS.ARM_SPARK, CANSparkMax.IdleMode.kBrake);
+    arm_spark = new CANSparkMax(CAN_IDS.ARM_SPARK, CANSparkMaxLowLevel.MotorType.kBrushless);
     arm_spark.setInverted(true);
+    arm_spark.setSmartCurrentLimit(40);
+    arm_spark.setIdleMode(CANSparkMax.IdleMode.kBrake);
+    arm_spark.burnFlash();
 
     arm_limit_switch = new DigitalInput(ARM_CONSTANTS.LIMIT_SWITCH_PORT);
     arm_encoder = new Encoder(
@@ -42,6 +47,8 @@ public class Arm extends SubsystemBase {
   @Override
   public void periodic() {
     arm_controller.update();
+    SmartDashboard.putNumber("arm_encoder", arm_encoder.get());
+    SmartDashboard.putBoolean("arm_lim_switch", isLimitSwitchClosed());
   }
 
   // motor setters

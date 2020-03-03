@@ -11,10 +11,12 @@ import edu.wpi.first.wpilibj.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.wpilibj.trajectory.Trajectory;
 
-import org.team4159.frc.robot.Constants;
 import org.team4159.frc.robot.subsystems.Drivetrain;
 import org.team4159.lib.control.ControlLoop;
 import org.team4159.lib.control.signal.DriveSignal;
+
+import static org.team4159.frc.robot.Constants.*;
+
 
 public class TrajectoryController implements ControlLoop {
   private Drivetrain drivetrain;
@@ -22,11 +24,11 @@ public class TrajectoryController implements ControlLoop {
   private Trajectory trajectory_to_follow;
 
   private DifferentialDriveWheelSpeeds prev_speeds = new DifferentialDriveWheelSpeeds(0,0);
-  private DifferentialDriveKinematics kinematics = new DifferentialDriveKinematics(Constants.DRIVE_CONSTANTS.TRACK_WIDTH);
-  private SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(Constants.DRIVE_CONSTANTS.kS, Constants.DRIVE_CONSTANTS.kV, Constants.DRIVE_CONSTANTS.kA);
-  private RamseteController controller = new RamseteController(Constants.DRIVE_CONSTANTS.kB, Constants.DRIVE_CONSTANTS.kZeta);
-  private PIDController pid_left = new PIDController(Constants.DRIVE_CONSTANTS.kP, 0, Constants.DRIVE_CONSTANTS.kD);
-  private PIDController pid_right = new PIDController(Constants.DRIVE_CONSTANTS.kP, 0, Constants.DRIVE_CONSTANTS.kD);
+  private DifferentialDriveKinematics kinematics = new DifferentialDriveKinematics(DRIVE_CONSTANTS.TRACK_WIDTH);
+  private SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(DRIVE_CONSTANTS.kS, DRIVE_CONSTANTS.kV, DRIVE_CONSTANTS.kA);
+  private RamseteController controller = new RamseteController(DRIVE_CONSTANTS.kB, DRIVE_CONSTANTS.kZeta);
+  private PIDController pid_left = new PIDController(DRIVE_CONSTANTS.kP, 0, DRIVE_CONSTANTS.kD);
+  private PIDController pid_right = new PIDController(DRIVE_CONSTANTS.kP, 0, DRIVE_CONSTANTS.kD);
 
   private Timer timer = new Timer();
   private double prev_time = 0;

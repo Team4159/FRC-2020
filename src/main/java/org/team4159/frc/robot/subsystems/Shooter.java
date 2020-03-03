@@ -1,5 +1,6 @@
 package org.team4159.frc.robot.subsystems;
 
+import com.revrobotics.CANSparkMaxLowLevel;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -14,7 +15,7 @@ import org.team4159.lib.hardware.controller.rev.CardinalMAX;
 import static org.team4159.frc.robot.Constants.*;
 
 public class Shooter extends SubsystemBase {
-  private CardinalMAX shooter_spark_one, shooter_spark_two;
+  private CANSparkMax shooter_spark_one, shooter_spark_two;
   private SpeedControllerGroup shooter_motors;
 
   private EnhancedEncoder shooter_encoder;
@@ -22,11 +23,18 @@ public class Shooter extends SubsystemBase {
   private ShooterController shooter_controller;
 
   public Shooter() {
-    shooter_spark_one = new CardinalMAX(CAN_IDS.SHOOTER_SPARK_ONE, CANSparkMax.IdleMode.kCoast);
-    shooter_spark_two = new CardinalMAX(CAN_IDS.SHOOTER_SPARK_TWO, CANSparkMax.IdleMode.kCoast);
-    shooter_spark_two.setInverted(true);
+    shooter_spark_one = new CANSparkMax(CAN_IDS.SHOOTER_SPARK_ONE, CANSparkMaxLowLevel.MotorType.kBrushless);
+    shooter_spark_two = new CANSparkMax(CAN_IDS.SHOOTER_SPARK_TWO, CANSparkMaxLowLevel.MotorType.kBrushless);
 
-    shooter_motors = new SpeedControllerGroup(shooter_spark_one, shooter_spark_two);
+    shooter_spark_one.setSmartCurrentLimit(40);
+    shooter_spark_two.setSmartCurrentLimit(40);
+    shooter_spark_one.setIdleMode(CANSparkMax.IdleMode.kCoast);
+    shooter_spark_two.setIdleMode(CANSparkMax.IdleMode.kCoast);
+    shooter_spark_one.setInverted(true);
+    shooter_spark_one.burnFlash();
+    shooter_spark_two.burnFlash();
+
+    // shooter_motors = new SpeedControllerGroup(shooter_spark_one, shooter_spark_two);
 
     shooter_encoder = new EnhancedEncoder(new Encoder(
       SHOOTER_CONSTANTS.ENCODER_CHANNEL_A_PORT,
@@ -44,11 +52,13 @@ public class Shooter extends SubsystemBase {
   }
 
   public void setRawSpeed(double speed) {
-    shooter_motors.set(speed);
+    shooter_spark_one.set(speed);
+    shooter_spark_two.set(speed);
   }
 
   public void setRawVoltage(double voltage) {
-    shooter_motors.setVoltage(voltage);
+    shooter_spark_one.set(voltage);
+    shooter_spark_two.set(voltage);
   }
 
   public void stop() {
@@ -56,7 +66,7 @@ public class Shooter extends SubsystemBase {
   }
 
   public double getSpeed() {
-    return shooter_encoder.getVelocity();
+    return -shooter_encoder.getVelocity() * SHOOTER_CONSTANTS.COUNTS_PER_SECOND_TO_RPM;
   }
 
   public ShooterController getController() {

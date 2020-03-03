@@ -34,6 +34,9 @@ public class ShooterController implements ControlLoop {
 
   @Override
   public void update() {
+    SmartDashboard.putNumber("shooter_rpm", shooter.getSpeed());
+    SmartDashboard.putNumber("target_shooter_rpm", getTargetSpeed());
+    SmartDashboard.putNumber("vision_target_dist", getDistanceToVisionTarget());
     switch (state) {
       case IDLE:
         shooter.setRawVoltage(0);
@@ -61,15 +64,13 @@ public class ShooterController implements ControlLoop {
   public double getDistanceToVisionTarget() {
     double vertical_offset = limelight.getTargetVerticalOffset();
     double total_angle_to_target = LIMELIGHT_CONSTANTS.MOUNT_ANGLE + vertical_offset;
-    return LIMELIGHT_CONSTANTS.VISION_TARGET_HEIGHT / Math.tan(total_angle_to_target);
+    SmartDashboard.putNumber("tan_angle", Math.tan(total_angle_to_target));
+    SmartDashboard.putNumber("vis_height", LIMELIGHT_CONSTANTS.VISION_TARGET_HEIGHT);
+    return LIMELIGHT_CONSTANTS.VISION_TARGET_HEIGHT / Math.tan(Math.toRadians(total_angle_to_target));
   }
 
-  public void spinUp() {
-    state = State.CLOSED_LOOP;
-  }
-
-  public void spinDown() {
-    state = State.IDLE;
+  public double getTargetSpeed() {
+    return pid_controller.getSetpoint();
   }
 
   public void setTargetSpeed(double speed) {
@@ -80,20 +81,15 @@ public class ShooterController implements ControlLoop {
     return pid_controller.atSetpoint();
   }
 
-  // Temporary for development?
-  public void writeToSmartDashboard() {
-    SmartDashboard.putNumber(
-      "current_shooter_speed_rpm",
-      shooter.getSpeed()
-    );
-
-    double distance = getDistanceToVisionTarget();
-
-    SmartDashboard.putNumber("distance in inches", distance);
-    SmartDashboard.putNumber("distance in feet", distance / 12);
-  }
-
   public void setState(State state) {
     this.state = state;
+  }
+
+  public void spinUp() {
+    state = State.CLOSED_LOOP;
+  }
+
+  public void spinDown() {
+    state = State.IDLE;
   }
 }

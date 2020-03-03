@@ -2,6 +2,7 @@ package org.team4159.frc.robot.controllers;
 
 import edu.wpi.first.wpilibj.controller.PIDController;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.team4159.frc.robot.subsystems.Arm;
 import org.team4159.lib.control.ControlLoop;
 
@@ -33,18 +34,26 @@ public class ArmController implements ControlLoop {
 
   @Override
   public void update() {
+    SmartDashboard.putString("arm_state", state.toString());
+    SmartDashboard.putNumber("arm_setpoint", getSetpoint());
+
+    if (arm.isLimitSwitchClosed()) {
+      arm.zeroEncoder();
+    }
+
     switch (state) {
       case IDLE:
         break;
       case ZEROING:
-        arm.setRawSpeed(ARM_CONSTANTS.ZEROING_SPEED);
         if (arm.isLimitSwitchClosed()) {
-          arm.zeroEncoder();
           state = State.CLOSED_LOOP;
+        } else {
+          arm.setRawSpeed(ARM_CONSTANTS.ZEROING_SPEED);
         }
         break;
       case CLOSED_LOOP:
         double output = pid_controller.calculate(arm.getPosition());
+        SmartDashboard.putNumber("arm_pid", output);
         arm.setRawVoltage(output);
         break;
     }

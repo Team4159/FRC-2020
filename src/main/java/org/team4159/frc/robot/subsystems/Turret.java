@@ -20,9 +20,9 @@ public class Turret extends SubsystemBase {
 
   public Turret() {
     turret_falcon = new CardinalFX(CAN_IDS.TURRET_FALCON, NeutralMode.Brake);
+    turret_falcon.setInverted(true);
 
     turret_falcon.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
-    turret_falcon.setInverted(false);
 
     turret_controller = new TurretController(this, Limelight.getDefault());
   }

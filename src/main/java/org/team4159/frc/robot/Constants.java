@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.CounterBase.EncodingType;
 import org.team4159.lib.hardware.Gearing;
 import org.team4159.lib.hardware.joystick.T16000M;
 import org.team4159.lib.math.MathUtil;
+import org.team4159.lib.simulation.MotorModels;
 
 public final class Constants {
   // not sure where to put these
@@ -22,30 +23,31 @@ public final class Constants {
     public static final class LEFT_JOY {
       public static final int USB_PORT = 0;
 
-      public static final class BUTTON_IDS { }
+      public static final class BUTTON_IDS {
+        public static final int FLIP_ROBOT_ORIENTATION = T16000M.TRIGGER_ID;
+      }
     }
 
     public static final class RIGHT_JOY {
       public static final int USB_PORT = 1;
 
-      public static final class BUTTON_IDS { }
+      public static final class BUTTON_IDS {
+        public static final int FLIP_ROBOT_ORIENTATION = T16000M.TRIGGER_ID;
+      }
     }
 
     public static final class SECONDARY_JOY {
       public static final int USB_PORT = 2;
 
       public static final class BUTTON_IDS {
-        public static final int FLIP_ROBOT_ORIENTATION = T16000M.TOP_MIDDLE_BTN_ID;
-        public static final int TOGGLE_ARM = T16000M.TOP_RIGHT_BTN_ID;
-        public static final int LIMELIGHT_SEEK = T16000M.PRIMARY_TOP_INNER_BTN_ID;
-
-        // Debug buttons
         public static final int
-          RUN_INTAKE = T16000M.TOP_LEFT_BTN_ID,
-          RUN_FEEDER = T16000M.PRIMARY_TOP_OUTER_BTN_ID,
-          RUN_NECK = T16000M.PRIMARY_TOP_MIDDLE_BTN_ID,
-          RUN_SHOOTER = T16000M.PRIMARY_BOTTOM_MIDDLE_BTN_ID,
-          LIMELIGHT_LOOK = T16000M.TRIGGER_ID;
+          TOGGLE_ARM = T16000M.PRIMARY_TOP_OUTER_BTN_ID,
+          INTAKE = T16000M.PRIMARY_TOP_MIDDLE_BTN_ID,
+          RUN_INTAKE = T16000M.PRIMARY_TOP_MIDDLE_BTN_ID,
+          LIMELIGHT_SEEK = T16000M.TOP_MIDDLE_BTN_ID,
+          RUN_FEEDER = T16000M.PRIMARY_BOTTOM_MIDDLE_BTN_ID,
+          RUN_SHOOTER = T16000M.TRIGGER_ID,
+          RUN_NECK = T16000M.PRIMARY_BOTTOM_INNER_BTN_ID;
       }
     }
   }
@@ -57,14 +59,14 @@ public final class Constants {
     public static final int RIGHT_REAR_FALCON = 1;
     public static final int TURRET_FALCON = 8; // unknown
 
-    public static final int SHOOTER_SPARK_ONE = 4;
+    public static final int SHOOTER_SPARK_ONE = 3;
     public static final int SHOOTER_SPARK_TWO = 5;
 
     public static final int ARM_SPARK = 1;
     public static final int INTAKE_SPARK = 2; // unknown
     // TODO: Change!
-    public static final int LOWER_FEEDER_TALON = 5;
-    public static final int UPPER_FEEDER_SPARK = 3;
+    public static final int LOWER_FEEDER_TALON = 4;
+    public static final int UPPER_FEEDER_SPARK = 4;
     public static final int NECK_SPARK = 6;
 
     public static final int PIGEON = 0;
@@ -99,33 +101,32 @@ public final class Constants {
   }
 
   public static final class SHOOTER_CONSTANTS {
-    public static final double  COUNTS_PER_SECOND_TO_RPM = (1.0 / ENCODERS.THROUGH_BORE_ENCODER_CPR) * 60;
+    public static final double COUNTS_PER_SECOND_TO_RPM = (1.0 / ENCODERS.THROUGH_BORE_ENCODER_CPR) * 60;
+    public static final double RPM_TO_COUNTS_PER_SECOND = 1.0 / COUNTS_PER_SECOND_TO_RPM;
 
-    @SuppressWarnings("PointlessArithmeticExpression")
-    // 1 RPM i think
-    public static final int ACCEPTABLE_SPEED_ERROR = 1 * ENCODERS.THROUGH_BORE_ENCODER_CPR / 60; // counts per second
+    public static final double ACCEPTABLE_SPEED_ERROR = 5;
+    public static final double MAX_SPEED = Units.radiansPerSecondToRotationsPerMinute(MotorModels.NEO.free_speed) * 30 / 20;
 
     public static final int ENCODER_CHANNEL_A_PORT = 4;
     public static final int ENCODER_CHANNEL_B_PORT = 5;
     public static final boolean IS_ENCODER_REVERSED = true;
     public static final EncodingType ENCODER_ENCODING_TYPE = EncodingType.k4X;
 
-    public static final double kP = 0.001;
+    public static final double kP = 0.1;
     public static final double kI = 0.0;
     public static final double kD = 0.0;
   }
 
   public static final class ARM_CONSTANTS {
     public static final Gearing GEARING = new Gearing(1.0, ENCODERS.MAG_ENCODER_CPR);
-    public static final int RANGE_IN_DEGREES = 53;
     public static final int ACCEPTABLE_ERROR_IN_DEGREES = 3;
 
     // TODO: Find
-    public static final int RANGE_IN_COUNTS = (int) (RANGE_IN_DEGREES * GEARING.COUNTS_PER_DEGREE);
+    public static final int RANGE_IN_COUNTS = 615;
     public static final int ACCEPTABLE_ERROR_IN_COUNTS = (int) (ACCEPTABLE_ERROR_IN_DEGREES * GEARING.COUNTS_PER_DEGREE);
 
     public static final int UP_POSITION = 0;
-    public static final int DOWN_POSITION = RANGE_IN_COUNTS;
+    public static final int DOWN_POSITION = -RANGE_IN_COUNTS;
 
     public static final int LIMIT_SWITCH_PORT = 9;
 
@@ -134,22 +135,18 @@ public final class Constants {
     public static final boolean IS_ENCODER_REVERSED = true;
     public static final EncodingType ENCODER_ENCODING_TYPE = EncodingType.k4X;
 
-    public static final double kP = 0.05;
-    public static final double kI = 0.0;
-    public static final double kD = 0.00;
+    public static final double kP = 5.0 / RANGE_IN_COUNTS;
+    public static final double kI = 0.01;
+    public static final double kD = 0.0;
 
-    public static final double ZEROING_SPEED = -0.3;
+    public static final double ZEROING_SPEED = 0.3;
   }
 
   public static final class TURRET_CONSTANTS {
     public static final Gearing GEARING = new Gearing(124.0 / 16.0, ENCODERS.FALCON_CPR);
     public static final int RANGE_IN_DEGREES = 240;
-    // 124 rotations of the falcon = 16 rotations of the sprocket
-    public static final int RANGE_IN_TICKS = 9678;
 
-    public static final int FORWARD_POSITION = (int) (RANGE_IN_DEGREES / 2  * GEARING.COUNTS_PER_DEGREE);
-
-    //public static final int FORWARD_POSITION = 9678 / 2;
+    public static final int FORWARD_POSITION = 9600 / 2;
     public static final int REVERSE_POSITION = -1 * FORWARD_POSITION;
 
     public static final int BUFFER = 300;
@@ -159,12 +156,13 @@ public final class Constants {
 
     public static final int CENTER_POSITION = 0;
 
-    public static final int STARTING_SEEKING_RANGE = (int) (40 * GEARING.COUNTS_PER_DEGREE);
-    public static final int SEEKING_RANGE_INCREMENT = (int) (20 * GEARING.COUNTS_PER_DEGREE);
+    public static final double POSITION_kP = 1.0 / 9600 / 2;
+    public static final double POSITION_kI = 0;
+    public static final double POSITION_kD = 0;
 
-    public static final double LIMELIGHT_TURN_kP = 0.01;
-    public static final double LIMELIGHT_TURN_kI = 0;
-    public static final double LIMELIGHT_TURN_kD = 0;
+    public static final double LIMELIGHT_AIM_kP = -0.01;
+    public static final double LIMELIGHT_AIM_kI = 0;
+    public static final double LIMELIGHT_AIM_kD = 0;
 
     public static final double LIMELIGHT_TURN_TOLERANCE = 1;
 
@@ -175,10 +173,10 @@ public final class Constants {
   public static final class LIMELIGHT_CONSTANTS {
     // TEMPORARY VALUES FOR TESTING SETUP
 
-    public static final double MOUNT_HEIGHT = 9;
+    public static final double MOUNT_HEIGHT = 36.25;
     public static final double MOUNT_ANGLE = 25;
 
-    public static final double VISION_TARGET_HEIGHT = 51.5 - MOUNT_HEIGHT;
+    public static final double VISION_TARGET_HEIGHT = 8 * 12 + 2.25 - MOUNT_HEIGHT;
   }
 
   public static final class INTAKE_CONSTANTS {

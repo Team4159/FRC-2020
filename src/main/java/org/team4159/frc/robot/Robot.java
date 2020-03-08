@@ -26,4 +26,10 @@ public class Robot extends TimedRobot {
     System.out.println("teleop init");
     robot_container.zeroSubsystems();
   }
+
+  @Override
+  public void teleopPeriodic() {
+    robot_container.updateSubsystemInputs();
+    robot_container.updateControllerInputs();
+  }
 }

@@ -3,6 +3,9 @@ package org.team4159.frc.robot;
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.Joystick;
 
+import edu.wpi.first.wpilibj2.command.ConditionalCommand;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import org.team4159.lib.control.signal.DriveSignal;
 import org.team4159.frc.robot.controllers.complex.IntakeController;
 import org.team4159.frc.robot.subsystems.*;
@@ -31,6 +34,7 @@ public class RobotContainer {
 
   public RobotContainer() {
     configureCameras();
+    configureButtonBindings();
   }
 
   private void configureCameras() {
@@ -43,86 +47,65 @@ public class RobotContainer {
     turret.getController().startZeroing();
   }
 
-  public void updateSubsystemInputs() {
-    updateArmInputs();
-    updateIntakeInputs();
-    updateFeederInputs();
+  public void configureButtonBindings() {
+    new JoystickButton(secondary_joy, CONTROLS.SECONDARY_JOY.BUTTON_IDS.TOGGLE_ARM).whenPressed(
+      new ConditionalCommand(
+        new InstantCommand(() -> arm.getController().setSetpoint(ARM_CONSTANTS.DOWN_POSITION)),
+        new InstantCommand(() -> arm.getController().setSetpoint(ARM_CONSTANTS.UP_POSITION)),
+        () -> arm.getController().getSetpoint() == ARM_CONSTANTS.UP_POSITION)
+    );
 
-    updateNeckInputs();
-    updateShooterInputs();
-    updateTurretInputs();
-  }
+    new JoystickButton(secondary_joy, CONTROLS.LEFT_JOY.BUTTON_IDS.FLIP_ROBOT_ORIENTATION).whenPressed(
+      new InstantCommand(() -> {
+        drivetrain.getController().flipDriveOrientation();
+        drivetrain.getController().demandSignal(new DriveSignal(left_joy.getY(), right_joy.getY()));
+      })
+    );
 
-  public void updateControllerInputs() {
-    updateDrivetrainControllerInputs();
-    // updateIntakeControllerInputs();
-  }
+    new JoystickButton(secondary_joy, CONTROLS.RIGHT_JOY.BUTTON_IDS.FLIP_ROBOT_ORIENTATION).whenPressed(
+      new InstantCommand(() -> {
+        drivetrain.getController().flipDriveOrientation();
+        drivetrain.getController().demandSignal(new DriveSignal(left_joy.getY(), right_joy.getY()));
+      })
+    );
 
-  public void updateArmInputs() {
-    if (secondary_joy.getRawButtonPressed(CONTROLS.SECONDARY_JOY.BUTTON_IDS.TOGGLE_ARM)) {
-      if (arm.getController().getSetpoint() == ARM_CONSTANTS.UP_POSITION) {
-        arm.getController().setSetpoint(ARM_CONSTANTS.DOWN_POSITION);
-      } else {
-        arm.getController().setSetpoint(ARM_CONSTANTS.UP_POSITION);
-      }
-    }
-  }
+    new JoystickButton(secondary_joy, CONTROLS.SECONDARY_JOY.BUTTON_IDS.RUN_FEEDER).whenPressed(
+      new InstantCommand(feeder::feed)
+    ).whenReleased(
+      new InstantCommand(feeder::stop)
+    );
 
-  public void updateDrivetrainControllerInputs() {
-    if (left_joy.getRawButtonPressed(CONTROLS.LEFT_JOY.BUTTON_IDS.FLIP_ROBOT_ORIENTATION) ||
-        right_joy.getRawButtonPressed(CONTROLS.RIGHT_JOY.BUTTON_IDS.FLIP_ROBOT_ORIENTATION)) {
-      drivetrain.getController().flipDriveOrientation();
-    }
+    new JoystickButton(secondary_joy, CONTROLS.SECONDARY_JOY.BUTTON_IDS.RUN_INTAKE).whenPressed(
+      new InstantCommand(intake::intake)
+    ).whenReleased(
+      new InstantCommand(intake::stop)
+    );
 
-    drivetrain.getController().demandSignal(new DriveSignal(left_joy.getY(), right_joy.getY()));
-  }
+    new JoystickButton(secondary_joy, CONTROLS.SECONDARY_JOY.BUTTON_IDS.RUN_INTAKE).whenPressed(
+      new InstantCommand(neck::neck)
+    ).whenReleased(
+      new InstantCommand(neck::stop)
+    );
 
-  public void updateFeederInputs() {
-    if (secondary_joy.getRawButton(CONTROLS.SECONDARY_JOY.BUTTON_IDS.RUN_FEEDER)) {
-      feeder.feed();
-    } else {
-      feeder.stop();
-    }
-  }
+    new JoystickButton(secondary_joy, CONTROLS.SECONDARY_JOY.BUTTON_IDS.RUN_SHOOTER).whenPressed(
+      new InstantCommand(() -> {
+        shooter.getController().setTargetSpeed(SHOOTER_CONSTANTS.MAX_SPEED);
+        shooter.getController().spinUp();
+      })
+    ).whenReleased(
+      new InstantCommand(() -> shooter.getController().spinDown())
+    );
 
-  public void updateIntakeInputs() {
-    if (secondary_joy.getRawButton(CONTROLS.SECONDARY_JOY.BUTTON_IDS.RUN_INTAKE)) {
-      intake.intake();
-    } else {
-      intake.stop();
-    }
-  }
+    new JoystickButton(secondary_joy, CONTROLS.SECONDARY_JOY.BUTTON_IDS.LIMELIGHT_SEEK).whenPressed(
+      new InstantCommand(() -> turret.getController().startSeeking())
+    ).whenReleased(
+      new InstantCommand(() -> turret.getController().idle())
+    );
 
-  public void updateNeckInputs() {
-    if (secondary_joy.getRawButton(CONTROLS.SECONDARY_JOY.BUTTON_IDS.RUN_NECK)) {
-      neck.neck();
-    } else {
-      neck.stop();
-    }
-  }
-
-  public void updateShooterInputs() {
-    if (secondary_joy.getRawButton(CONTROLS.SECONDARY_JOY.BUTTON_IDS.RUN_SHOOTER)) {
-      shooter.getController().setTargetSpeed(SHOOTER_CONSTANTS.MAX_SPEED);
-      shooter.getController().spinUp();
-    } else {
-      shooter.getController().spinDown();
-    }
-  }
-
-  public void updateTurretInputs() {
-    if (secondary_joy.getRawButton(CONTROLS.SECONDARY_JOY.BUTTON_IDS.LIMELIGHT_SEEK)) {
-      turret.getController().startSeeking();
-    } else {
-      turret.getController().idle();
-    }
-  }
-
-  public void updateIntakeControllerInputs() {
-    if (secondary_joy.getRawButton(CONTROLS.SECONDARY_JOY.BUTTON_IDS.INTAKE)) {
-      intake_controller.intake();
-    } else {
-      intake_controller.stopIntaking();
-    }
+    new JoystickButton(secondary_joy, CONTROLS.SECONDARY_JOY.BUTTON_IDS.INTAKE).whenPressed(
+      new InstantCommand(intake_controller::intake)
+    ).whenReleased(
+      new InstantCommand(intake_controller::stopIntaking)
+    );
   }
 }

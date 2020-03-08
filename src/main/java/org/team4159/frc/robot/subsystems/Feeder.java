@@ -17,7 +17,7 @@ public class Feeder extends SubsystemBase {
   private CardinalSRX floor_talon;
 
   public Feeder() {
-    tower_spark = new CardinalMAX(CAN_IDS.UPPER_FEEDER_SPARK, CANSparkMax.IdleMode.kCoast);
+    tower_spark = new CardinalMAX(CAN_IDS.UPPER_FEEDER_SPARK, CANSparkMax.IdleMode.kCoast, false);
     floor_talon = new CardinalSRX(CAN_IDS.LOWER_FEEDER_TALON, NeutralMode.Brake);
   }
 

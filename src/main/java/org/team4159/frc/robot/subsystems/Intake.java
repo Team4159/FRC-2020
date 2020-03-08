@@ -9,14 +9,10 @@ import org.team4159.lib.hardware.controller.rev.CardinalMAX;
 import static org.team4159.frc.robot.Constants.*;
 
 public class Intake extends SubsystemBase {
-  private CANSparkMax intake_spark;
+  private CardinalMAX intake_spark;
 
   public Intake() {
-    intake_spark = new CANSparkMax(CAN_IDS.INTAKE_SPARK, CANSparkMaxLowLevel.MotorType.kBrushless);
-    intake_spark.setInverted(false);
-    intake_spark.setSmartCurrentLimit(40);
-    intake_spark.setIdleMode(CANSparkMax.IdleMode.kCoast);
-    intake_spark.burnFlash();
+    intake_spark = new CardinalMAX(CAN_IDS.INTAKE_SPARK, CANSparkMax.IdleMode.kCoast, false);
   }
 
   public void setRawSpeed(double speed) {

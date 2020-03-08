@@ -9,16 +9,17 @@ public class CardinalMAX extends CANSparkMax {
   private double last_setpoint;
   private ControlType last_control_type;
 
-  public CardinalMAX(int id, IdleMode mode) {
-    this(id, mode, DEFAULT_CURRENT_LIMIT, MotorType.kBrushless);
+  public CardinalMAX(int id, IdleMode mode, boolean inverted) {
+    this(id, mode, DEFAULT_CURRENT_LIMIT, MotorType.kBrushless, inverted);
   }
 
-  public CardinalMAX(int id, IdleMode mode, int current_limit, MotorType type) {
+  public CardinalMAX(int id, IdleMode mode, int current_limit, MotorType type, boolean inverted) {
     super(id, type);
 
     super.restoreFactoryDefaults();
     super.setSmartCurrentLimit(current_limit);
     super.setIdleMode(mode);
+    super.setInverted(inverted);
     super.burnFlash();
   }
 

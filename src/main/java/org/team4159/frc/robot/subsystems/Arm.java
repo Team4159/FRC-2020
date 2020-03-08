@@ -15,7 +15,7 @@ import org.team4159.lib.hardware.controller.rev.CardinalMAX;
 import static org.team4159.frc.robot.Constants.*;
 
 public class Arm extends SubsystemBase {
-  private CANSparkMax arm_spark;
+  private CardinalMAX arm_spark;
 
   private DigitalInput arm_limit_switch;
   private Encoder arm_encoder;
@@ -27,11 +27,7 @@ public class Arm extends SubsystemBase {
       return;
     }
 
-    arm_spark = new CANSparkMax(CAN_IDS.ARM_SPARK, CANSparkMaxLowLevel.MotorType.kBrushless);
-    arm_spark.setInverted(true);
-    arm_spark.setSmartCurrentLimit(40);
-    arm_spark.setIdleMode(CANSparkMax.IdleMode.kBrake);
-    arm_spark.burnFlash();
+    arm_spark = new CardinalMAX(CAN_IDS.ARM_SPARK, CANSparkMax.IdleMode.kCoast, true);
 
     arm_limit_switch = new DigitalInput(ARM_CONSTANTS.LIMIT_SWITCH_PORT);
     arm_encoder = new Encoder(

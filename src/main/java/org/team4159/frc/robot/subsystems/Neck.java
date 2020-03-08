@@ -9,11 +9,10 @@ import org.team4159.lib.hardware.controller.rev.CardinalMAX;
 import static org.team4159.frc.robot.Constants.*;
 
 public class Neck extends SubsystemBase {
-  private CANSparkMax neck_spark;
+  private CardinalMAX neck_spark;
 
   public Neck() {
-    neck_spark = new CardinalMAX(CAN_IDS.NECK_SPARK, CANSparkMax.IdleMode.kCoast);
-    neck_spark.setInverted(true);
+    neck_spark = new CardinalMAX(CAN_IDS.NECK_SPARK, CANSparkMax.IdleMode.kCoast, true);
   }
 
   public void setRawSpeed(double speed) {

@@ -23,10 +23,10 @@ public class Arm extends SubsystemBase {
   private ArmController arm_controller;
 
   public Arm() {
-    if (RobotBase.isSimulation()) {
-      return;
-    }
+    init();
+  }
 
+  protected void init() {
     arm_spark = new CardinalMAX(CAN_IDS.ARM_SPARK, CANSparkMax.IdleMode.kCoast, true);
 
     arm_limit_switch = new DigitalInput(ARM_CONSTANTS.LIMIT_SWITCH_PORT);

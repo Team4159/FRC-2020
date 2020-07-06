@@ -37,6 +37,13 @@ deploy {
     }
 }
 
+test {
+	testLogging {
+		events "failed"
+		exceptionFormat "full"
+	}
+}
+
 // Set this to true to enable desktop support.
 def includeDesktopSupport = false
 

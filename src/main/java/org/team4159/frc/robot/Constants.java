@@ -132,7 +132,7 @@ public final class Constants {
 
     public static final int ENCODER_CHANNEL_A_PORT = 0;
     public static final int ENCODER_CHANNEL_B_PORT = 1;
-    public static final boolean IS_ENCODER_REVERSED = true;
+    public static final boolean IS_ENCODER_REVERSED = false;
     public static final EncodingType ENCODER_ENCODING_TYPE = EncodingType.k4X;
 
     public static final double kP = 5.0 / RANGE_IN_COUNTS;

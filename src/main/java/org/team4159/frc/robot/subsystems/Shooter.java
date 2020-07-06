@@ -1,6 +1,5 @@
 package org.team4159.frc.robot.subsystems;
 
-import com.revrobotics.CANSparkMaxLowLevel;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;

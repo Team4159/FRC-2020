@@ -1,6 +1,5 @@
 package org.team4159.frc.robot;
 
-import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.Joystick;
 
 import org.team4159.lib.control.signal.DriveSignal;

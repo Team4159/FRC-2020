@@ -1,10 +1,8 @@
 package org.team4159.frc.robot.subsystems;
 
-import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.revrobotics.CANSparkMaxLowLevel;
 import com.revrobotics.CANSparkMax;
 
 import org.team4159.lib.hardware.controller.ctre.CardinalSRX;

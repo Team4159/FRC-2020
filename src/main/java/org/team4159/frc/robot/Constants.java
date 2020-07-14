@@ -135,7 +135,7 @@ public final class Constants {
     public static final boolean IS_ENCODER_REVERSED = true;
     public static final EncodingType ENCODER_ENCODING_TYPE = EncodingType.k4X;
 
-    public static final double kP = 5.0 / RANGE_IN_COUNTS;
+    public static final double kP = 24.0 / RANGE_IN_COUNTS;
     public static final double kI = 0.01;
     public static final double kD = 0.0;
 

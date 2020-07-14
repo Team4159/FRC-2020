@@ -105,6 +105,9 @@ public class ArmTest {
     Zeroes();
     arm_controller.setSetpoint(ARM_CONSTANTS.DOWN_POSITION);
     SimulationRunner.simulate(arm, arm_controller, 10);
-    Assert.assertTrue(String.format("Arm not at setpoint: Expected: %d, Got: %d", ARM_CONSTANTS.DOWN_POSITION, arm.getPosition()), arm_controller.isAtSetpoint());
+    Assert.assertTrue(
+      String.format("Arm not at setpoint: Expected: %d, Got: %d", ARM_CONSTANTS.DOWN_POSITION, arm.getPosition()),
+      arm_controller.isAtSetpoint()
+    );
   }
 }

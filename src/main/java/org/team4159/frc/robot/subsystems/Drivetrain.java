@@ -17,6 +17,9 @@ import org.team4159.lib.control.signal.DriveSignal;
 import org.team4159.lib.control.signal.filters.LowPassFilterSource;
 import org.team4159.lib.hardware.controller.ctre.CardinalFX;
 
+// Unnecessary when https://www.chiefdelphi.com/t/edu-wpi-first-wpilibj-simulation-cannot-be-imported/383522/2 fixed by wpilib
+import org.team4159.lib.simulation.Field2d;
+
 import static org.team4159.frc.robot.Constants.*;
 
 public class Drivetrain extends SubsystemBase {
@@ -29,6 +32,8 @@ public class Drivetrain extends SubsystemBase {
   private LowPassFilterSource filtered_heading;
 
   private DrivetrainController drivetrain_controller;
+
+  private Field2d field2d;
 
   public Drivetrain() {
     left_front_falcon = new CardinalFX(CAN_IDS.LEFT_FRONT_FALCON, NeutralMode.Coast);

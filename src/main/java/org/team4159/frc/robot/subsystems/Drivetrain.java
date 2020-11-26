@@ -1,6 +1,8 @@
 package org.team4159.frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
+import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
@@ -12,6 +14,8 @@ import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.sensors.PigeonIMU;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 
+import org.team4159.frc.robot.Constants;
+import org.team4159.frc.robot.Robot;
 import org.team4159.frc.robot.controllers.DrivetrainController;
 import org.team4159.lib.control.signal.DriveSignal;
 import org.team4159.lib.control.signal.filters.LowPassFilterSource;
@@ -33,9 +37,20 @@ public class Drivetrain extends SubsystemBase {
 
   private DrivetrainController drivetrain_controller;
 
-  private Field2d field2d;
+  private final DifferentialDriveKinematics kinematics = new DifferentialDriveKinematics(Constants.DRIVE_CONSTANTS.TRACK_WIDTH);
+  private Field2d field2d = new Field2d();
+  private double sim_left_meters = 0, sim_right_meters = 0, sim_direction = 0;
+  private DifferentialDriveWheelSpeeds sim_wheel_speeds = new DifferentialDriveWheelSpeeds(0, 0);
+
+  private Double sim_last_ts;
+  private Pose2d sim_pose;
 
   public Drivetrain() {
+    if (Robot.isSimulation()) {
+      // TODO: Implement this
+      field2d.setRobotPose(new Pose2d(0, 0, new Rotation2d(0)));
+    }
+
     left_front_falcon = new CardinalFX(CAN_IDS.LEFT_FRONT_FALCON, NeutralMode.Coast);
     left_rear_falcon = new CardinalFX(CAN_IDS.LEFT_REAR_FALCON, NeutralMode.Coast);
     right_front_falcon = new CardinalFX(CAN_IDS.RIGHT_FRONT_FALCON, NeutralMode.Coast);
@@ -70,17 +85,50 @@ public class Drivetrain extends SubsystemBase {
 
   @Override
   public void periodic() {
-    odometry.update(
-      Rotation2d.fromDegrees(getDirection()),
-      getLeftDistance(),
-      getRightDistance()
-    );
-    filtered_heading.get();
+    if (Robot.isReal()) {
+      odometry.update(
+          Rotation2d.fromDegrees(getDirection()),
+          getLeftDistance(),
+          getRightDistance()
+      );
+      filtered_heading.get();
+      drivetrain_controller.update();
+    } else {
+      if (sim_last_ts == null) {
+        sim_last_ts = Timer.getFPGATimestamp();
+        return;
+      }
 
-    drivetrain_controller.update();
+      double dt = Timer.getFPGATimestamp() - sim_last_ts;
+      sim_left_meters += 0.1; //sim_wheel_speeds.leftMetersPerSecond * dt;
+      sim_right_meters += 0.1; //sim_wheel_speeds.rightMetersPerSecond * dt;
+      sim_direction += kinematics.toChassisSpeeds(sim_wheel_speeds).omegaRadiansPerSecond * (180.0 / Math.PI) * dt;
+
+      System.out.println(sim_left_meters + "m : " + sim_right_meters + "m");
+
+      if (sim_direction > 180.0) {
+        sim_direction -= 360.0;
+      } else if (sim_direction < -180.0) {
+        sim_direction += 360.0;
+      }
+
+      odometry.update(Rotation2d.fromDegrees(sim_direction), sim_left_meters, sim_right_meters);
+      sim_pose = odometry.getPoseMeters();
+      field2d.setRobotPose(sim_pose);
+
+      sim_last_ts = Timer.getFPGATimestamp();
+    }
+
   }
 
   public void drive(DriveSignal signal) {
+    // TODO: arbitrary, implement physics
+    final double kMetersPerSecond = 3.0;
+
+    if (Robot.isSimulation()) {
+      sim_wheel_speeds = new DifferentialDriveWheelSpeeds(kMetersPerSecond * signal.left, kMetersPerSecond * signal.right);
+    }
+
     left_falcons.set(signal.left);
     right_falcons.set(signal.right);
   }
@@ -104,10 +152,18 @@ public class Drivetrain extends SubsystemBase {
   }
 
   public DifferentialDriveWheelSpeeds getWheelSpeeds() {
+    if (Robot.isSimulation()) {
+      return sim_wheel_speeds;
+    }
+
     return new DifferentialDriveWheelSpeeds(getLeftVelocity(), getRightVelocity());
   }
 
   public double getDirection() {
+    if (Robot.isSimulation()) {
+      return sim_direction;
+    }
+
     return Math.IEEEremainder(pigeon.getFusedHeading(), 360) * (DRIVE_CONSTANTS.IS_GYRO_INVERTED ? -1 : 1);
   }
 
@@ -121,6 +177,10 @@ public class Drivetrain extends SubsystemBase {
 
   // distance in meters
   public double getLeftDistance() {
+    if (Robot.isSimulation()) {
+      return sim_left_meters;
+    }
+
     return -1 * left_front_falcon.getSelectedSensorPosition() * DRIVE_CONSTANTS.METERS_PER_COUNT;
   }
 
@@ -130,6 +190,10 @@ public class Drivetrain extends SubsystemBase {
   }
 
   public double getRightDistance() {
+    if (Robot.isSimulation()) {
+      return sim_right_meters;
+    }
+
     return right_front_falcon.getSelectedSensorPosition() * DRIVE_CONSTANTS.METERS_PER_COUNT;
   }
 
@@ -138,6 +202,10 @@ public class Drivetrain extends SubsystemBase {
   }
 
   public Pose2d getPose() {
+    if (Robot.isSimulation()) {
+      return sim_pose;
+    }
+
     return odometry.getPoseMeters();
   }
 

@@ -51,36 +51,39 @@ public class Drivetrain extends SubsystemBase {
       field2d.setRobotPose(new Pose2d(0, 0, new Rotation2d(0)));
     }
 
-    left_front_falcon = new CardinalFX(CAN_IDS.LEFT_FRONT_FALCON, NeutralMode.Coast);
-    left_rear_falcon = new CardinalFX(CAN_IDS.LEFT_REAR_FALCON, NeutralMode.Coast);
-    right_front_falcon = new CardinalFX(CAN_IDS.RIGHT_FRONT_FALCON, NeutralMode.Coast);
-    right_rear_falcon = new CardinalFX(CAN_IDS.RIGHT_REAR_FALCON, NeutralMode.Coast);
+    if (Robot.isReal()) {
+      left_front_falcon = new CardinalFX(CAN_IDS.LEFT_FRONT_FALCON, NeutralMode.Coast);
+      left_rear_falcon = new CardinalFX(CAN_IDS.LEFT_REAR_FALCON, NeutralMode.Coast);
+      right_front_falcon = new CardinalFX(CAN_IDS.RIGHT_FRONT_FALCON, NeutralMode.Coast);
+      right_rear_falcon = new CardinalFX(CAN_IDS.RIGHT_REAR_FALCON, NeutralMode.Coast);
 
-    left_front_falcon.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
-    right_front_falcon.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
+      left_front_falcon.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
+      right_front_falcon.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
 
-    // setSensorPhase isn't working
+      // setSensorPhase isn't working
 
-    left_falcons = new SpeedControllerGroup(
-      left_front_falcon,
-      left_rear_falcon
-    );
-    right_falcons = new SpeedControllerGroup(
-      right_front_falcon,
-      right_rear_falcon
-    );
+      left_falcons = new SpeedControllerGroup(
+          left_front_falcon,
+          left_rear_falcon
+      );
+      right_falcons = new SpeedControllerGroup(
+          right_front_falcon,
+          right_rear_falcon
+      );
 
-    left_falcons.setInverted(false);
-    right_falcons.setInverted(true);
+      left_falcons.setInverted(false);
+      right_falcons.setInverted(true);
 
-    pigeon = new PigeonIMU(CAN_IDS.PIGEON);
+      pigeon = new PigeonIMU(CAN_IDS.PIGEON);
+      filtered_heading = new LowPassFilterSource(pigeon::getFusedHeading, 10);
+    }
 
     odometry = new DifferentialDriveOdometry(new Rotation2d(0));
-    filtered_heading = new LowPassFilterSource(pigeon::getFusedHeading, 10);
-
     drivetrain_controller = new DrivetrainController(this);
 
-    zeroSensors();
+    if (Robot.isReal()) {
+      zeroSensors();
+    }
   }
 
   @Override
@@ -92,7 +95,6 @@ public class Drivetrain extends SubsystemBase {
           getRightDistance()
       );
       filtered_heading.get();
-      drivetrain_controller.update();
     } else {
       if (sim_last_ts == null) {
         sim_last_ts = Timer.getFPGATimestamp();
@@ -100,11 +102,11 @@ public class Drivetrain extends SubsystemBase {
       }
 
       double dt = Timer.getFPGATimestamp() - sim_last_ts;
-      sim_left_meters += 0.1; //sim_wheel_speeds.leftMetersPerSecond * dt;
-      sim_right_meters += 0.1; //sim_wheel_speeds.rightMetersPerSecond * dt;
+      sim_left_meters += sim_wheel_speeds.leftMetersPerSecond * dt;
+      sim_right_meters += sim_wheel_speeds.rightMetersPerSecond * dt;
       sim_direction += kinematics.toChassisSpeeds(sim_wheel_speeds).omegaRadiansPerSecond * (180.0 / Math.PI) * dt;
 
-      System.out.println(sim_left_meters + "m : " + sim_right_meters + "m");
+      System.out.println("L" + sim_left_meters + "m, R" + sim_right_meters + "m");
 
       if (sim_direction > 180.0) {
         sim_direction -= 360.0;
@@ -119,14 +121,15 @@ public class Drivetrain extends SubsystemBase {
       sim_last_ts = Timer.getFPGATimestamp();
     }
 
+    drivetrain_controller.update();
   }
 
   public void drive(DriveSignal signal) {
-    // TODO: arbitrary, implement physics
-    final double kMetersPerSecond = 3.0;
-
     if (Robot.isSimulation()) {
+      // TODO: arbitrary, implement physics
+      final double kMetersPerSecond = 3.0;
       sim_wheel_speeds = new DifferentialDriveWheelSpeeds(kMetersPerSecond * signal.left, kMetersPerSecond * signal.right);
+      return;
     }
 
     left_falcons.set(signal.left);

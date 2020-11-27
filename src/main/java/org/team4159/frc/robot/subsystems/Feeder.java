@@ -7,6 +7,7 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.revrobotics.CANSparkMaxLowLevel;
 import com.revrobotics.CANSparkMax;
 
+import org.team4159.frc.robot.Robot;
 import org.team4159.lib.hardware.controller.ctre.CardinalSRX;
 import org.team4159.lib.hardware.controller.rev.CardinalMAX;
 
@@ -17,6 +18,10 @@ public class Feeder extends SubsystemBase {
   private CardinalSRX floor_talon;
 
   public Feeder() {
+    if (Robot.isSimulation()) {
+      return;
+    }
+
     tower_spark = new CardinalMAX(CAN_IDS.UPPER_FEEDER_SPARK, CANSparkMax.IdleMode.kCoast, false);
     floor_talon = new CardinalSRX(CAN_IDS.LOWER_FEEDER_TALON, NeutralMode.Brake);
   }

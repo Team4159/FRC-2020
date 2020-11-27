@@ -7,6 +7,7 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 
+import org.team4159.frc.robot.Robot;
 import org.team4159.frc.robot.controllers.TurretController;
 import org.team4159.lib.hardware.Limelight;
 import org.team4159.lib.hardware.controller.ctre.CardinalFX;
@@ -19,6 +20,10 @@ public class Turret extends SubsystemBase {
   private TurretController turret_controller;
 
   public Turret() {
+    if (Robot.isSimulation()) {
+      return;
+    }
+
     turret_falcon = new CardinalFX(CAN_IDS.TURRET_FALCON, NeutralMode.Brake);
     turret_falcon.setInverted(true);
 
@@ -29,6 +34,10 @@ public class Turret extends SubsystemBase {
 
   @Override
   public void periodic() {
+    if (Robot.isSimulation()) {
+      return;
+    }
+
     turret_controller.update();
   }
 

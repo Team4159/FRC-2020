@@ -39,18 +39,22 @@ public class RobotContainer {
   }
 
   public void zeroSubsystems() {
-    arm.getController().startZeroing();
-    turret.getController().startZeroing();
+    if (Robot.isReal()) {
+      arm.getController().startZeroing();
+      turret.getController().startZeroing();
+    }
   }
 
   public void updateSubsystemInputs() {
-    updateArmInputs();
-    updateIntakeInputs();
-    updateFeederInputs();
+    if (Robot.isReal()) {
+      updateArmInputs();
+      updateIntakeInputs();
+      updateFeederInputs();
 
-    updateNeckInputs();
-    updateShooterInputs();
-    updateTurretInputs();
+      updateNeckInputs();
+      updateShooterInputs();
+      updateTurretInputs();
+    }
   }
 
   public void updateControllerInputs() {
@@ -74,7 +78,8 @@ public class RobotContainer {
       drivetrain.getController().flipDriveOrientation();
     }
 
-    drivetrain.getController().demandSignal(new DriveSignal(left_joy.getY(), right_joy.getY()));
+    //drivetrain.getController().demandSignal(new DriveSignal(left_joy.getY(), right_joy.getY()));
+    drivetrain.getController().demandSignal(new DriveSignal(1.0, 1.0));
   }
 
   public void updateFeederInputs() {

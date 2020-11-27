@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
+import org.team4159.frc.robot.Robot;
 import org.team4159.frc.robot.controllers.ArmController;
 import org.team4159.lib.hardware.controller.rev.CardinalMAX;
 
@@ -23,6 +24,10 @@ public class Arm extends SubsystemBase {
   private ArmController arm_controller;
 
   public Arm() {
+    if (Robot.isSimulation()) {
+      return;
+    }
+
     arm_spark = new CardinalMAX(CAN_IDS.ARM_SPARK, CANSparkMax.IdleMode.kCoast, true);
 
     arm_limit_switch = new DigitalInput(ARM_CONSTANTS.LIMIT_SWITCH_PORT);
@@ -38,6 +43,10 @@ public class Arm extends SubsystemBase {
 
   @Override
   public void periodic() {
+    if (Robot.isSimulation()) {
+      return;
+    }
+
     arm_controller.update();
     SmartDashboard.putNumber("arm_encoder", arm_encoder.get());
     SmartDashboard.putBoolean("arm_lim_switch", isLimitSwitchClosed());

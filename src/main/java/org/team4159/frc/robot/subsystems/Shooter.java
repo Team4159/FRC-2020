@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import com.revrobotics.CANSparkMax;
 
+import org.team4159.frc.robot.Robot;
 import org.team4159.frc.robot.controllers.ShooterController;
 import org.team4159.lib.hardware.EnhancedEncoder;
 import org.team4159.lib.hardware.Limelight;
@@ -23,6 +24,10 @@ public class Shooter extends SubsystemBase {
   private ShooterController shooter_controller;
 
   public Shooter() {
+    if (Robot.isSimulation()) {
+      return;
+    }
+
     shooter_spark_one = new CardinalMAX(CAN_IDS.SHOOTER_SPARK_ONE, CANSparkMax.IdleMode.kCoast, true);
     shooter_spark_two = new CardinalMAX(CAN_IDS.SHOOTER_SPARK_TWO, CANSparkMax.IdleMode.kCoast, false);
 
@@ -40,6 +45,10 @@ public class Shooter extends SubsystemBase {
 
   @Override
   public void periodic() {
+    if (Robot.isSimulation()) {
+      return;
+    }
+
     shooter_controller.update();
   }
 

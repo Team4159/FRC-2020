@@ -23,7 +23,7 @@ import org.team4159.lib.control.signal.filters.LowPassFilterSource;
 import org.team4159.lib.hardware.controller.ctre.CardinalFX;
 
 // Unnecessary when https://www.chiefdelphi.com/t/edu-wpi-first-wpilibj-simulation-cannot-be-imported/383522/2 fixed by wpilib
-import org.team4159.lib.math.physics.DCMotorModelMoving;
+import org.team4159.lib.math.physics.DCMotorModelSim;
 import org.team4159.lib.math.physics.TankDriveModel;
 import org.team4159.lib.simulation.Field2d;
 import org.team4159.lib.simulation.MotorModels;
@@ -61,8 +61,8 @@ public class Drivetrain extends SubsystemBase {
           Constants.DRIVE_CONSTANTS.TRACK_WIDTH,
           2.0,
           2.0,
-          new DCMotorModelMoving(MotorModels.Falcon_500),
-          new DCMotorModelMoving(MotorModels.Falcon_500)
+          new DCMotorModelSim(MotorModels.Falcon_500),
+          new DCMotorModelSim(MotorModels.Falcon_500)
       );
     }
 
@@ -110,30 +110,6 @@ public class Drivetrain extends SubsystemBase {
           getRightDistance()
       );
       filtered_heading.get();
-    } else {
-//      if (sim_last_ts == null) {
-//        sim_last_ts = Timer.getFPGATimestamp();
-//        return;
-//      }
-//
-//      double dt = Timer.getFPGATimestamp() - sim_last_ts;
-//      sim_left_meters += sim_wheel_speeds.leftMetersPerSecond * dt;
-//      sim_right_meters += sim_wheel_speeds.rightMetersPerSecond * dt;
-//      sim_direction += kinematics.toChassisSpeeds(sim_wheel_speeds).omegaRadiansPerSecond * (180.0 / Math.PI) * dt;
-//
-//      System.out.println("L" + sim_left_meters + "m, R" + sim_right_meters + "m");
-//
-//      if (sim_direction > 180.0) {
-//        sim_direction -= 360.0;
-//      } else if (sim_direction < -180.0) {
-//        sim_direction += 360.0;
-//      }
-//
-//      odometry.update(Rotation2d.fromDegrees(sim_direction), sim_left_meters, sim_right_meters);
-//      sim_pose = odometry.getPoseMeters();
-//      field2d.setRobotPose(sim_pose);
-//
-//      sim_last_ts = Timer.getFPGATimestamp();
     }
 
     drivetrain_controller.update();

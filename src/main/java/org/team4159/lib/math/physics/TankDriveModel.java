@@ -18,7 +18,7 @@ import org.team4159.lib.control.signal.DriveSignal;
  */
 
 public class TankDriveModel {
-    private DCMotorModelMoving m_l_motor, m_r_motor;
+    private DCMotorModelSim m_l_motor, m_r_motor;
     private double m_inertia, m_bm;
 
     private final double m_timestep = 5.0 * 1000;
@@ -28,8 +28,8 @@ public class TankDriveModel {
         double wheelbase_M,
         double width_M,
         double length_M,
-        DCMotorModelMoving l_motor,
-        DCMotorModelMoving r_motor
+        DCMotorModelSim l_motor,
+        DCMotorModelSim r_motor
     ) {
         m_l_motor = l_motor;
         m_r_motor = r_motor;
@@ -43,16 +43,17 @@ public class TankDriveModel {
     public Transform2d calculate(DriveSignal drive_signal, double dt) {
         double x = 0, y = 0, angle = 0;
 
-        final double embiggener = 100000;
+        // setting up intervals to perform calcs in
+        final double scalar = 100000.0;
 
-        int total_time = (int) (dt * embiggener);
+        int total_time = (int) (dt * scalar);
         int steps = total_time / (int) m_timestep;
-        double step = m_timestep / embiggener;
+        double step = m_timestep / scalar;
 
         double last_step;
         double remainder = total_time % m_timestep;
         if (remainder != 0) {
-            last_step = remainder / embiggener;
+            last_step = remainder / scalar;
             steps += 1;
         } else {
             last_step = step;

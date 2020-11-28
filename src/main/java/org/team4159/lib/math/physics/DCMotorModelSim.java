@@ -1,9 +1,9 @@
 package org.team4159.lib.math.physics;
 
-public class DCMotorModelMoving {
+public class DCMotorModelSim {
     private final DCMotorModel motor_model;
 
-    public DCMotorModelMoving(DCMotorModel motor) {
+    public DCMotorModelSim(DCMotorModel motor) {
         motor_model = motor;
     }
 
@@ -20,7 +20,7 @@ public class DCMotorModelMoving {
 
         // initial estimate
         double v1 = v0 + a0 * dt;
-        double a1 = (applied_voltage - motor_model.volts_per_speed() * v1) * dt / motor_model.volts_per_speed();
+        double a1 = (applied_voltage - motor_model.volts_per_speed() * v1) * dt /  motor_model.volts_per_speed();
 
         // trapezoidal correction
         v1 = v0 + ((a0 + a1) / 2.0) * dt;

@@ -21,4 +21,12 @@ public class MathUtil {
   public static boolean epsilonEquals(double a, double b) {
     return epsilonEquals(a, b, kEpsilon);
   }
+
+  public static double epsilonRound(double n, double epsilon) {
+    return Math.abs(n) <= epsilon ? 0 : n;
+  }
+
+  public static double epsilonRound(double n) {
+    return epsilonRound(n, kEpsilon);
+  }
 }

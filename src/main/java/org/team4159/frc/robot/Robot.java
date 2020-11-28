@@ -18,12 +18,13 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousInit() {
+    robot_container.autonomousInit();
     robot_container.zeroSubsystems();
   }
 
   @Override
   public void teleopInit() {
-    System.out.println("teleop init");
+    robot_container.teleopInit();
     robot_container.zeroSubsystems();
   }
 

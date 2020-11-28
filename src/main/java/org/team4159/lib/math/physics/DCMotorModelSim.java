@@ -1,5 +1,7 @@
 package org.team4159.lib.math.physics;
 
+import org.team4159.lib.math.MathUtil;
+
 public class DCMotorModelSim {
     private final DCMotorModel motor_model;
 
@@ -7,7 +9,7 @@ public class DCMotorModelSim {
         motor_model = motor;
     }
 
-    private double acceleration = 0, velocity = 0, position = 0;
+    private double acceleration = 0, velocity = 0;
 
     public double compute(double motor_pct, double dt) {
         // TODO: nominal voltage
@@ -26,7 +28,13 @@ public class DCMotorModelSim {
         v1 = v0 + ((a0 + a1) / 2.0) * dt;
         a1 = (applied_voltage - motor_model.volts_per_speed() * v1) * dt / motor_model.volts_per_speed();
 
-        position += ((v0 + v1) / 2.0) * dt;
+        // round to prevent runaway errors
+//        v1 = MathUtil.epsilonRound(v1);
+//        a1 = MathUtil.epsilonRound(a1);
+
+        //System.out.println("motor %: " + motor_pct + ", v0: " + v0  + ", v1: " + v1);
+
+        //position += ((v0 + v1) / 2.0) * dt;
         velocity = v1;
         acceleration = a1;
 

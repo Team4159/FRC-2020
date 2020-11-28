@@ -38,6 +38,16 @@ public class RobotContainer {
     limelight.setLEDMode(Limelight.LEDMode.ForceOff);
   }
 
+  public void autonomousInit() {
+    drivetrain.getController().startFollowingTrajectory(Trajectories.TEST_TRAJECTORY);
+    zeroSubsystems();
+  }
+
+  public void teleopInit() {
+    drivetrain.getController().cancelPathFollowing();
+    zeroSubsystems();
+  }
+
   public void zeroSubsystems() {
     if (Robot.isReal()) {
       arm.getController().startZeroing();

@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.geometry.Translation2d;
 import edu.wpi.first.wpilibj.geometry.Transform2d;
 
+import edu.wpi.first.wpilibj.kinematics.DifferentialDriveWheelSpeeds;
 import org.team4159.lib.control.signal.DriveSignal;
 
 /**
@@ -18,10 +19,10 @@ import org.team4159.lib.control.signal.DriveSignal;
  */
 
 public class TankDriveModel {
-    private DCMotorModelSim m_l_motor, m_r_motor;
-    private double m_inertia, m_bm;
+    private final DCMotorModelSim m_l_motor, m_r_motor;
+    private final double m_inertia, m_bm;
 
-    private final double m_timestep = 5.0 * 1000;
+    private final double m_timestep = 5.0;
 
     public TankDriveModel(
         double mass_KG,
@@ -40,32 +41,46 @@ public class TankDriveModel {
         m_bm = (wheelbase_M / 2.0) * mass_KG;
     }
 
-    public Transform2d calculate(DriveSignal drive_signal, double dt) {
-        double x = 0, y = 0, angle = 0;
+    private double ms(double seconds) {
+        return 1000 * seconds;
+    }
 
-        // setting up intervals to perform calcs in
-        final double scalar = 100000.0;
+    private double seconds(double ms) {
+        return ms / 1000;
+    }
 
-        int total_time = (int) (dt * scalar);
+    public TankDriveSnapshot calculate(DriveSignal drive_signal, double dt) {
+        double x = 0, y = 0, angle = 0, l = 0, r = 0;
+
+        System.out.println(drive_signal.left + ", " + drive_signal.right);
+
+
+//        int total_time = (int) (dt * scalar);
+//        int steps = total_time / (int) m_timestep;
+//        double step = m_timestep / scalar;
+
+        int total_time = (int) ms(dt);
         int steps = total_time / (int) m_timestep;
-        double step = m_timestep / scalar;
 
+        double step = seconds(m_timestep);
         double last_step;
         double remainder = total_time % m_timestep;
+
         if (remainder != 0) {
-            last_step = remainder / scalar;
+            last_step = remainder;
             steps += 1;
         } else {
             last_step = step;
         }
 
         while (steps > 0) {
-            final double step_dt = steps == 1 ? last_step : step;
+            final double step_dt = steps == 1 ? seconds(last_step) : seconds(m_timestep);
 
             steps -= 1;
 
-            double l = m_l_motor.compute(drive_signal.left, step_dt),
-                   r = m_r_motor.compute(drive_signal.right, step_dt);
+            l = m_l_motor.compute(drive_signal.left, step_dt);
+            r = m_r_motor.compute(drive_signal.right, step_dt);
+
 
             double velocity = (l + r) * 0.5;
 
@@ -78,16 +93,17 @@ public class TankDriveModel {
             x += distance * Math.cos(angle);
             y += distance * Math.sin(angle);
 
-            if (!Double.isNaN(velocity)) {
-                System.out.println(velocity);
-            }
-
             angle += turn;
         }
 
-        return new Transform2d(
-            new Translation2d(x, y),
-            Rotation2d.fromDegrees(angle)
+        return new TankDriveSnapshot(
+            new Transform2d(
+                new Translation2d(x, y),
+                Rotation2d.fromDegrees(angle)
+            ),
+            new DifferentialDriveWheelSpeeds(l, r)
         );
+
+
     }
 }

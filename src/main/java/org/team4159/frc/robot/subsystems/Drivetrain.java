@@ -2,7 +2,6 @@ package org.team4159.frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.geometry.Transform2d;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.geometry.Pose2d;
@@ -25,6 +24,7 @@ import org.team4159.lib.hardware.controller.ctre.CardinalFX;
 // Unnecessary when https://www.chiefdelphi.com/t/edu-wpi-first-wpilibj-simulation-cannot-be-imported/383522/2 fixed by wpilib
 import org.team4159.lib.math.physics.DCMotorModelSim;
 import org.team4159.lib.math.physics.TankDriveModel;
+import org.team4159.lib.math.physics.TankDriveSnapshot;
 import org.team4159.lib.simulation.Field2d;
 import org.team4159.lib.simulation.MotorModels;
 
@@ -110,6 +110,11 @@ public class Drivetrain extends SubsystemBase {
           getRightDistance()
       );
       filtered_heading.get();
+    } else {
+      if (sim_last_ts == null) {
+        sim_last_ts = Timer.getFPGATimestamp();
+        return;
+      }
     }
 
     drivetrain_controller.update();
@@ -121,16 +126,21 @@ public class Drivetrain extends SubsystemBase {
         sim_last_ts = Timer.getFPGATimestamp();
         return;
       }
+      // TODO: move to periodic
 
       double dt = Timer.getFPGATimestamp() - sim_last_ts;
-      Transform2d transform = tank_drive_sim.calculate(signal, dt);
+      TankDriveSnapshot snapshot = tank_drive_sim.calculate(signal, dt);
 
-      sim_pose = sim_pose.plus(transform);
+      sim_pose = sim_pose.plus(snapshot.transform2d);
+      sim_direction = sim_pose.getRotation().getDegrees();
+      sim_wheel_speeds = snapshot.wheel_speeds;
+
       field2d.setRobotPose(sim_pose);
-    } else {
-      left_falcons.set(signal.left);
-      right_falcons.set(signal.right);
+      return;
     }
+
+    left_falcons.set(signal.left);
+    right_falcons.set(signal.right);
   }
 
   public void resetEncoders() {

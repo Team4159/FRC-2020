@@ -2,6 +2,7 @@ package org.team4159.frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.geometry.Transform2d;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.geometry.Pose2d;
@@ -22,7 +23,10 @@ import org.team4159.lib.control.signal.filters.LowPassFilterSource;
 import org.team4159.lib.hardware.controller.ctre.CardinalFX;
 
 // Unnecessary when https://www.chiefdelphi.com/t/edu-wpi-first-wpilibj-simulation-cannot-be-imported/383522/2 fixed by wpilib
+import org.team4159.lib.math.physics.DCMotorModelMoving;
+import org.team4159.lib.math.physics.TankDriveModel;
 import org.team4159.lib.simulation.Field2d;
+import org.team4159.lib.simulation.MotorModels;
 
 import static org.team4159.frc.robot.Constants.*;
 
@@ -43,12 +47,23 @@ public class Drivetrain extends SubsystemBase {
   private DifferentialDriveWheelSpeeds sim_wheel_speeds = new DifferentialDriveWheelSpeeds(0, 0);
 
   private Double sim_last_ts;
-  private Pose2d sim_pose;
+  // TODO: Implement this
+  private Pose2d sim_pose = new Pose2d(0, 0, new Rotation2d(0));
+
+  private TankDriveModel tank_drive_sim;
 
   public Drivetrain() {
     if (Robot.isSimulation()) {
-      // TODO: Implement this
-      field2d.setRobotPose(new Pose2d(0, 0, new Rotation2d(0)));
+      field2d.setRobotPose(sim_pose);
+
+      tank_drive_sim = new TankDriveModel(
+          55.0, // TODO: find mass
+          Constants.DRIVE_CONSTANTS.TRACK_WIDTH,
+          2.0,
+          2.0,
+          new DCMotorModelMoving(MotorModels.Falcon_500),
+          new DCMotorModelMoving(MotorModels.Falcon_500)
+      );
     }
 
     if (Robot.isReal()) {
@@ -96,29 +111,29 @@ public class Drivetrain extends SubsystemBase {
       );
       filtered_heading.get();
     } else {
-      if (sim_last_ts == null) {
-        sim_last_ts = Timer.getFPGATimestamp();
-        return;
-      }
-
-      double dt = Timer.getFPGATimestamp() - sim_last_ts;
-      sim_left_meters += sim_wheel_speeds.leftMetersPerSecond * dt;
-      sim_right_meters += sim_wheel_speeds.rightMetersPerSecond * dt;
-      sim_direction += kinematics.toChassisSpeeds(sim_wheel_speeds).omegaRadiansPerSecond * (180.0 / Math.PI) * dt;
-
-      System.out.println("L" + sim_left_meters + "m, R" + sim_right_meters + "m");
-
-      if (sim_direction > 180.0) {
-        sim_direction -= 360.0;
-      } else if (sim_direction < -180.0) {
-        sim_direction += 360.0;
-      }
-
-      odometry.update(Rotation2d.fromDegrees(sim_direction), sim_left_meters, sim_right_meters);
-      sim_pose = odometry.getPoseMeters();
-      field2d.setRobotPose(sim_pose);
-
-      sim_last_ts = Timer.getFPGATimestamp();
+//      if (sim_last_ts == null) {
+//        sim_last_ts = Timer.getFPGATimestamp();
+//        return;
+//      }
+//
+//      double dt = Timer.getFPGATimestamp() - sim_last_ts;
+//      sim_left_meters += sim_wheel_speeds.leftMetersPerSecond * dt;
+//      sim_right_meters += sim_wheel_speeds.rightMetersPerSecond * dt;
+//      sim_direction += kinematics.toChassisSpeeds(sim_wheel_speeds).omegaRadiansPerSecond * (180.0 / Math.PI) * dt;
+//
+//      System.out.println("L" + sim_left_meters + "m, R" + sim_right_meters + "m");
+//
+//      if (sim_direction > 180.0) {
+//        sim_direction -= 360.0;
+//      } else if (sim_direction < -180.0) {
+//        sim_direction += 360.0;
+//      }
+//
+//      odometry.update(Rotation2d.fromDegrees(sim_direction), sim_left_meters, sim_right_meters);
+//      sim_pose = odometry.getPoseMeters();
+//      field2d.setRobotPose(sim_pose);
+//
+//      sim_last_ts = Timer.getFPGATimestamp();
     }
 
     drivetrain_controller.update();
@@ -126,14 +141,20 @@ public class Drivetrain extends SubsystemBase {
 
   public void drive(DriveSignal signal) {
     if (Robot.isSimulation()) {
-      // TODO: arbitrary, implement physics
-      final double kMetersPerSecond = 3.0;
-      sim_wheel_speeds = new DifferentialDriveWheelSpeeds(kMetersPerSecond * signal.left, kMetersPerSecond * signal.right);
-      return;
-    }
+      if (sim_last_ts == null) {
+        sim_last_ts = Timer.getFPGATimestamp();
+        return;
+      }
 
-    left_falcons.set(signal.left);
-    right_falcons.set(signal.right);
+      double dt = Timer.getFPGATimestamp() - sim_last_ts;
+      Transform2d transform = tank_drive_sim.calculate(signal, dt);
+
+      sim_pose = sim_pose.plus(transform);
+      field2d.setRobotPose(sim_pose);
+    } else {
+      left_falcons.set(signal.left);
+      right_falcons.set(signal.right);
+    }
   }
 
   public void resetEncoders() {

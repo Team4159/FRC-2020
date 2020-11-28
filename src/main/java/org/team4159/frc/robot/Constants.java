@@ -93,6 +93,7 @@ public final class Constants {
     public static final double kP = 1.0;
     public static final double kD = 0.0;
 
+    // meters (?)
     public static final double TRACK_WIDTH = 0.5461;
 
     // ramsete constants (tested for most robots)

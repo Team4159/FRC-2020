@@ -38,12 +38,12 @@ public class RobotContainer {
   }
 
   public void zeroSubsystems() {
-    arm.getController().startZeroing();
+    //arm.getController().startZeroing();
     turret.getController().startZeroing();
   }
 
   public void updateSubsystemInputs() {
-    updateArmInputs();
+    //updateArmInputs();
     updateIntakeInputs();
     updateFeederInputs();
 
@@ -53,8 +53,8 @@ public class RobotContainer {
   }
 
   public void updateControllerInputs() {
-    updateDrivetrainControllerInputs();
-    // updateIntakeControllerInputs();
+    // updateDrivetrainControllerInputs();
+    updateIntakeControllerInputs();
   }
 
   public void updateArmInputs() {

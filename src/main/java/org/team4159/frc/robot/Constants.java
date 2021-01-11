@@ -146,7 +146,7 @@ public final class Constants {
     public static final Gearing GEARING = new Gearing(124.0 / 16.0, ENCODERS.FALCON_CPR);
     public static final int RANGE_IN_DEGREES = 240;
 
-    public static final int FORWARD_POSITION = 9600 / 2;
+    public static final int FORWARD_POSITION = 8300 / 2;
     public static final int REVERSE_POSITION = -1 * FORWARD_POSITION;
 
     public static final int BUFFER = 300;
@@ -166,7 +166,7 @@ public final class Constants {
 
     public static final double LIMELIGHT_TURN_TOLERANCE = 1;
 
-    public static final double ZEROING_SPEED = 0.1;
+    public static final double ZEROING_SPEED = 0.075;
     public static final double SEEKING_SPEED = 0.1;
   }
 

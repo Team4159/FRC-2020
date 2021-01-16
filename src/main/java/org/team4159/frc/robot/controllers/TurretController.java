@@ -62,6 +62,13 @@ public class TurretController implements ControlLoop {
     }
      */
 
+    // Things to debug/test:
+    // 1. Why is it seeking when seeking is commented out? (Check if the limelight latches on to anything else).
+    // 2. Tune by incrementing D and lowering P.
+    // 3. Test the shooter.
+    // 4. Try to implement seeking?
+
+
     System.out.println(state + ", " + limelight.isTargetVisible());
 
     switch (state) {
@@ -74,6 +81,7 @@ public class TurretController implements ControlLoop {
         if (turret.isForwardLimitSwitchClosed()) {
           state = State.IDLE;
         } else {
+          position_pid.setSetpoint(300);
           turret.setRawSpeed(TURRET_CONSTANTS.ZEROING_SPEED);
         }
         break;
@@ -103,7 +111,7 @@ public class TurretController implements ControlLoop {
         if (limelight.isTargetVisible()) {
           System.out.println("Yes2");
           SmartDashboard.putNumber("aim_pid", aim_pid.calculate(limelight.getTargetHorizontalOffset()));
-          turret.setRawSpeed(aim_pid.calculate(limelight.getTargetHorizontalOffset()));
+          turret.setRawSpeed(clamp(aim_pid.calculate(limelight.getTargetHorizontalOffset())));
         } else {
           startSeeking();
         }
@@ -122,9 +130,13 @@ public class TurretController implements ControlLoop {
     }
   }
 
+  public double clamp(double doub) {
+    return Math.min(0.075, Math.max(-0.075, doub));
+  }
+
   public boolean isTurretPointingAtTarget() {
-    return true;
-    //return aim_pid.atSetpoint();
+    //return true;
+    return aim_pid.atSetpoint();
   }
 
   /*

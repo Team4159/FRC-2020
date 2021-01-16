@@ -34,7 +34,7 @@ public class RobotContainer {
 
   private void configureCameras() {
     //CameraServer.getInstance().startAutomaticCapture();
-    limelight.setLEDMode(Limelight.LEDMode.ForceOff);
+    limelight.setLEDMode(Limelight.LEDMode.ForceOn);
   }
 
   public void zeroSubsystems() {

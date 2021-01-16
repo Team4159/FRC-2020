@@ -62,8 +62,8 @@ public final class Constants {
     public static final int SHOOTER_SPARK_ONE = 3;
     public static final int SHOOTER_SPARK_TWO = 5;
 
-    public static final int ARM_SPARK = 1;
-    public static final int INTAKE_SPARK = 2; // unknown
+    public static final int ARM_SPARK = 2;
+    public static final int INTAKE_SPARK = 1; // unknown
     // TODO: Change!
     public static final int LOWER_FEEDER_TALON = 4;
     public static final int UPPER_FEEDER_SPARK = 4;
@@ -180,7 +180,7 @@ public final class Constants {
   }
 
   public static final class INTAKE_CONSTANTS {
-    public static final double INTAKE_SPEED = 1;
+    public static final double INTAKE_SPEED = 0.5;
   }
 
   public static final class FEEDER_CONSTANTS {

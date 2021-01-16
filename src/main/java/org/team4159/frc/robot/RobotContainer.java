@@ -34,12 +34,12 @@ public class RobotContainer {
 
   private void configureCameras() {
     //CameraServer.getInstance().startAutomaticCapture();
-    limelight.setLEDMode(Limelight.LEDMode.ForceOn);
+    limelight.setLEDMode(Limelight.LEDMode.ForceOff);
   }
 
   public void zeroSubsystems() {
     //arm.getController().startZeroing();
-    turret.getController().startZeroing();
+    //turret.getController().startZeroing();
   }
 
   public void updateSubsystemInputs() {
@@ -53,7 +53,7 @@ public class RobotContainer {
   }
 
   public void updateControllerInputs() {
-    // updateDrivetrainControllerInputs();
+    updateDrivetrainControllerInputs();
     updateIntakeControllerInputs();
   }
 
@@ -73,7 +73,7 @@ public class RobotContainer {
       drivetrain.getController().flipDriveOrientation();
     }
 
-    drivetrain.getController().demandSignal(new DriveSignal(left_joy.getY(), right_joy.getY()));
+    drivetrain.getController().demandSignal(DriveSignal.fromArcade(left_joy.getY(), -1 * left_joy.getX()));
   }
 
   public void updateFeederInputs() {
@@ -111,17 +111,18 @@ public class RobotContainer {
 
   public void updateTurretInputs() {
     if (secondary_joy.getRawButton(CONTROLS.SECONDARY_JOY.BUTTON_IDS.LIMELIGHT_SEEK)) {
-      turret.getController().startSeeking();
+      turret.getController().demand(secondary_joy.getX());
     } else {
+      turret.getController().demand(0);
       turret.getController().idle();
     }
   }
 
   public void updateIntakeControllerInputs() {
     if (secondary_joy.getRawButton(CONTROLS.SECONDARY_JOY.BUTTON_IDS.INTAKE)) {
-      intake_controller.intake();
+      //intake_controller.intake();
     } else {
-      intake_controller.stopIntaking();
+      //intake_controller.stopIntaking();
     }
   }
 }

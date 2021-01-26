@@ -68,9 +68,6 @@ public class TurretController implements ControlLoop {
     // 3. Test the shooter.
     // 4. Try to implement seeking?
 
-
-    System.out.println(state + ", " + limelight.isTargetVisible());
-
     switch (state) {
       case IDLE:
         // turret.setRawSpeed(0);
@@ -107,11 +104,11 @@ public class TurretController implements ControlLoop {
         }
         break;
       case FOUND_TARGET:
-        System.out.println("yes1");
         if (limelight.isTargetVisible()) {
-          System.out.println("Yes2");
           SmartDashboard.putNumber("aim_pid", aim_pid.calculate(limelight.getTargetHorizontalOffset()));
-          turret.setRawSpeed(clamp(aim_pid.calculate(limelight.getTargetHorizontalOffset())));
+          //turret.setRawSpeed(aim_pid.calculate(limelight.getTargetHorizontalOffset()));
+          // Temporary fix
+          turret.setRawSpeed(Math.min(0.075, Math.max(-0.075, aim_pid.calculate(limelight.getTargetHorizontalOffset()))));
         } else {
           startSeeking();
         }
@@ -128,10 +125,6 @@ public class TurretController implements ControlLoop {
         break;
       */
     }
-  }
-
-  public double clamp(double doub) {
-    return Math.min(0.075, Math.max(-0.075, doub));
   }
 
   public boolean isTurretPointingAtTarget() {
@@ -159,7 +152,6 @@ public class TurretController implements ControlLoop {
 
   private void foundTarget() {
     state = State.FOUND_TARGET;
-    System.out.println("YES 0" + state);
     aim_pid.reset();
   }
 

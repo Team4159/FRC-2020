@@ -162,7 +162,7 @@ public final class Constants {
 
     public static final double LIMELIGHT_AIM_kP = -0.01;
     public static final double LIMELIGHT_AIM_kI = 0;
-    public static final double LIMELIGHT_AIM_kD = 0;
+    public static final double LIMELIGHT_AIM_kD = -0.005;
 
     public static final double LIMELIGHT_TURN_TOLERANCE = 1;
 

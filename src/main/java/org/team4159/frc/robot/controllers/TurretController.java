@@ -49,6 +49,7 @@ public class TurretController implements ControlLoop {
     SmartDashboard.putNumber("turret_position", turret.getPosition());
     SmartDashboard.putBoolean("turret_forward_lim_switch", turret.isForwardLimitSwitchClosed());
     SmartDashboard.putBoolean("turret_reverse_lim_switch", turret.isReverseLimitSwitchClosed());
+    SmartDashboard.putNumber("turret_setpoint", position_pid.getSetpoint());
 
     if (turret.isForwardLimitSwitchClosed()) {
       turret.setEncoderPosition(TURRET_CONSTANTS.FORWARD_POSITION);
@@ -76,9 +77,9 @@ public class TurretController implements ControlLoop {
         break;
       case ZEROING:
         if (turret.isForwardLimitSwitchClosed()) {
+          position_pid.setSetpoint(0);
           state = State.IDLE;
         } else {
-          position_pid.setSetpoint(300);
           turret.setRawSpeed(TURRET_CONSTANTS.ZEROING_SPEED);
         }
         break;

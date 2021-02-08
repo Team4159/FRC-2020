@@ -58,7 +58,7 @@ public class RobotContainer {
 
   public void updateControllerInputs() {
     // Disabled for testing subsystems
-    //updateDrivetrainControllerInputs();
+    updateDrivetrainControllerInputs();
     updateIntakeControllerInputs();
   }
 

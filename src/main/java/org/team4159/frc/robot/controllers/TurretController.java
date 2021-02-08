@@ -57,18 +57,6 @@ public class TurretController implements ControlLoop {
       turret.setEncoderPosition(TURRET_CONSTANTS.REVERSE_POSITION);
     }
 
-    /*
-    if (isTurretOutOfSafeRange() && state != State.ZEROING) {
-      setState(State.RECOVERING);
-    }
-     */
-
-    // Things to debug/test:
-    // 1. Why is it seeking when seeking is commented out? (Check if the limelight latches on to anything else).
-    // 2. Tune by incrementing D and lowering P.
-    // 3. Test the shooter.
-    // 4. Try to implement seeking?
-
     switch (state) {
       case IDLE:
         // turret.setRawSpeed(0);
@@ -85,12 +73,14 @@ public class TurretController implements ControlLoop {
         break;
       case SEEKING_TARGET:
         if (!limelight.isTargetVisible()) {
-          turret.setRawSpeed(0);
-          /*
+          //turret.setRawSpeed(0);
           turret.setRawSpeed(seeking_direction * TURRET_CONSTANTS.SEEKING_SPEED);
 
+          System.out.println(turret.getPosition() + ", " + (turret.getPosition()-seeking_starting_position));
+
           if (Math.abs(turret.getPosition() - seeking_starting_position) > seeking_range) {
-            seeking_direction *= -1.0;
+            System.out.println("So true");
+            seeking_direction *= -1;
 
             int new_seeking_range = seeking_range + TURRET_CONSTANTS.SEEKING_RANGE_INCREMENT;
 
@@ -99,7 +89,6 @@ public class TurretController implements ControlLoop {
               seeking_range = new_seeking_range;
             }
           }
-           */
         } else {
           foundTarget();
         }
@@ -145,10 +134,13 @@ public class TurretController implements ControlLoop {
 
   public void startSeeking() {
     if (state == State.FOUND_TARGET) return;
-    limelight.setLEDMode(Limelight.LEDMode.ForceOn);
-//    seeking_range = TURRET_CONSTANTS.STARTING_SEEKING_RANGE;
-//    seeking_starting_position = turret.getPosition();
+    if (state == State.SEEKING_TARGET) return;
     state = State.SEEKING_TARGET;
+
+    limelight.setLEDMode(Limelight.LEDMode.ForceOn);
+    seeking_range = TURRET_CONSTANTS.INITIAL_SEEKING_RANGE;
+    seeking_starting_position = turret.getPosition();
+    seeking_direction = 1;
   }
 
   private void foundTarget() {

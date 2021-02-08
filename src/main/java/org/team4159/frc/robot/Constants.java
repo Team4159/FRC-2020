@@ -159,6 +159,10 @@ public final class Constants {
     public static final int FORWARD_POSITION = 8625 / 2;
     public static final int REVERSE_POSITION = -1 * FORWARD_POSITION;
 
+    // Somewhat arbitrary
+    public static final int INITIAL_SEEKING_RANGE = 512;
+    public static final int SEEKING_RANGE_INCREMENT = 512;
+
     public static final int BUFFER = 300;
 
     public static final int SAFE_FORWARD_POSITION = FORWARD_POSITION - BUFFER;

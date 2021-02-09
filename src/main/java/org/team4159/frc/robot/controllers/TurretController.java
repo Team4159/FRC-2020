@@ -76,10 +76,7 @@ public class TurretController implements ControlLoop {
           //turret.setRawSpeed(0);
           turret.setRawSpeed(seeking_direction * TURRET_CONSTANTS.SEEKING_SPEED);
 
-          System.out.println(turret.getPosition() + ", " + (turret.getPosition()-seeking_starting_position));
-
           if (Math.abs(turret.getPosition() - seeking_starting_position) > seeking_range) {
-            System.out.println("So true");
             seeking_direction *= -1;
 
             int new_seeking_range = seeking_range + TURRET_CONSTANTS.SEEKING_RANGE_INCREMENT;

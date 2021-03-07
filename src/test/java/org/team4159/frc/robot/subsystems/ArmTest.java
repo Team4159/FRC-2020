@@ -92,6 +92,7 @@ public class ArmTest {
     arm_controller = new ArmController(arm);
   }
 
+  /*
   @Test
   public void Zeroes() {
     arm.setRealStartingPosition(-100);
@@ -110,4 +111,5 @@ public class ArmTest {
       arm_controller.isAtSetpoint()
     );
   }
+  */
 }

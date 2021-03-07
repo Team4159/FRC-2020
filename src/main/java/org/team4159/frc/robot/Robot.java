@@ -29,7 +29,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
-    robot_container.updateSubsystemInputs();
     robot_container.updateControllerInputs();
+    robot_container.updateSubsystemInputs();
   }
 }

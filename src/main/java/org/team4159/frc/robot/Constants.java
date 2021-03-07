@@ -60,14 +60,14 @@ public final class Constants {
     public static final int TURRET_FALCON = 8; // unknown
 
     public static final int SHOOTER_SPARK_ONE = 3;
-    public static final int SHOOTER_SPARK_TWO = 5;
+    public static final int SHOOTER_SPARK_TWO = 4;
 
-    public static final int ARM_SPARK = 1;
+    public static final int ARM_SPARK = 6;
     public static final int INTAKE_SPARK = 2; // unknown
     // TODO: Change!
     public static final int LOWER_FEEDER_TALON = 4;
-    public static final int UPPER_FEEDER_SPARK = 4;
-    public static final int NECK_SPARK = 6;
+    public static final int UPPER_FEEDER_SPARK = 1;
+    public static final int NECK_SPARK = 5;
 
     public static final int PIGEON = 0;
   }
@@ -122,21 +122,21 @@ public final class Constants {
     public static final int ACCEPTABLE_ERROR_IN_DEGREES = 3;
 
     // TODO: Find
-    public static final int RANGE_IN_COUNTS = 615;
+    public static final int RANGE_IN_COUNTS = 435;
     public static final int ACCEPTABLE_ERROR_IN_COUNTS = (int) (ACCEPTABLE_ERROR_IN_DEGREES * GEARING.COUNTS_PER_DEGREE);
 
     public static final int UP_POSITION = 0;
-    public static final int DOWN_POSITION = -RANGE_IN_COUNTS;
+    public static final int DOWN_POSITION = RANGE_IN_COUNTS;
 
-    public static final int LIMIT_SWITCH_PORT = 9;
+    public static final int LIMIT_SWITCH_PORT = 0;
 
-    public static final int ENCODER_CHANNEL_A_PORT = 0;
-    public static final int ENCODER_CHANNEL_B_PORT = 1;
-    public static final boolean IS_ENCODER_REVERSED = true;
+    public static final int ENCODER_CHANNEL_A_PORT = 9;
+    public static final int ENCODER_CHANNEL_B_PORT = 8;
+    public static final boolean IS_ENCODER_REVERSED = false;
     public static final EncodingType ENCODER_ENCODING_TYPE = EncodingType.k4X;
 
-    public static final double kP = 24.0 / RANGE_IN_COUNTS;
-    public static final double kI = 0.01;
+    public static final double kP = 5.0 / RANGE_IN_COUNTS;
+    public static final double kI = 0.0;
     public static final double kD = 0.0;
 
     public static final double ZEROING_SPEED = 0.3;

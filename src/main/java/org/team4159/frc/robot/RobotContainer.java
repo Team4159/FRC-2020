@@ -39,15 +39,13 @@ public class RobotContainer {
 
   public void zeroSubsystems() {
     // Arm motor (CAN ID 2) not working
-    //arm.getController().startZeroing();
+    arm.getController().startZeroing();
 
-    turret.getController().startZeroing();
+    //turret.getController().startZeroing();
   }
 
   public void updateSubsystemInputs() {
     // Arm motor (CAN ID 2) not working
-    //updateArmInputs();
-
     updateIntakeInputs();
     updateFeederInputs();
 
@@ -59,10 +57,11 @@ public class RobotContainer {
   public void updateControllerInputs() {
     // Disabled for testing subsystems
     //updateDrivetrainControllerInputs();
+    updateArmControllerInputs();
     updateIntakeControllerInputs();
   }
 
-  public void updateArmInputs() {
+  public void updateArmControllerInputs() {
     if (secondary_joy.getRawButtonPressed(CONTROLS.SECONDARY_JOY.BUTTON_IDS.TOGGLE_ARM)) {
       if (arm.getController().getSetpoint() == ARM_CONSTANTS.UP_POSITION) {
         arm.getController().setSetpoint(ARM_CONSTANTS.DOWN_POSITION);

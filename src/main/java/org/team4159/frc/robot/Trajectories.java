@@ -7,11 +7,15 @@ import edu.wpi.first.wpilibj.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.wpilibj.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryConfig;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryGenerator;
+import edu.wpi.first.wpilibj.trajectory.TrajectoryUtil;
 import edu.wpi.first.wpilibj.trajectory.constraint.DifferentialDriveVoltageConstraint;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.util.Units;
 
 import static org.team4159.frc.robot.Constants.*;
 
+import java.io.IOException;
 import java.util.List;
 
 /*
@@ -35,23 +39,18 @@ public class Trajectories {
     .setKinematics(kinematics)
     .addConstraint(constraint);
 
-  public static final Trajectory TEST_TRAJECTORY =
-    TrajectoryGenerator.generateTrajectory(
-      List.of(
-        new Pose2d(0, 0, Rotation2d.fromDegrees(0)),
-        new Pose2d(1, 0.5, Rotation2d.fromDegrees(0))
-      ),
-      config
-    );
+  public Trajectory SLALOM_TRAJECTORY = new Trajectory();
 
-  public static final Trajectory SCRIMMAGE_AUTO =
-    TrajectoryGenerator.generateTrajectory(
-      List.of(
-        new Pose2d(0, 0, Rotation2d.fromDegrees(0)),
-        new Pose2d(0, Units.inchesToMeters(36.0 + 122.63), Rotation2d.fromDegrees(0))
-      ),
-      config
-    );
+  public void loadTrajectories() {
+    SLALOM_TRAJECTORY = loadTrajectory("Slalom.wpilib.json");
+  }
+
+  public Trajectory loadTrajectory(String path) {
+    try {
+      return TrajectoryUtil.fromPathweaverJson(Filesystem.getDeployDirectory().toPath().resolve("output/" + path));
+    } catch (IOException ex) {
+      DriverStation.reportError("Unable to open trajectory" + path, ex.getStackTrace());
+      return new Trajectory();
+    }
+  }
 }
-
-

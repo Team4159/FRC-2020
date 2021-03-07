@@ -146,8 +146,22 @@ public final class Constants {
     public static final Gearing GEARING = new Gearing(124.0 / 16.0, ENCODERS.FALCON_CPR);
     public static final int RANGE_IN_DEGREES = 240;
 
-    public static final int FORWARD_POSITION = 8300 / 2;
+    // Range measurement trials:
+    // T1A = 4150+5340
+    // T1B = 4150+5518
+    // T2A = 4150+5348
+    // T2B = 4150+5226
+    // T3A = 4150+5434
+    // T3B = 4150+5482
+
+    // Avg = 8627.66
+
+    public static final int FORWARD_POSITION = 8625 / 2;
     public static final int REVERSE_POSITION = -1 * FORWARD_POSITION;
+
+    // Somewhat arbitrary
+    public static final int INITIAL_SEEKING_RANGE = 512;
+    public static final int SEEKING_RANGE_INCREMENT = 512;
 
     public static final int BUFFER = 300;
 

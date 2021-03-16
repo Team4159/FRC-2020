@@ -46,20 +46,21 @@ public class RobotContainer {
 
   public void updateSubsystemInputs() {
     // Arm motor (CAN ID 2) not working
-    updateIntakeInputs();
-    updateFeederInputs();
+    // updateIntakeInputs();
+    // updateFeederInputs();
 
-    updateNeckInputs();
+    // updateNeckInputs();
     updateShooterInputs();
     updateTurretInputs();
   }
 
   public void updateControllerInputs() {
     // Disabled for testing subsystems
-    //updateDrivetrainControllerInputs();
+    updateDrivetrainControllerInputs();
 
-    updateArmControllerInputs();
+    // updateArmControllerInputs();
     updateIntakeControllerInputs();
+    intake_controller.update();
   }
 
   public void updateArmControllerInputs() {

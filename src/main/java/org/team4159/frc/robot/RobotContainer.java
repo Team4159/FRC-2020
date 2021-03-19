@@ -39,8 +39,9 @@ public class RobotContainer {
 
   public void zeroSubsystems() {
     // Arm motor (CAN ID 2) not working
-    arm.getController().startZeroing();
 
+    // ZEROING DISABLED AS PER 3/19 as NO LIMIT SWITCHES EXIST FOR EITHER SUBSYSTEM
+    //arm.getController().startZeroing();
     //turret.getController().startZeroing();
   }
 

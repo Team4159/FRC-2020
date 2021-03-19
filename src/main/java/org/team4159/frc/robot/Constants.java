@@ -86,9 +86,9 @@ public final class Constants {
     public static final double MAX_TRAJECTORY_ACCELERATION = 3.0;
     public static final double MAX_TRAJECTORY_VOLTAGE = 10.0;
 
-    public static final double kS = 0.216; // volts
-    public static final double kV = 1.89; // volts * seconds / meters
-    public static final double kA = 0.135; // volts * (seconds ^ 2) / meters
+    public static final double kS = 0.717; // volts
+    public static final double kV = 4.85; // volts * seconds / meters
+    public static final double kA = 0.37; // volts * (seconds ^ 2) / meters
 
     public static final double kP = 1.0;
     public static final double kD = 0.0;

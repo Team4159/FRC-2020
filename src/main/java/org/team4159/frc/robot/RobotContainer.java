@@ -2,6 +2,8 @@ package org.team4159.frc.robot;
 
 import edu.wpi.first.wpilibj.Joystick;
 
+import edu.wpi.first.wpilibj2.command.CommandBase;
+import org.team4159.frc.robot.commands.drivetrain.FollowTrajectory;
 import org.team4159.lib.control.signal.DriveSignal;
 import org.team4159.frc.robot.controllers.complex.IntakeController;
 import org.team4159.frc.robot.subsystems.*;
@@ -28,7 +30,14 @@ public class RobotContainer {
 
   private final AutoSelector auto_selector = new AutoSelector();
 
+  public CommandBase getAutoCommand() {
+    // TODO: Generalize with auto selector
+    return new FollowTrajectory(Trajectories.SLALOM_TRAJECTORY, drivetrain);
+  }
+
   public RobotContainer() {
+    Trajectories.loadTrajectories();
+
     configureCameras();
   }
 

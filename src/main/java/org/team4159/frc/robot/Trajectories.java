@@ -39,13 +39,13 @@ public class Trajectories {
     .setKinematics(kinematics)
     .addConstraint(constraint);
 
-  public Trajectory SLALOM_TRAJECTORY = new Trajectory();
+  public static Trajectory SLALOM_TRAJECTORY = new Trajectory();
 
-  public void loadTrajectories() {
+  public static void loadTrajectories() {
     SLALOM_TRAJECTORY = loadTrajectory("Slalom.wpilib.json");
   }
 
-  public Trajectory loadTrajectory(String path) {
+  public static Trajectory loadTrajectory(String path) {
     try {
       return TrajectoryUtil.fromPathweaverJson(Filesystem.getDeployDirectory().toPath().resolve("output/" + path));
     } catch (IOException ex) {

@@ -57,61 +57,63 @@ public class TurretController implements ControlLoop {
       turret.setEncoderPosition(TURRET_CONSTANTS.REVERSE_POSITION);
     }
 
-    switch (state) {
-      case IDLE:
-        // turret.setRawSpeed(0);
-        SmartDashboard.putNumber("turret_pid", position_pid.calculate(turret.getPosition()));
-        turret.setRawSpeed(position_pid.calculate(turret.getPosition()));
-        break;
-      case ZEROING:
-        if (turret.isForwardLimitSwitchClosed()) {
-          position_pid.setSetpoint(0);
-          state = State.IDLE;
-        } else {
-          turret.setRawSpeed(TURRET_CONSTANTS.ZEROING_SPEED);
-        }
-        break;
-      case SEEKING_TARGET:
-        if (!limelight.isTargetVisible()) {
-          //turret.setRawSpeed(0);
-          turret.setRawSpeed(seeking_direction * TURRET_CONSTANTS.SEEKING_SPEED);
+    turret.setRawSpeed(0.0);
 
-          if (Math.abs(turret.getPosition() - seeking_starting_position) > seeking_range) {
-            seeking_direction *= -1;
-
-            int new_seeking_range = seeking_range + TURRET_CONSTANTS.SEEKING_RANGE_INCREMENT;
-
-            if (!(turret.getPosition() + new_seeking_range > TURRET_CONSTANTS.SAFE_FORWARD_POSITION
-                    && turret.getPosition() - new_seeking_range < TURRET_CONSTANTS.SAFE_REVERSE_POSITION)) {
-              seeking_range = new_seeking_range;
-            }
-          }
-        } else {
-          foundTarget();
-        }
-        break;
-      case FOUND_TARGET:
-        if (limelight.isTargetVisible()) {
-          SmartDashboard.putNumber("aim_pid", aim_pid.calculate(limelight.getTargetHorizontalOffset()));
-          //turret.setRawSpeed(aim_pid.calculate(limelight.getTargetHorizontalOffset()));
-          // Temporary fix
-          turret.setRawSpeed(Math.min(0.075, Math.max(-0.075, aim_pid.calculate(limelight.getTargetHorizontalOffset()))));
-        } else {
-          startSeeking();
-        }
-        break;
-      /*
-      case RECOVERING:
-        if (turret.getPosition() > TURRET_CONSTANTS.SAFE_FORWARD_POSITION) {
-          turret.setRawSpeed(TURRET_CONSTANTS.ZEROING_SPEED);
-        } else if (turret.getPosition() < TURRET_CONSTANTS.SAFE_REVERSE_POSITION) {
-          turret.setRawSpeed(-1.0 * TURRET_CONSTANTS.ZEROING_SPEED);
-        } else {
-          setState(last_state);
-        }
-        break;
-      */
-    }
+//    switch (state) {
+//      case IDLE:
+//        // turret.setRawSpeed(0);
+//        SmartDashboard.putNumber("turret_pid", position_pid.calculate(turret.getPosition()));
+//        turret.setRawSpeed(position_pid.calculate(turret.getPosition()));
+//        break;
+//      case ZEROING:
+//        if (turret.isForwardLimitSwitchClosed()) {
+//          position_pid.setSetpoint(0);
+//          state = State.IDLE;
+//        } else {
+//          turret.setRawSpeed(TURRET_CONSTANTS.ZEROING_SPEED);
+//        }
+//        break;
+//      case SEEKING_TARGET:
+//        if (!limelight.isTargetVisible()) {
+//          //turret.setRawSpeed(0);
+//          turret.setRawSpeed(seeking_direction * TURRET_CONSTANTS.SEEKING_SPEED);
+//
+//          if (Math.abs(turret.getPosition() - seeking_starting_position) > seeking_range) {
+//            seeking_direction *= -1;
+//
+//            int new_seeking_range = seeking_range + TURRET_CONSTANTS.SEEKING_RANGE_INCREMENT;
+//
+//            if (!(turret.getPosition() + new_seeking_range > TURRET_CONSTANTS.SAFE_FORWARD_POSITION
+//                    && turret.getPosition() - new_seeking_range < TURRET_CONSTANTS.SAFE_REVERSE_POSITION)) {
+//              seeking_range = new_seeking_range;
+//            }
+//          }
+//        } else {
+//          foundTarget();
+//        }
+//        break;
+//      case FOUND_TARGET:
+//        if (limelight.isTargetVisible()) {
+//          SmartDashboard.putNumber("aim_pid", aim_pid.calculate(limelight.getTargetHorizontalOffset()));
+//          //turret.setRawSpeed(aim_pid.calculate(limelight.getTargetHorizontalOffset()));
+//          // Temporary fix
+//          turret.setRawSpeed(Math.min(0.075, Math.max(-0.075, aim_pid.calculate(limelight.getTargetHorizontalOffset()))));
+//        } else {
+//          startSeeking();
+//        }
+//        break;
+//      /*
+//      case RECOVERING:
+//        if (turret.getPosition() > TURRET_CONSTANTS.SAFE_FORWARD_POSITION) {
+//          turret.setRawSpeed(TURRET_CONSTANTS.ZEROING_SPEED);
+//        } else if (turret.getPosition() < TURRET_CONSTANTS.SAFE_REVERSE_POSITION) {
+//          turret.setRawSpeed(-1.0 * TURRET_CONSTANTS.ZEROING_SPEED);
+//        } else {
+//          setState(last_state);
+//        }
+//        break;
+//      */
+//    }
   }
 
   public boolean isTurretPointingAtTarget() {

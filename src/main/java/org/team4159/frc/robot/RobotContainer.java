@@ -32,7 +32,7 @@ public class RobotContainer {
 
   public CommandBase getAutoCommand() {
     // TODO: Generalize with auto selector
-    return new FollowTrajectory(Trajectories.SLALOM_TRAJECTORY, drivetrain);
+    return FollowTrajectory.createCommand(Trajectories.SLALOM_TRAJECTORY, drivetrain);
   }
 
   public RobotContainer() {

@@ -14,7 +14,8 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 
 import org.team4159.frc.robot.controllers.DrivetrainController;
 import org.team4159.lib.control.signal.DriveSignal;
-import org.team4159.lib.control.signal.filters.LowPassFilterSource;
+// If I don't do this, IntelliJ begins sobbing
+import org.team4159.lib.control.signal.filters.*;
 import org.team4159.lib.hardware.controller.ctre.CardinalFX;
 
 import static org.team4159.frc.robot.Constants.*;
@@ -78,6 +79,10 @@ public class Drivetrain extends SubsystemBase {
   public void drive(DriveSignal signal) {
     left_falcons.set(signal.left);
     right_falcons.set(signal.right);
+  }
+
+  public void stop() {
+    drive(DriveSignal.fromVolts(0.0, 0.0));
   }
 
   public void resetEncoders() {

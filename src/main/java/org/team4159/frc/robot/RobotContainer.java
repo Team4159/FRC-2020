@@ -51,7 +51,7 @@ public class RobotContainer {
 
     // ZEROING DISABLED AS PER 3/19 as NO LIMIT SWITCHES EXIST FOR EITHER SUBSYSTEM
     //arm.getController().startZeroing();
-    //turret.getController().startZeroing();
+    turret.getController().startZeroing();
   }
 
   public void updateSubsystemInputs() {
@@ -129,7 +129,7 @@ public class RobotContainer {
     if (secondary_joy.getRawButton(CONTROLS.SECONDARY_JOY.BUTTON_IDS.LIMELIGHT_SEEK)) {
       turret.getController().startSeeking();
     } else {
-      turret.getController().idle();
+      // turret.getController().idle();
     }
   }
 

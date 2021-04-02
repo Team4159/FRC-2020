@@ -11,11 +11,13 @@ import static org.team4159.frc.robot.Constants.*;
 
 public class TurretController implements ControlLoop {
   private enum State {
+    IDLE,
     ZEROING,
+    // STABLE = DONE ZEROING, sticky at position 0
+    STABLE,
     SEEKING_TARGET,
     FOUND_TARGET,
     //RECOVERING,
-    IDLE
   }
   private State last_state;
   private State state = State.IDLE;
@@ -40,6 +42,7 @@ public class TurretController implements ControlLoop {
   public TurretController(Turret turret, Limelight limelight) {
     this.turret = turret;
     this.limelight = limelight;
+    turret.setEncoderPosition(0);
     position_pid.setSetpoint(0);
   }
 
@@ -57,7 +60,24 @@ public class TurretController implements ControlLoop {
       turret.setEncoderPosition(TURRET_CONSTANTS.REVERSE_POSITION);
     }
 
-    turret.setRawSpeed(0.0);
+    double speed = 0.0;
+
+    switch (state) {
+      case IDLE:
+        break;
+      case ZEROING:
+        if (turret.isForwardLimitSwitchClosed()) {
+          state = State.STABLE;
+        } else {
+          speed = TURRET_CONSTANTS.ZEROING_SPEED;
+        }
+        break;
+      case STABLE:
+        position_pid.setSetpoint(TURRET_CONSTANTS.CENTER_POSITION);
+        speed = position_pid.calculate(turret.getPosition());
+    }
+    
+    turret.setRawSpeed(speed);
 
 //    switch (state) {
 //      case IDLE:

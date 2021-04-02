@@ -157,7 +157,7 @@ public final class Constants {
 
     // Avg = 8627.66
 
-    public static final int FORWARD_POSITION = 8625 / 2;
+    public static final int FORWARD_POSITION = 5196 / 2;
     public static final int REVERSE_POSITION = -1 * FORWARD_POSITION;
 
     // Somewhat arbitrary
@@ -171,9 +171,9 @@ public final class Constants {
 
     public static final int CENTER_POSITION = 0;
 
-    public static final double POSITION_kP = 1.0 / 9600 / 2;
+    public static final double POSITION_kP = 1.0 / 5196 / 2;
     public static final double POSITION_kI = 0;
-    public static final double POSITION_kD = 0;
+    public static final double POSITION_kD = 0.00001;
 
     public static final double LIMELIGHT_AIM_kP = -0.01;
     public static final double LIMELIGHT_AIM_kI = 0;

@@ -60,8 +60,8 @@ public class RobotContainer {
     // updateFeederInputs();
 
     // updateNeckInputs();
-    updateShooterInputs();
-    updateTurretInputs();
+    //updateShooterInputs();
+    //updateTurretInputs();
   }
 
   public void updateControllerInputs() {
@@ -69,8 +69,8 @@ public class RobotContainer {
     updateDrivetrainControllerInputs();
 
     // updateArmControllerInputs();
-    updateIntakeControllerInputs();
-    intake_controller.update();
+//    updateIntakeControllerInputs();
+//    intake_controller.update();
   }
 
   public void updateArmControllerInputs() {
@@ -89,7 +89,7 @@ public class RobotContainer {
       drivetrain.getController().flipDriveOrientation();
     }
 
-    drivetrain.getController().demandSignal(new DriveSignal(left_joy.getY(), right_joy.getY()));
+    drivetrain.getController().demandSignal(DriveSignal.fromArcade(left_joy.getY(), -1 * left_joy.getX()));
   }
 
   public void updateFeederInputs() {

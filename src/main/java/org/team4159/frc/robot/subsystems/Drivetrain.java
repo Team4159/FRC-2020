@@ -73,8 +73,6 @@ public class Drivetrain extends SubsystemBase {
     );
     filtered_heading.get();
 
-    System.out.println(getLeftDistance() + ", " + getRightDistance());
-
     drivetrain_controller.update();
   }
 

@@ -41,14 +41,18 @@ public final class Constants {
 
       public static final class BUTTON_IDS {
         public static final int
-          TOGGLE_ARM = T16000M.PRIMARY_TOP_OUTER_BTN_ID,
-          INTAKE = T16000M.PRIMARY_TOP_MIDDLE_BTN_ID,
-          RUN_INTAKE = T16000M.PRIMARY_TOP_MIDDLE_BTN_ID,
+          TOGGLE_ARM = T16000M.SECONDARY_BOTTOM_OUTER_BTN_ID,
+          INTAKE = T16000M.PRIMARY_BOTTOM_INNER_BTN_ID,
+          RUN_INTAKE = T16000M.PRIMARY_BOTTOM_INNER_BTN_ID,
+
           LIMELIGHT_SEEK = T16000M.TOP_MIDDLE_BTN_ID,
-          MANUAL_TURRET = T16000M.PRIMARY_BOTTOM_OUTER_BTN_ID,
-          RUN_FEEDER = T16000M.PRIMARY_BOTTOM_MIDDLE_BTN_ID,
+          MANUAL_TURRET = T16000M.TOP_RIGHT_BTN_ID,
           RUN_SHOOTER = T16000M.TRIGGER_ID,
-          RUN_NECK = T16000M.PRIMARY_BOTTOM_INNER_BTN_ID;
+
+          RUN_FEEDER = T16000M.SECONDARY_BOTTOM_MIDDLE_BTN_ID,
+          RUN_FEEDER_BACKWARDS = T16000M.SECONDARY_TOP_MIDDLE_BTN_ID,
+          RUN_NECK = T16000M.SECONDARY_BOTTOM_INNER_BTN_ID,
+          RUN_NECK_BACKWARDS = T16000M.SECONDARY_TOP_INNER_BTN_ID;
       }
     }
   }
@@ -107,7 +111,8 @@ public final class Constants {
     public static final double RPM_TO_COUNTS_PER_SECOND = 1.0 / COUNTS_PER_SECOND_TO_RPM;
 
     public static final double ACCEPTABLE_SPEED_ERROR = 5;
-    public static final double MAX_SPEED = Units.radiansPerSecondToRotationsPerMinute(MotorModels.NEO.free_speed) * 30 / 20;
+    // I don't know how this was calculated, but it seems really unrealistic. When we did the IAC, I had a target speed of around 3000 RPM, thus I've just multiplied this by 3/8.
+    public static final double MAX_SPEED = (3.0 / 8.0) * Units.radiansPerSecondToRotationsPerMinute(MotorModels.NEO.free_speed) * 30 / 20;
 
     public static final int ENCODER_CHANNEL_A_PORT = 4;
     public static final int ENCODER_CHANNEL_B_PORT = 5;

@@ -36,4 +36,9 @@ public class Feeder extends SubsystemBase {
     setRawTowerSpeed(0);
     setRawFloorSpeed(0);
   }
+
+  public void unfeed() {
+    setRawTowerSpeed(-1 * FEEDER_CONSTANTS.TOWER_FEEDING_SPEED);
+    setRawFloorSpeed(-1 * FEEDER_CONSTANTS.FLOOR_FEEDING_SPEED);
+  }
 }

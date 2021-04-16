@@ -72,7 +72,7 @@ public class ShootingController implements ControlLoop {
   }
 
   public void stopShooting() {
-    turret_controller.idle();
+    turret_controller.stable();
     shooter_controller.setState(ShooterController.State.IDLE);
 
     state = State.IDLE;

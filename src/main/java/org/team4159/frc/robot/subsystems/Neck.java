@@ -22,6 +22,10 @@ public class Neck extends SubsystemBase {
     setRawSpeed(1);
   }
 
+  public void unneck() {
+    setRawSpeed(-1);
+  }
+
   public void stop() {
     setRawSpeed(0);
   }

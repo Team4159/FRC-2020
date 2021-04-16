@@ -3,7 +3,6 @@ package org.team4159.frc.robot;
 import edu.wpi.first.wpilibj.Joystick;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import org.team4159.frc.robot.commands.drivetrain.FollowTrajectory;
 import org.team4159.lib.control.signal.DriveSignal;
 import org.team4159.frc.robot.controllers.complex.IntakeController;
 import org.team4159.frc.robot.subsystems.*;
@@ -57,12 +56,12 @@ public class RobotContainer {
 
   public void updateSubsystemInputs() {
     // Arm motor (CAN ID 2) not working
-    // updateIntakeInputs();
-    // updateFeederInputs();
+    updateIntakeInputs();
+    updateFeederInputs();
 
-    // updateNeckInputs();
-    //updateShooterInputs();
-    //updateTurretInputs();
+    updateNeckInputs();
+    updateShooterInputs();
+    updateTurretInputs();
   }
 
   public void updateControllerInputs() {
@@ -96,6 +95,8 @@ public class RobotContainer {
   public void updateFeederInputs() {
     if (secondary_joy.getRawButton(CONTROLS.SECONDARY_JOY.BUTTON_IDS.RUN_FEEDER)) {
       feeder.feed();
+    } else if (secondary_joy.getRawButton(CONTROLS.SECONDARY_JOY.BUTTON_IDS.RUN_FEEDER_BACKWARDS)) {
+      feeder.unfeed();
     } else {
       feeder.stop();
     }
@@ -112,6 +113,8 @@ public class RobotContainer {
   public void updateNeckInputs() {
     if (secondary_joy.getRawButton(CONTROLS.SECONDARY_JOY.BUTTON_IDS.RUN_NECK)) {
       neck.neck();
+    } else if (secondary_joy.getRawButton(CONTROLS.SECONDARY_JOY.BUTTON_IDS.RUN_NECK_BACKWARDS)) {
+      neck.unneck();
     } else {
       neck.stop();
     }
@@ -130,9 +133,9 @@ public class RobotContainer {
     if (secondary_joy.getRawButton(CONTROLS.SECONDARY_JOY.BUTTON_IDS.LIMELIGHT_SEEK)) {
       turret.getController().startSeeking();
     } else if (secondary_joy.getRawButton(CONTROLS.SECONDARY_JOY.BUTTON_IDS.MANUAL_TURRET)) {
-      turret.getController().manual(secondary_joy.getY() * 0.05);
+      turret.getController().manual(secondary_joy.getX() * 0.1);
     } else {
-      turret.getController().idle();
+      turret.getController().stable();
     }
   }
 

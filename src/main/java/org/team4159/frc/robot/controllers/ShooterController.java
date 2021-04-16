@@ -56,7 +56,7 @@ public class ShooterController implements ControlLoop {
         }
         */
 
-        shooter.setRawVoltage(pid_controller.calculate(shooter.getSpeed()));
+        shooter.setRawVoltage(-1 * pid_controller.calculate(shooter.getSpeed()));
         break;
     }
   }

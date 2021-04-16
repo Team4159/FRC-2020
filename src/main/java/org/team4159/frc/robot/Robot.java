@@ -31,7 +31,7 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopInit() {
     System.out.println("teleop init");
-    // robot_container.zeroSubsystems();
+    robot_container.zeroSubsystems();
   }
 
   @Override

@@ -86,6 +86,8 @@ public class TurretController implements ControlLoop {
         stable_setpoint = turret.getPosition();
         break;
     }
+
+    SmartDashboard.putNumber("turret_speed", speed);
     
     turret.setRawSpeed(speed);
 
@@ -183,6 +185,12 @@ public class TurretController implements ControlLoop {
     state = State.RECOVERING;
   }
   */
+
+  public void stable() {
+    if (state != State.ZEROING) {
+      state = State.STABLE;
+    }
+  }
 
   public void idle() {
     if (state != State.ZEROING) {

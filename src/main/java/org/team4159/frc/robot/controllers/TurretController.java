@@ -17,10 +17,14 @@ public class TurretController implements ControlLoop {
     STABLE,
     SEEKING_TARGET,
     FOUND_TARGET,
+    MANUAL
     //RECOVERING,
   }
   private State last_state;
   private State state = State.IDLE;
+
+  private double manual_speed = 0;
+  private double stable_setpoint = TURRET_CONSTANTS.CENTER_POSITION;
 
   private Turret turret;
   private Limelight limelight;
@@ -68,13 +72,19 @@ public class TurretController implements ControlLoop {
       case ZEROING:
         if (turret.isForwardLimitSwitchClosed()) {
           state = State.STABLE;
+          stable_setpoint = TURRET_CONSTANTS.CENTER_POSITION;
         } else {
           speed = TURRET_CONSTANTS.ZEROING_SPEED;
         }
         break;
       case STABLE:
-        position_pid.setSetpoint(TURRET_CONSTANTS.CENTER_POSITION);
+        position_pid.setSetpoint(stable_setpoint);
         speed = position_pid.calculate(turret.getPosition());
+        break;
+      case MANUAL:
+        speed = manual_speed;
+        stable_setpoint = turret.getPosition();
+        break;
     }
     
     turret.setRawSpeed(speed);
@@ -177,6 +187,13 @@ public class TurretController implements ControlLoop {
   public void idle() {
     if (state != State.ZEROING) {
       state = State.IDLE;
+    }
+  }
+
+  public void manual(double speed) {
+    if (state != State.ZEROING) {
+      state = State.MANUAL;
+      manual_speed = speed;
     }
   }
 }

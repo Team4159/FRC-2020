@@ -129,8 +129,10 @@ public class RobotContainer {
   public void updateTurretInputs() {
     if (secondary_joy.getRawButton(CONTROLS.SECONDARY_JOY.BUTTON_IDS.LIMELIGHT_SEEK)) {
       turret.getController().startSeeking();
+    } else if (secondary_joy.getRawButton(CONTROLS.SECONDARY_JOY.BUTTON_IDS.MANUAL_TURRET)) {
+      turret.getController().manual(secondary_joy.getY() * 0.05);
     } else {
-      // turret.getController().idle();
+      turret.getController().idle();
     }
   }
 

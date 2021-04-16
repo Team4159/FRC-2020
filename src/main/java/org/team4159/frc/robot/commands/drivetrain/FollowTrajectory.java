@@ -31,23 +31,16 @@ public class FollowTrajectory {
         PIDController left_pid = new PIDController(Constants.DRIVE_CONSTANTS.kP, Constants.DRIVE_CONSTANTS.kI, Constants.DRIVE_CONSTANTS.kD);
         PIDController right_pid = new PIDController(Constants.DRIVE_CONSTANTS.kP, Constants.DRIVE_CONSTANTS.kI, Constants.DRIVE_CONSTANTS.kD);
 
-
         RamseteCommand ramsete_command = new RamseteCommand(
                 filtered_trajectory,
                 drivetrain::getPose,
-                disabled_ramsete,
-                // new RamseteController(Constants.DRIVE_CONSTANTS.kB, Constants.DRIVE_CONSTANTS.kZeta),
+                new RamseteController(Constants.DRIVE_CONSTANTS.kB, Constants.DRIVE_CONSTANTS.kZeta),
                 new SimpleMotorFeedforward(Constants.DRIVE_CONSTANTS.kS, Constants.DRIVE_CONSTANTS.kV, Constants.DRIVE_CONSTANTS.kA),
                 new DifferentialDriveKinematics(Constants.DRIVE_CONSTANTS.TRACK_WIDTH),
                 drivetrain::getWheelSpeeds,
                 left_pid,
                 right_pid,
-                // (leftVolts, rightVolts) -> drivetrain.drive(DriveSignal.fromVolts(-1 * rightVolts, -1 * leftVolts)),
-                (leftVolts, rightVolts) -> {
-                    drivetrain.drive(DriveSignal.fromVolts(-1 * rightVolts, -1 * leftVolts));
-
-                    System.out.println("LM: " + (int) drivetrain.getWheelSpeeds().leftMetersPerSecond + ", LS: " + (int) left_pid.getSetpoint() + "; RM: " + (int) drivetrain.getWheelSpeeds().rightMetersPerSecond + ", RS: " + (int) right_pid.getSetpoint());
-                },
+                (leftVolts, rightVolts) -> drivetrain.drive(DriveSignal.fromVolts(leftVolts, rightVolts)),
                 drivetrain
         );
 

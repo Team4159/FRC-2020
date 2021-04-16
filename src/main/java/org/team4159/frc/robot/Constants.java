@@ -77,7 +77,7 @@ public final class Constants {
     public static final double WHEEL_RADIUS = Units.inchesToMeters(3.0);
     public static final double WHEEL_CIRCUMFERENCE = WHEEL_RADIUS * MathUtil.kTau;
 
-    public static final double METERS_PER_COUNT = WHEEL_CIRCUMFERENCE / GEARING.COUNTS_PER_REV;
+    public static final double METERS_PER_COUNT = 1.05 * WHEEL_CIRCUMFERENCE / GEARING.COUNTS_PER_REV;
 
     public static final boolean IS_GYRO_INVERTED = false;
 
@@ -90,7 +90,7 @@ public final class Constants {
     public static final double kV = 4.85; // volts * seconds / meters
     public static final double kA = 0.37; // volts * (seconds ^ 2) / meters
 
-    public static final double kP = 0.0;
+    public static final double kP = 1.0;
     public static final double kI = 0.0;
     public static final double kD = 0.0;
 

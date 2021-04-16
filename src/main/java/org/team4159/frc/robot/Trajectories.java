@@ -40,9 +40,14 @@ public class Trajectories {
     .addConstraint(constraint);
 
   public static Trajectory SLALOM_TRAJECTORY = new Trajectory();
+  public static Trajectory BARREL_TRAJECTORY = new Trajectory();
+  public static Trajectory BOUNCE_TRAJECTORY = new Trajectory();
+
 
   public static void loadTrajectories() {
     SLALOM_TRAJECTORY = loadTrajectory("Slalom.wpilib.json");
+    BARREL_TRAJECTORY = loadTrajectory("Barrel-Racing.wpilib.json");
+    BOUNCE_TRAJECTORY = loadTrajectory("Bounce.wpilib.json");
   }
 
   public static Trajectory loadTrajectory(String path) {

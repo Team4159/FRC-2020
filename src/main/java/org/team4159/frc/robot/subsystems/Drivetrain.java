@@ -68,8 +68,8 @@ public class Drivetrain extends SubsystemBase {
   public void periodic() {
     odometry.update(
       Rotation2d.fromDegrees(getDirection()),
-      getLeftDistance(),
-      getRightDistance()
+      -1 * getLeftDistance(),
+      -1 * getRightDistance()
     );
     filtered_heading.get();
 

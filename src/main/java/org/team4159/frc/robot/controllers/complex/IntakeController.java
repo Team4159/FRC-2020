@@ -34,20 +34,19 @@ public class IntakeController implements ControlLoop {
             floor_speed = 0;
 
     SmartDashboard.putString("intake_state", state.toString());
-    System.out.println(state.toString());
 
     switch (state) {
       case STOWED:
         break;
       case DEPLOYING:
         arm_setpoint = ARM_CONSTANTS.DOWN_POSITION;
-        if (arm_controller.getSetpoint() == ARM_CONSTANTS.DOWN_POSITION && arm_controller.isAtSetpoint()) {
+        if (arm_controller.isAtSetpoint()) {
           state = State.INTAKING;
         }
         break;
       case INTAKING:
         arm_setpoint = ARM_CONSTANTS.DOWN_POSITION;
-        intake_speed = INTAKE_CONSTANTS.INTAKE_SPEED;
+        // intake_speed = INTAKE_CONSTANTS.INTAKE_SPEED;
         tower_speed = FEEDER_CONSTANTS.TOWER_FEEDING_SPEED;
         floor_speed = FEEDER_CONSTANTS.FLOOR_FEEDING_SPEED;
         break;

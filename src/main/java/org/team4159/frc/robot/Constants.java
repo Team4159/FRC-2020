@@ -68,7 +68,7 @@ public final class Constants {
     public static final int SHOOTER_SPARK_TWO = 4;
 
     public static final int ARM_SPARK = 6;
-    public static final int INTAKE_SPARK = 2; // unknown
+    public static final int INTAKE_SPARK = 6; // unknown
     // TODO: Change!
     public static final int LOWER_FEEDER_TALON = 4;
     public static final int UPPER_FEEDER_SPARK = 1;
@@ -142,7 +142,7 @@ public final class Constants {
     public static final boolean IS_ENCODER_REVERSED = false;
     public static final EncodingType ENCODER_ENCODING_TYPE = EncodingType.k4X;
 
-    public static final double kP = 5.5 / RANGE_IN_COUNTS;
+    public static final double kP = 5.0 / RANGE_IN_COUNTS;
     public static final double kI = 0.0;
     public static final double kD = 0.0;
 
@@ -206,7 +206,7 @@ public final class Constants {
 
   public static final class FEEDER_CONSTANTS {
     public static final double FLOOR_FEEDING_SPEED = 1;
-    public static final double TOWER_FEEDING_SPEED = 0.3;
+    public static final double TOWER_FEEDING_SPEED = 0.5;
   }
 
   public static final class FIELD_CONSTANTS {

@@ -34,6 +34,7 @@ public class Arm extends SubsystemBase {
       ARM_CONSTANTS.IS_ENCODER_REVERSED,
       ARM_CONSTANTS.ENCODER_ENCODING_TYPE
     );
+    arm_spark.setInverted(false);
 
     arm_controller = new ArmController(this);
   }

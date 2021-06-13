@@ -50,16 +50,16 @@ public class RobotContainer {
     // Arm motor (CAN ID 2) not working
 
     // ZEROING DISABLED AS PER 3/19 as NO LIMIT SWITCHES EXIST FOR EITHER SUBSYSTEM
-    //arm.getController().startZeroing();
+    arm.getController().startZeroing();
     turret.getController().startZeroing();
   }
 
   public void updateSubsystemInputs() {
     // Arm motor (CAN ID 2) not working
     updateIntakeInputs();
-    updateFeederInputs();
+    // updateFeederInputs();
 
-    updateNeckInputs();
+    // updateNeckInputs();
     updateShooterInputs();
     updateTurretInputs();
   }
@@ -68,9 +68,9 @@ public class RobotContainer {
     // Disabled for testing subsystems
     updateDrivetrainControllerInputs();
 
-    // updateArmControllerInputs();
-//    updateIntakeControllerInputs();
-//    intake_controller.update();
+    //  updateArmControllerInputs()
+    updateIntakeControllerInputs();
+    intake_controller.update();
   }
 
   public void updateArmControllerInputs() {

@@ -45,9 +45,9 @@ public class ArmController implements ControlLoop {
       case IDLE:
         break;
       case CLOSED_LOOP:
-        double output = pid_controller.calculate(arm.getPosition());
-        SmartDashboard.putNumber("arm_pid", output);
-        arm.setRawVoltage(output);
+          double output = pid_controller.calculate(arm.getPosition());
+          SmartDashboard.putNumber("arm_pid", output);
+          arm.setRawVoltage(output);
         break;
     }
   }

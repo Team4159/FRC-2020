@@ -89,7 +89,7 @@ public class RobotContainer {
       drivetrain.getController().flipDriveOrientation();
     }
 
-    drivetrain.getController().demandSignal(DriveSignal.fromArcade(left_joy.getY(), -1 * left_joy.getX()));
+    drivetrain.getController().demandSignal(new DriveSignal(left_joy.getY(), right_joy.getY()));
   }
 
   public void updateFeederInputs() {

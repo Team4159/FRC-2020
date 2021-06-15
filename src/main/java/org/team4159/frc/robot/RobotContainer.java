@@ -59,7 +59,7 @@ public class RobotContainer {
     updateIntakeInputs();
     // updateFeederInputs();
 
-    // updateNeckInputs();
+    updateNeckInputs();
     updateShooterInputs();
     updateTurretInputs();
   }

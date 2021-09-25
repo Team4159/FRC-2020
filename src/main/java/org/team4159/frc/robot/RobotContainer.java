@@ -10,6 +10,8 @@ import org.team4159.lib.hardware.Limelight;
 
 import static org.team4159.frc.robot.Constants.*;
 
+import org.team4159.frc.robot.Constants.CONTROLS;
+
 public class RobotContainer {
   private final Drivetrain drivetrain = new Drivetrain();
   private final Shooter shooter = new Shooter();
@@ -68,17 +70,21 @@ public class RobotContainer {
     // Disabled for testing subsystems
     updateDrivetrainControllerInputs();
 
-    //  updateArmControllerInputs()
+    updateArmControllerInputs();
     updateIntakeControllerInputs();
     intake_controller.update();
   }
 
   public void updateArmControllerInputs() {
-    if (secondary_joy.getRawButtonPressed(CONTROLS.SECONDARY_JOY.BUTTON_IDS.TOGGLE_ARM)) {
+    if (secondary_joy.getRawButtonPressed(CONTROLS.SECONDARY_JOY.BUTTON_IDS.UP_ARM)) {
       if (arm.getController().getSetpoint() == ARM_CONSTANTS.UP_POSITION) {
-        arm.getController().setSetpoint(ARM_CONSTANTS.DOWN_POSITION);
-      } else {
-        arm.getController().setSetpoint(ARM_CONSTANTS.UP_POSITION);
+        arm.getController().setSetpoint(ARM_CONSTANTS.RANGE_IN_COUNTS);
+      } 
+    }
+
+    if(secondary_joy.getRawButtonPressed(CONTROLS.SECONDARY_JOY.BUTTON_IDS.ARM_DOWN)) {
+      if(arm.getController().getSetpoint() != ARM_CONSTANTS.DOWN_POSITION) {
+        arm.getController.setSetpoint(ARM_CONSTANTS.UP_POSITION);
       }
     }
   }

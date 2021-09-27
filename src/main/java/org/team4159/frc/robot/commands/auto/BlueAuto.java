@@ -7,11 +7,28 @@ import org.team4159.frc.robot.subsystems.*;
 /*
  * Placeholder until we plan out an autonomous routine
  */
+
+
+//REMEMBER TO IMPORT TIMER
+
 public class BlueAuto extends SequentialCommandGroup {
   private final double SHOOTER_TPS = 10000;
 
   public BlueAuto(Drivetrain drivetrain, Arm arm, Feeder feeder, Intake intake, Turret turret, Shooter shooter, Neck neck) {
-    addCommands(
+    new SequentialCommandGroup (
+      new ArmDownCMD(arm),
+
+      new ParallelCommandGroup (
+
+      )//Anything we wanna run at the same time
+
+    );
+
+
+
+
+
+//addCommands(
 //        new SequentialCommandGroup(
 //          new ParallelCommandGroup(
 //            new FollowTrajectory(Trajectories.SCRIMMAGE_AUTO, drivetrain),
@@ -27,6 +44,6 @@ public class BlueAuto extends SequentialCommandGroup {
 //            new LimelightSeek(turret)
 //          )
 //        )
-      );
+//      );
   }
 }

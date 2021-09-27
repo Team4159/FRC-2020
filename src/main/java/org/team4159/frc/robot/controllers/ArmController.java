@@ -21,6 +21,8 @@ public class ArmController implements ControlLoop {
 
   private PIDController pid_controller;
 
+  public double output;
+
   public ArmController(Arm arm) {
     this.arm = arm;
 
@@ -45,9 +47,9 @@ public class ArmController implements ControlLoop {
       case IDLE:
         break;
       case CLOSED_LOOP:
-          double output = pid_controller.calculate(arm.getPosition());
+          output = pid_controller.calculate(arm.getPosition()); //Potentially Comment That Line Out
           SmartDashboard.putNumber("arm_pid", output);
-          arm.setRawVoltage(output);
+          setRawVoltage(output); //And Maybe This Line
         break;
     }
   }
@@ -67,5 +69,13 @@ public class ArmController implements ControlLoop {
 
   public int getSetpoint() {
     return (int) pid_controller.getSetpoint();
+  }
+
+  public void setIdle() {
+    state = State.Idle;
+  }
+
+  public void setRawVoltage(Double output) {
+    arm.setRawVoltage(output);
   }
 }

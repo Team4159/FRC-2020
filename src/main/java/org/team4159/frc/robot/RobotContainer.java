@@ -60,7 +60,6 @@ public class RobotContainer {
     // Arm motor (CAN ID 2) not working
     updateIntakeInputs();
     // updateFeederInputs();
-
     updateNeckInputs();
     updateShooterInputs();
     updateTurretInputs();
@@ -77,14 +76,14 @@ public class RobotContainer {
 
   public void updateArmControllerInputs() {
     if (secondary_joy.getRawButtonPressed(CONTROLS.SECONDARY_JOY.BUTTON_IDS.UP_ARM)) {
-      if (arm.getController().getSetpoint() == ARM_CONSTANTS.UP_POSITION) {
-        arm.getController().setSetpoint(ARM_CONSTANTS.RANGE_IN_COUNTS);
+      if (arm.getController().getSetpoint() != ARM_CONSTANTS.UP_POSITION) {
+        arm.getController().setSetpoint(ARM_CONSTANTS.UP_POSITION);
       } 
     }
 
     if(secondary_joy.getRawButtonPressed(CONTROLS.SECONDARY_JOY.BUTTON_IDS.ARM_DOWN)) {
       if(arm.getController().getSetpoint() != ARM_CONSTANTS.DOWN_POSITION) {
-        arm.getController.setSetpoint(ARM_CONSTANTS.UP_POSITION);
+        arm.getController.setSetpoint(ARM_CONSTANTS.DOWN_POSITION);
       }
     }
   }

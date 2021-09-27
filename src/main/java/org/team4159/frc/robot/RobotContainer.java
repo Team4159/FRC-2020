@@ -74,6 +74,11 @@ public class RobotContainer {
     intake_controller.update();
   }
 
+  /*For future reference:
+    new JoystickButton(joystick,1).whileActiveOnce(ArmUpCmd(arm));
+
+  */
+
   public void updateArmControllerInputs() {
     if (secondary_joy.getRawButtonPressed(CONTROLS.SECONDARY_JOY.BUTTON_IDS.UP_ARM)) {
       if (arm.getController().getSetpoint() != ARM_CONSTANTS.UP_POSITION) {

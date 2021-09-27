@@ -9,12 +9,18 @@ import org.team4159.frc.robot.subsystems.*;
  */
 
 
-//REMEMBER TO IMPORT TIMER
+import edu.wpi.first.wpilibj.Timer;
 
 public class BlueAuto extends SequentialCommandGroup {
   private final double SHOOTER_TPS = 10000;
 
   public BlueAuto(Drivetrain drivetrain, Arm arm, Feeder feeder, Intake intake, Turret turret, Shooter shooter, Neck neck) {
+    if(getMatchTime() == 0) {
+      System.out.println("Auto Ready!");
+    }
+    
+    
+    
     new SequentialCommandGroup (
       new ArmDownCMD(arm),
 

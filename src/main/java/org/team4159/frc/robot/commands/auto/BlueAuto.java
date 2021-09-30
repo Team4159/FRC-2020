@@ -9,6 +9,7 @@ import org.team4159.frc.robot.subsystems.*;
  */
 public class BlueAuto extends SequentialCommandGroup {
   private final double SHOOTER_TPS = 10000;
+  
 
   public BlueAuto(Drivetrain drivetrain, Arm arm, Feeder feeder, Intake intake, Turret turret, Shooter shooter, Neck neck) {
     addCommands(

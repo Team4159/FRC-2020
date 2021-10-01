@@ -10,6 +10,8 @@ import org.team4159.lib.hardware.Limelight;
 
 import static org.team4159.frc.robot.Constants.*;
 
+import org.team4159.frc.robot.commands.auto.BackAndShoot;
+
 public class RobotContainer {
   private final Drivetrain drivetrain = new Drivetrain();
   private final Shooter shooter = new Shooter();
@@ -37,7 +39,7 @@ public class RobotContainer {
 
   public RobotContainer() {
     Trajectories.loadTrajectories();
-
+    auto_selector.addOption("CalGames Auto", new BackAndShoot(drivetrain, shooter, neck));
     configureCameras();
   }
 

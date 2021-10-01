@@ -12,6 +12,7 @@ public class Back extends CommandBase{
     private PIDController controller;
     public Back(Drivetrain dt){
         this.dt = dt;
+        dt.resetEncoders();
         controller = new PIDController(Constants.DRIVE_CONSTANTS.kP,0,0);
         controller.setSetpoint(5d);
         addRequirements(dt);

@@ -64,15 +64,15 @@ public final class Constants {
     public static final int RIGHT_REAR_FALCON = 1;
     public static final int TURRET_FALCON = 8; // unknown
 
-    public static final int SHOOTER_SPARK_ONE = 3;
+    public static final int SHOOTER_SPARK_ONE = 3; //Interchangeble
     public static final int SHOOTER_SPARK_TWO = 4;
 
     public static final int ARM_SPARK = 6;
-    public static final int INTAKE_SPARK = 6; // unknown
+    public static final int INTAKE_SPARK = 2; // unknown
     // TODO: Change!
     public static final int LOWER_FEEDER_TALON = 4;
-    public static final int UPPER_FEEDER_SPARK = 1;
-    public static final int NECK_SPARK = 5;
+    public static final int UPPER_FEEDER_SPARK = 5; //?
+    public static final int NECK_SPARK = 1;
 
     public static final int PIGEON = 0;
   }

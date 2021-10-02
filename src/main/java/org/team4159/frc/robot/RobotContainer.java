@@ -75,6 +75,7 @@ public class RobotContainer {
     intake_controller.update();
   }
 
+  //Dude, use the limit switch
   public void updateArmControllerInputs() {
     if (secondary_joy.getRawButtonPressed(CONTROLS.SECONDARY_JOY.BUTTON_IDS.TOGGLE_ARM)) {
       if (arm.getController().getSetpoint() == ARM_CONSTANTS.UP_POSITION) {

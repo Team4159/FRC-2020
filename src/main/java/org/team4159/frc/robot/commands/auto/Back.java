@@ -9,18 +9,26 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 
 public class Back extends CommandBase{
     private Drivetrain dt;
-    private PIDController controller;
-    public Back(Drivetrain dt){
+    private PIDController controller = new PIDController(Constants.DRIVE_CONSTANTS.kP,0,0);
+    private double speed;
+    private double setpoint;
+    private int timer = 0;
+    public Back(Drivetrain dt, double distance, double speed){
         this.dt = dt;
+        this.setpoint = distance;
+        this.speed = speed;
         dt.resetEncoders();
-        controller = new PIDController(Constants.DRIVE_CONSTANTS.kP,0,0);
-        controller.setSetpoint(5d);
+        controller.setSetpoint(distance);
+        //controller.setTolerance(5, 10);
         addRequirements(dt);
     }
     @Override
     public void execute() {
-        double error = controller.calculate( ((dt.getRightDistance() - 5)+(dt.getLeftDistance()-5))/2 ); //"Something is wrong I can feel it"
-        dt.drive(new DriveSignal(error, error));
+        timer ++;
+        //double speed = controller.calculate(dt.getLeftDistance(), setpoint);
+        System.out.println(speed);
+        if( timer < 90 )
+          dt.drive(new DriveSignal(speed, speed));
     }
     @Override
     public boolean isFinished() {

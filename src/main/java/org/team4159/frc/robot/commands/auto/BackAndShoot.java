@@ -24,7 +24,7 @@ public class BackAndShoot extends SequentialCommandGroup {
         this.shooter = shooter;
         this.neck = neck;
         addCommands(
-            new Back(dt),
+            new Back(dt, 3, 0.25),
             new ShootCmd(shooter, neck)
         );
     }

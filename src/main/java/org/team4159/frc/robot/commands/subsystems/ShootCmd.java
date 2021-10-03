@@ -25,7 +25,8 @@ public class ShootCmd extends CommandBase{
         //Don't look at this it pains me too its temporary
         while(timer.get() < 5d){
             neck.setRawSpeed(0.4d);
-            shooter.setRawSpeed(.6d);;
+            shooter.setRawSpeed(10.0d);
+
         }
     }
     @Override

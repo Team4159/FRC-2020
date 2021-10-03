@@ -39,6 +39,9 @@ public class RobotContainer {
 
   public RobotContainer() {
     Trajectories.loadTrajectories();
+
+    //private BackAndShoot = new BackAndShoot(drivetrain, shooter, neck);
+    auto_selector.setDefaultOption("Calgames Auto", new BackAndShoot(drivetrain, shooter, neck));
     auto_selector.addOption("CalGames Auto", new BackAndShoot(drivetrain, shooter, neck));
     configureCameras();
   }
